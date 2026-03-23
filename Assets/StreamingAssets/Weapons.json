@@ -1,0 +1,57 @@
+[
+	{
+	  "ID": "W0001",
+	  "ItemType": "Weapon",
+	  "Name": "Rusty Sword",
+	  "Description": "An old, rusty blade. Better than bare hands.",
+	  "Price": 15,
+	  "Rarity": "Common",
+	  "WeaponATK": 5,
+	  "WeaponType": "Sword",
+	  "RequiredLevel": 1
+	},
+	{
+	  "ID": "W0002",
+	  "ItemType": "Weapon",
+	  "Name": "Iron Longsword",
+	  "Description": "Standard issue soldier weapon.",
+	  "Price": 150,
+	  "Rarity": "Uncommon",
+	  "WeaponATK": 18,
+	  "WeaponType": "Sword",
+	  "RequiredLevel": 3
+	},
+	{
+	  "ID": "W0003",
+	  "ItemType": "Weapon",
+	  "Name": "Hunter's Bow",
+	  "Description": "Sturdy bow made of yew wood.",
+	  "Price": 200,
+	  "Rarity": "Rare",
+	  "WeaponATK": 22,
+	  "WeaponType": "Bow",
+	  "RequiredLevel": 5
+	},
+	{
+	  "ID": "W0004",
+	  "ItemType": "Weapon",
+	  "Name": "War Hammer",
+	  "Description": "Crushes armor with ease.",
+	  "Price": 500,
+	  "Rarity": "Epic",
+	  "WeaponATK": 45,
+	  "WeaponType": "Hammer",
+	  "RequiredLevel": 8
+	},
+	{
+	  "ID": "W0005",
+	  "ItemType": "Weapon",
+	  "Name": "Dragon Slayer",
+	  "Description": "A legendary blade saID to pierce dragon scales.",
+	  "Price": 2500,
+	  "Rarity": "Legendary",
+	  "WeaponATK": 85,
+	  "WeaponType": "Sword",
+	  "RequiredLevel": 15
+	}
+]

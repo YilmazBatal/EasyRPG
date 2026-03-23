@@ -1,0 +1,52 @@
+[
+	{
+	  "ID": "M0001",
+	  "ItemType": "Material",
+	  "Name": "Slime Gel",
+	  "Description": "Sticky green goo.",
+	  "Price": 2,
+	  "Rarity": "Common",
+	  "Quantity": 1,
+	  "MaxStack": 64
+	},
+	{
+	  "ID": "M0002",
+	  "ItemType": "Material",
+	  "Name": "Wolf Fur",
+	  "Description": "Warm and soft.",
+	  "Price": 8,
+	  "Rarity": "Common",
+	  "Quantity": 1,
+	  "MaxStack": 64
+	},
+	{
+	  "ID": "M0003",
+	  "ItemType": "Material",
+	  "Name": "Iron Ore",
+	  "Description": "Raw metal ready for smelting.",
+	  "Price": 25,
+	  "Rarity": "Uncommon",
+	  "Quantity": 1,
+	  "MaxStack": 64
+	},
+	{
+	  "ID": "M0004",
+	  "ItemType": "Material",
+	  "Name": "Magic Dust",
+	  "Description": "Glowing powder.",
+	  "Price": 100,
+	  "Rarity": "Rare",
+	  "Quantity": 1,
+	  "MaxStack": 64
+	},
+	{
+	  "ID": "M0005",
+	  "ItemType": "Material",
+	  "Name": "Dragon Scale",
+	  "Description": "Harder than steel, hot to the touch.",
+	  "Price": 1000,
+	  "Rarity": "Legendary",
+	  "Quantity": 1,
+	  "MaxStack": 64
+	}
+]

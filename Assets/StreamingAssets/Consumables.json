@@ -1,0 +1,82 @@
+[
+	{
+	  "ID": "C0001",
+	  "ItemType": "Consumable",
+	  "Name": "Health Potion S",
+	  "Description": "Provides 25% HP.",
+	  "Effect": "HP",
+	  "Value": 25,
+	  "Price": 100,
+	  "Rarity": "Common",
+	  "CombatItem": true
+	},
+	{
+	  "ID": "C0002",
+	  "ItemType": "Consumable",
+	  "Name": "Health Potion M",
+	  "Description": "Provides 50% HP.",
+	  "Effect": "HP",
+	  "Value": 50,
+	  "Price": 175,
+	  "Rarity": "Common",
+	  "CombatItem": true
+	},
+	{
+	  "ID": "C0003",
+	  "ItemType": "Consumable",
+	  "Name": "Health Potion L",
+	  "Description": "Provides 100% HP.",
+	  "Effect": "HP",
+	  "Value": 100,
+	  "Price": 300,
+	  "Rarity": "Common",
+	  "CombatItem": true
+	},
+	{
+	  "ID": "C0004",
+	  "ItemType": "Consumable",
+	  "Name": "Protein Bar",
+	  "Description": "Boosts STR for 2 turns.",
+	  "Effect": "STR",
+	  "Value": 15,
+	  "Price": 300,
+	  "Rarity": "Uncommon",
+	  "CombatItem": true,
+	  "Turns": 2
+	},
+	{
+	  "ID": "C0005",
+	  "ItemType": "Consumable",
+	  "Name": "Lucky Clover",
+	  "Description": "Increase your crit chance slightly for 5 turns.",
+	  "Effect": "CRI",
+	  "Value": 10,
+	  "Price": 600,
+	  "Rarity": "Rare",
+	  "CombatItem": true,
+	  "Turns": 5
+	},
+	{
+	  "ID": "C0006",
+	  "ItemType": "Consumable",
+	  "Name": "Book of Knowledge",
+	  "Description": "Increase your stat point to invest on training grounds.",
+	  "Effect": "BOO",
+	  "Value": 10,
+	  "Price": 10000,
+	  "Rarity": "Epic",
+	  "CombatItem": false
+	},
+	{
+      "ID": "C0007",
+      "ItemType": "Consumable",
+      "Name": "Energy Drink",
+      "Description": "Boosts AGI for 2 turns.",
+      "Effect": "AGI",
+      "Value": 10,
+      "Price": 250,
+      "Rarity": "Rare",
+      "CombatItem": true,
+      "Turns": 2
+  }
+]

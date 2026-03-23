@@ -1,0 +1,57 @@
+[
+	{
+	  "ID": "A0001",
+	  "ItemType": "Armor",
+	  "Name": "Tattered Shirt",
+	  "Description": "Provides minimal protection.",
+	  "Price": 10,
+	  "Rarity": "Common",
+	  "ArmorDef": 2,
+	  "ExtraHP": 5,
+	  "RequiredLevel": 1
+	},
+	{
+	  "ID": "A0002",
+	  "ItemType": "Armor",
+	  "Name": "Leather Vest",
+	  "Description": "Lightweight and flexible.",
+	  "Price": 120,
+	  "Rarity": "Uncommon",
+	  "ArmorDef": 8,
+	  "ExtraHP": 20,
+	  "RequiredLevel": 3
+	},
+	{
+	  "ID": "A0003",
+	  "ItemType": "Armor",
+	  "Name": "Chainmail",
+	  "Description": "Interlocking metal rings.",
+	  "Price": 350,
+	  "Rarity": "Rare",
+	  "ArmorDef": 18,
+	  "ExtraHP": 50,
+	  "RequiredLevel": 6
+	},
+	{
+	  "ID": "A0004",
+	  "ItemType": "Armor",
+	  "Name": "Steel Plate",
+	  "Description": "Heavy protection for knights.",
+	  "Price": 900,
+	  "Rarity": "Epic",
+	  "ArmorDef": 40,
+	  "ExtraHP": 100,
+	  "RequiredLevel": 10
+	},
+	{
+	  "ID": "A0005",
+	  "ItemType": "Armor",
+	  "Name": "VoID Armor",
+	  "Description": "Armor forged from the darkness itself.",
+	  "Price": 3000,
+	  "Rarity": "Legendary",
+	  "ArmorDef": 75,
+	  "ExtraHP": 250,
+	  "RequiredLevel": 20
+	}
+]

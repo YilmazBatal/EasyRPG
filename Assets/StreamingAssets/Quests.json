@@ -1,0 +1,22 @@
+[
+	{
+	  "ID": "Q0001",
+	  "IsRepeatable": true,
+	  "Name": "Genocide",
+	  "Description": "So many mobs around and villagers are tired of this. You need to help them. Kill those mobs.",
+	  "Objective": 10,
+	  "RewardGold": 3,
+	  "RewardExp" : 0.125,
+	  "RewardItem": true
+	},
+	{
+	  "ID": "Q0002",
+	  "IsRepeatable": true,
+	  "Name": "Crafter",
+	  "Description": "Craft an item.",
+	  "Objective": 1,
+	  "RewardGold": 5,
+	  "RewardExp" : 0.203,
+	  "RewardItem": false
+	}
+]

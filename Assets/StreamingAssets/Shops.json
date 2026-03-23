@@ -1,0 +1,17 @@
+[
+  {
+    "ID": "S001",
+    "ShopName": "Iron Forge Blacksmith",
+    "Items": [ "W0001", "W0002", "A0001", "A0002", "C0001", "C0002" ]
+  },
+  {
+    "ID": "S002",
+    "ShopName": "Whistling Crags Armory",
+    "Items": [ "W0003", "A0003", "C0001", "C0002", "C0003", "C0004" ]
+  },
+  {
+    "ID": "S003",
+    "ShopName": "Wood's Forgery",
+    "Items": [ "W0004", "A0004", "C0002", "C0004" ]
+  }
+]
