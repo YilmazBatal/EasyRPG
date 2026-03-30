@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 8244877254057063069}
   - component: {fileID: 101675834334823245}
   m_Layer: 5
-  m_Name: ItemCardBuy
+  m_Name: ItemCardBuySell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,10 +523,10 @@ RectTransform:
   - {fileID: 7312102467795660735}
   m_Father: {fileID: 8672697048173988116}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 68.67884, y: 0}
-  m_SizeDelta: {x: 457.705, y: 100}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -349, y: 0}
+  m_SizeDelta: {x: 457.70496, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &68398102007735272
 MonoBehaviour:

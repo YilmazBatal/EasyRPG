@@ -6,7 +6,7 @@ namespace TextBasedRPG.Core.Entities
 {
     public abstract class Entity : IDamageable
     {
-        public double Scaling = 1.3; 
+        public float Scaling = 1.3f; 
         public int EliteChance = 5; // %
         public int LevelInterval = 3;
 
@@ -17,14 +17,15 @@ namespace TextBasedRPG.Core.Entities
         public int BaseATK;
         public int BaseDEF;
         public int BaseSPD;
+        public string EntitySprite;
         public int Level;
         public Dictionary<string, int>? LootTable;  // ID, Chances%
         public List<string> Locations;
-        public double GoldMultiplier;
+        public float GoldMultiplier;
         public EntityType EntityType;
 
         // Runtime datas
-        public double PowerScore => (BaseHP * 0.1) + (BaseATK * 2) + (BaseDEF * 1.5) + (BaseSPD * 0.5);
+        public float PowerScore => (BaseHP * 0.1f) + (BaseATK * 2f) + (BaseDEF * 1.5f) + (BaseSPD * 0.5f);
         public int TotalHP => (int)Math.Round((decimal)BaseHP + (decimal)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
         public int GoldReward => (int)Math.Round((decimal)BaseHP + (decimal)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
         public int CurHP { get; set; }

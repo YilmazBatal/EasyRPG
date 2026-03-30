@@ -1,4 +1,5 @@
-﻿using TextBasedRPG.Managers;
+﻿using TextBasedRPG.Events;
+using TextBasedRPG.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,23 @@ namespace Assets._Project.Scripts.UI.Cards
         [SerializeField] private TMP_Text equippedWeaponName;
         [SerializeField] private TMP_Text equippedArmorName;
 
+        private void OnEnable()
+        {
+            EventManager.HeroEvents.OnGoldChanged += UpdateGoldUI;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.HeroEvents.OnGoldChanged -= UpdateGoldUI;
+        }
+
+        private void UpdateGoldUI(GameContext context)
+        {
+            playerGold.text = $"{context.Player.Gold}";
+
+            LeanTween.scale(playerGold.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
+        }
+
         public void UpdateRightSection(GameContext context)
         {
             if (context.Player != null)
@@ -37,14 +55,15 @@ namespace Assets._Project.Scripts.UI.Cards
 
             playerAvatar.sprite = heroDb.GetHeroByName(context.Player.ClassName).classIcon;
             playerClass.text = context.Player.ClassName;
+            
             playerHPValue.text = $"{context.Player.CurHP}/{context.Player.TotalHP}";
-            // change width out of 335
-            //playerHPFill.fillAmount = (float)context.Player.CurHP / context.Player.TotalHP;
+            playerHPFill.fillAmount = (float)context.Player.CurHP / context.Player.TotalHP;
+            
             playerEXPValue.text = $"{context.Player.CurExp}/{context.Player.ReqExp}";
-            // change width out of 335
-            //playerEXPFill.fillAmount = (float)context.Player.CurExp / context.Player.ReqExp;
+            playerEXPFill.fillAmount = (float)context.Player.CurExp / context.Player.ReqExp;
+
             playerLevel.text = $"{context.Player.Level}";
-            playerGold.text = $"{context.Player.Gold}";
+            UpdateGoldUI(context);
 
             if (context.Player.ActiveLocation != null)
                 playerLocation.text = LocationManager.locations[context.Player.ActiveLocation];

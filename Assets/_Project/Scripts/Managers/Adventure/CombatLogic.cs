@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using TextBasedRPG.Core.Entities;
-using TextBasedRPG.Interfaces;
 
 namespace TextBasedRPG.Managers
 {

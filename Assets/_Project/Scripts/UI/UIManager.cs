@@ -1,6 +1,9 @@
 ﻿using Assets._Project.Scripts.UI;
 using Assets._Project.Scripts.UI.Cards;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -25,11 +28,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _popUp;
     [SerializeField] private GameObject _heroSelectionContent;
     [SerializeField] private GameObject _classSelection;
-
     [HideInInspector] public GameObject _activePopUp;
 
     public Dictionary<string, Color> rarityColors;
 
+    [Header("Configuration")]
+    [SerializeField] [InspectorRange(0.01f,0.03f)] float typeWriterSpeed = 0.015f;
 
     [System.Serializable]
     public struct PanelMapping
@@ -43,8 +47,11 @@ public class UIManager : MonoBehaviour
         Instance = this;
         _panelDictionary = new Dictionary<GameState, GameObject>();
         foreach (var p in panels) _panelDictionary.Add(p.state, p.panelObject);
-
-        InitializeRarityColors();
+        foreach (var p in panels)
+        {
+            p.panelObject.SetActive(false);
+        }
+            InitializeRarityColors();
 
     }
     private void Start()
@@ -60,8 +67,6 @@ public class UIManager : MonoBehaviour
 
         _activePanel = _panelDictionary[newState];
         _activePanel.SetActive(true);
-
-        Debug.Log(newState + " Paneli Açıldı.");
     }
 
     public void GeneratePopUp(string title, string description, UnityAction onConfirm)
@@ -111,5 +116,46 @@ public class UIManager : MonoBehaviour
             { "Epic", new Color(187f/255f, 85f/255f, 255/255f) },
             { "Legendary", new Color(1f, 0.75f, 0f) }
         };
+    }
+
+    public static IEnumerator BruteForceTypeWriterRoutine(TMP_Text textComponent, string fullText)
+    {
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        textComponent.text = "";
+        string currentDisplayedText = "";
+
+        for (int i = 0; i < fullText.Length; i++)
+        {
+            if (fullText[i] == '<')
+            {
+                int tagCloseIndex = fullText.IndexOf('>', i);
+                if (tagCloseIndex != -1)
+                {
+                    string tag = fullText.Substring(i, tagCloseIndex - i + 1);
+                    currentDisplayedText += tag;
+                    textComponent.text = currentDisplayedText;
+                    i = tagCloseIndex; 
+                    continue;
+                }
+            }
+
+            char targetChar = fullText[i];
+
+            if (targetChar == ' ')
+            {
+                currentDisplayedText += " ";
+                textComponent.text = currentDisplayedText;
+                continue;
+            }
+
+            for (int j = 0; j < 3; j++)
+            {
+                textComponent.text = currentDisplayedText + chars[Random.Range(0, chars.Length)];
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            currentDisplayedText += targetChar;
+            textComponent.text = currentDisplayedText;
+        }
     }
 }

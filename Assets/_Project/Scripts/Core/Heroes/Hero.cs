@@ -43,9 +43,9 @@ namespace TextBasedRPG.Core.Heroes
         public int TotalHP => BaseHP + (EquippedArmor?.ExtraHP ?? 0) + (int)Math.Round(InvestedVITPoints * 1.5);
         public int TotalSPD => BaseSPD + (int)Math.Round(InvestedAGIPoints * 1.5);
         public int CurHP { get; internal set; } = 100;
-        public double CritRate => 5 + InvestedDEXPoints * 1.0 / 3.0; // %
-        public double CritDamage => 150 + InvestedSTRPoints; // %
-        public double EvasionRate => 5 + InvestedAGIPoints * 1.0 / 3.0; 
+        public float CritRate => 5f + InvestedDEXPoints * 1.0f / 3.0f; // %
+        public float CritDamage => 150f + InvestedSTRPoints; // %
+        public float EvasionRate => 5f + InvestedAGIPoints * 1.0f / 3.0f; 
 
         /// <summary>
         /// Method to display hero's base stats summary in choosing screen 

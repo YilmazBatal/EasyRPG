@@ -106,6 +106,7 @@ namespace TextBasedRPG.Managers.DataManagement
                     mappedEntity.BaseATK = data.BaseATK;
                     mappedEntity.BaseDEF = data.BaseDEF;
                     mappedEntity.BaseSPD = data.BaseSPD;
+                    mappedEntity.EntitySprite = data.EntitySprite;
                     mappedEntity.GoldMultiplier = data.GoldMultiplier;
                     mappedEntity.LootTable = data.LootTable ?? new();
                     mappedEntity.Locations = data.Locations ?? new();

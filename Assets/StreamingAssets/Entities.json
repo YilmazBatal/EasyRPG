@@ -1,26 +1,28 @@
 [
   {
     "ID": "E0001",
-    "Name": "Forest Slime",
+    "Name": "Slime",
     "BaseHP": 25,
     "BaseATK": 4,
     "BaseDEF": 2,
     "BaseSPD": 3,
+    "EntitySprite" : "slime",
     "EntityType": "Enemy",
     "GoldMultiplier": 1.0,
     "LootTable": {
       "M0001": 40, 
-      "I0012": 10
+      "A0001": 10
     },
     "Locations": ["L001"]
   },
   {
     "ID": "E0002",
-    "Name": "Forest Goblin",
+    "Name": "Goblin Soldier",
     "BaseHP": 55,
     "BaseATK": 12,
     "BaseDEF": 5,
     "BaseSPD": 12,
+    "EntitySprite": "goblin_soldier",
     "EntityType": "Enemy",
     "GoldMultiplier": 1.2,
     "LootTable": {
@@ -31,11 +33,44 @@
   },
   {
     "ID": "E0003",
+    "Name": "Goblin Archer",
+    "BaseHP": 55,
+    "BaseATK": 12,
+    "BaseDEF": 5,
+    "BaseSPD": 12,
+    "EntitySprite": "goblin_archer",
+    "EntityType": "Enemy",
+    "GoldMultiplier": 1.2,
+    "LootTable": {
+      "M0002": 40,
+      "W0001": 10
+    },
+    "Locations": ["L001"]
+  },
+  {
+    "ID": "E0004",
     "Name": "Skeleton Archer",
     "BaseHP": 40,
     "BaseATK": 18,
     "BaseDEF": 3,
     "BaseSPD": 20,
+    "EntitySprite": "skeleton_archer",
+    "EntityType": "Enemy",
+    "GoldMultiplier": 1.3,
+    "LootTable": {
+      "M0003": 30,
+      "W0003": 15
+    },
+    "Locations": ["L001", "L002"]
+  },
+  {
+    "ID": "E0005",
+    "Name": "Wolf",
+    "BaseHP": 40,
+    "BaseATK": 18,
+    "BaseDEF": 3,
+    "BaseSPD": 20,
+    "EntitySprite": "wolf",
     "EntityType": "Enemy",
     "GoldMultiplier": 1.3,
     "LootTable": {
@@ -51,6 +86,7 @@
     "BaseATK": 35,
     "BaseDEF": 15,
     "BaseSPD": 18,
+    "EntitySprite": "wolf",
     "EntityType": "Boss",
     "GoldMultiplier": 5,
     "LootTable": {
@@ -67,6 +103,7 @@
     "BaseATK": 20,
     "BaseDEF": 40,
     "BaseSPD": 4,
+    "EntitySprite": "wolf",
     "EntityType": "Boss",
     "GoldMultiplier": 5,
     "LootTable": {

@@ -4,7 +4,6 @@
     "Name": "The Awakening Wilds",
     "Description" : "A soft breeze carries the scent of blooming wildflowers. It is a place of beginnings, yet the distant rustling suggests you are not alone.",
     "LevelCap" : 20,
-    "Entities" : ["E0001", "E0002", "B0001"],
     "AdventureTexts": [
         "You found a suspicious looking rock. It looked back. You decided to walk away slowly.",
         "You tried to count your steps, but you forgot what comes after twelve. Sad.",
@@ -107,7 +106,6 @@
     "Name": "Amber Woods",
     "Description": "The shadows are longer and darker here. As the orange leaves crunch under your boots, you feel the weight of eyes watching from the thicket.",
     "LevelCap" : 60,
-    "Entities" : ["E0004", "E0005", "B0003"],
     "AdventureTexts": [
         "The crunching of leaves under your feet sounds like hundreds of tiny bones. Comforting.",
         "You saw a shadow move behind a tree. When you looked, the tree was gone too. Wait, what?",
