@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Interfaces;
+using TextBasedRPG.Managers;
 using TextBasedRPG.Models;
 using Random = UnityEngine.Random;
 
 namespace TextBasedRPG.Core.Heroes
 {
-    public abstract class Hero : IDamageable
+    public abstract class Hero/* : IDamageable*/
     {
         public List<InventoryData>? Inventory {  get; set; } = new List<InventoryData>();
         // Basic Info
@@ -66,18 +67,18 @@ namespace TextBasedRPG.Core.Heroes
         //        """);
         }
 
-        public void TakeDamage(int amount)
-        {
-            bool didEvade = Random.Range(0, 101) <= EvasionRate;
-            if (didEvade) {
-                //Console.WriteLine("User has dodged the attack.");
-            }
-            else {
-                CurHP -= Math.Max(1, amount);
-                if (CurHP < 0) CurHP = 0;
-            }
+        //public void TakeDamage(int amount)
+        //{
+        //    bool didEvade = Random.Range(0, 101) <= EvasionRate;
+        //    if (didEvade) {
+        //        //Console.WriteLine("User has dodged the attack.");
+        //    }
+        //    else {
+        //        CurHP -= Math.Max(1, amount);
+        //        if (CurHP < 0) CurHP = 0;
+        //    }
 
-        }
+        //}
         public void FullHeal()
         {
             CurHP = TotalHP;
@@ -94,7 +95,8 @@ namespace TextBasedRPG.Core.Heroes
             if (CurExp < 0) CurExp = 0;
 
             CurHP = TotalHP;
-
+            
+            // Spawn penalty notification somewhere 
             //MenuUI.ColoredMsg(ConsoleColor.Red, "\n[DEATH] You have died and suffered penalties.");
             //MenuUI.ColoredMsg(ConsoleColor.Yellow, $"[PENALTY] Lost Gold: {goldPenalty}");
             //MenuUI.ColoredMsg(ConsoleColor.Cyan, $"[PENALTY] Lost Experience: {expPenalty}");

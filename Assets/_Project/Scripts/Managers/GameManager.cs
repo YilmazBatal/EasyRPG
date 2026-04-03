@@ -47,18 +47,7 @@ public class GameManager : MonoBehaviour
         }
         ChangeState(_currentState);
     }
-    void Update()
-    {
-        if (_states != null && _states.ContainsKey(_currentState))
-        {
-            //GameState nextState = _states[_currentState].Update(Context);
 
-            //if (nextState != _currentState)
-            //{
-            //    ChangeState(nextState);
-            //}
-        }
-    }
     private void InitializeStates()
     {
         _states = new Dictionary<GameState, IMenuState> {
@@ -83,9 +72,9 @@ public class GameManager : MonoBehaviour
             _currentState = newState;
 
             if (UIManager.Instance != null)
+            {
                 UIManager.Instance.SwitchPanel(_currentState);
-
-            Debug.Log("New State: " + _currentState);
+            }
         }
     }
 }

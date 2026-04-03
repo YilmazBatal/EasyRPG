@@ -8,7 +8,7 @@ using TextBasedRPG.Models;
 using UnityEngine;
 using Material = TextBasedRPG.Core.Items.Material;
 
-namespace TextBasedRPG.Managers.DataManagement
+namespace  TextBasedRPG.Managers.DataManagement
 {
     internal class DataManager : ISaveService
     {
@@ -164,8 +164,8 @@ namespace TextBasedRPG.Managers.DataManagement
         private static void InitializeEvents(GameContext context)
         {
             // clearing in case cuz defensive programming
-            EventManager.HeroEvents.OnExpGained -= (amount) => LevelManager.CheckLevelUp(context);
-            EventManager.HeroEvents.OnExpGained += (amount) => LevelManager.CheckLevelUp(context);
+            EventManager.HeroEvents.OnExpChanged -= (context) => LevelManager.CheckLevelUp(context);
+            EventManager.HeroEvents.OnExpChanged += (context) => LevelManager.CheckLevelUp(context);
         }
 
     }

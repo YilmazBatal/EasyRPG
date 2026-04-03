@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     }
     private void Start()
     {
+
         //foreach (var p in panels) p.panelObject.SetActive(false);
     }
 
@@ -63,10 +64,28 @@ public class UIManager : MonoBehaviour
     {
         if (!_panelDictionary.ContainsKey(newState)) return;
 
+        var oldState = _activePanel;
+
         if (_activePanel != null) _activePanel.SetActive(false);
 
         _activePanel = _panelDictionary[newState];
         _activePanel.SetActive(true);
+
+        //LeanTween.cancel(oldState);
+        //LeanTween.cancel(_activePanel);
+
+        if (oldState == null) return;
+        else
+        {
+            LeanTween.value(oldState.gameObject, 1f, 0f, 0.2f).setEaseInOutCubic().setOnUpdate((float val) =>
+            {
+                oldState.GetComponent<CanvasGroup>().alpha = val;
+            });
+            LeanTween.value(_activePanel.gameObject, 0f, 1f, 0.2f).setEaseInOutCubic().setOnUpdate((float val) =>
+            {
+                _activePanel.GetComponent<CanvasGroup>().alpha = val;
+            });
+        }
     }
 
     public void GeneratePopUp(string title, string description, UnityAction onConfirm)
@@ -117,7 +136,7 @@ public class UIManager : MonoBehaviour
             { "Legendary", new Color(1f, 0.75f, 0f) }
         };
     }
-
+    
     public static IEnumerator BruteForceTypeWriterRoutine(TMP_Text textComponent, string fullText)
     {
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";

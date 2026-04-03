@@ -26,12 +26,12 @@ namespace TextBasedRPG.Core.Entities
 
         // Runtime datas
         public float PowerScore => (BaseHP * 0.1f) + (BaseATK * 2f) + (BaseDEF * 1.5f) + (BaseSPD * 0.5f);
-        public int TotalHP => (int)Math.Round((decimal)BaseHP + (decimal)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
-        public int GoldReward => (int)Math.Round((decimal)BaseHP + (decimal)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
+        public int TotalHP => (int)Math.Round(BaseHP + (float)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
+        public int GoldReward => (int)Math.Round(BaseHP + (float)(BaseHP * GeneratedLevel * 20 / 100 * (isElite ? Scaling : 1)));
         public int CurHP { get; set; }
-        public int TotalATK => (int)Math.Round((decimal)BaseATK + (decimal)(BaseATK * GeneratedLevel * 20/100 * (isElite ? Scaling : 1)));
-        public int TotalDEF => (int)Math.Round((decimal) BaseDEF + (decimal) (BaseDEF * GeneratedLevel * 5/100 * (isElite? Scaling : 1)));
-        public int CurrentSPD => (int)Math.Round((decimal) BaseSPD + (decimal) (BaseSPD + GeneratedLevel));
+        public int TotalATK => (int)Math.Round(BaseATK + (float)(BaseATK * GeneratedLevel * 20/100 * (isElite ? Scaling : 1)));
+        public int TotalDEF => (int)Math.Round(BaseDEF + (float) (BaseDEF * GeneratedLevel * 5/100 * (isElite? Scaling : 1)));
+        public int CurrentSPD => (int)Math.Round(BaseSPD + (float) (BaseSPD + GeneratedLevel));
         public int GeneratedLevel { get; set; }
         public bool isElite { get; set; }
         public bool IsAlive => CurHP > 0;
