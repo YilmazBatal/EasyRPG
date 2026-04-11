@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TextBasedRPG.Core.Items;
+using TextBasedRPG.Events;
 using TextBasedRPG.Interfaces;
 using TextBasedRPG.Managers;
 using TextBasedRPG.Models;
@@ -38,14 +39,18 @@ namespace TextBasedRPG.Core.Heroes
         public int Gold { get; internal set; } = 0;
         // Advanced stats             
         public int BonusATK { get; internal set; }
-        public int BonusDef { get; internal set; }
+        public float BonusCritRate { get; internal set; } // %
+        public float BonusCritDMG { get; internal set; } // %
+        public int BonusDEF { get; internal set; }
+        public int BonusSPD { get; internal set; }
+        public int BonuslessATK => BaseATK + (EquippedWeapon?.WeaponATK ?? 5) +(int)Math.Round(InvestedSTRPoints * 1.5);
         public int TotalATK => BaseATK + (EquippedWeapon?.WeaponATK ?? 5) + (int)Math.Round(InvestedSTRPoints * 1.5) + BonusATK;
-        public int TotalDEF => BaseDEF + (EquippedArmor?.ArmorDef ?? 0) + (int)Math.Round(InvestedVITPoints * 1.5) + BonusDef;
+        public int TotalDEF => BaseDEF + (EquippedArmor?.ArmorDef ?? 0) + (int)Math.Round(InvestedVITPoints * 1.5) + BonusDEF;
         public int TotalHP => BaseHP + (EquippedArmor?.ExtraHP ?? 0) + (int)Math.Round(InvestedVITPoints * 1.5);
         public int TotalSPD => BaseSPD + (int)Math.Round(InvestedAGIPoints * 1.5);
         public int CurHP { get; internal set; } = 100;
-        public float CritRate => 5f + InvestedDEXPoints * 1.0f / 3.0f; // %
-        public float CritDamage => 150f + InvestedSTRPoints; // %
+        public float CritRate => 5f + BonusCritRate + InvestedDEXPoints * 1.0f / 3.0f; // %
+        public float CritDamage => 150f + InvestedSTRPoints + BonusCritDMG; // %
         public float EvasionRate => 5f + InvestedAGIPoints * 1.0f / 3.0f; 
 
         /// <summary>
@@ -66,19 +71,6 @@ namespace TextBasedRPG.Core.Heroes
 
         //        """);
         }
-
-        //public void TakeDamage(int amount)
-        //{
-        //    bool didEvade = Random.Range(0, 101) <= EvasionRate;
-        //    if (didEvade) {
-        //        //Console.WriteLine("User has dodged the attack.");
-        //    }
-        //    else {
-        //        CurHP -= Math.Max(1, amount);
-        //        if (CurHP < 0) CurHP = 0;
-        //    }
-
-        //}
         public void FullHeal()
         {
             CurHP = TotalHP;
@@ -95,7 +87,11 @@ namespace TextBasedRPG.Core.Heroes
             if (CurExp < 0) CurExp = 0;
 
             CurHP = TotalHP;
-            
+
+            EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
+            EventManager.HeroEvents.TriggerGoldChanged(GameManager.Instance.Context);
+            EventManager.HeroEvents.TriggerExpChanged(GameManager.Instance.Context);
+
             // Spawn penalty notification somewhere 
             //MenuUI.ColoredMsg(ConsoleColor.Red, "\n[DEATH] You have died and suffered penalties.");
             //MenuUI.ColoredMsg(ConsoleColor.Yellow, $"[PENALTY] Lost Gold: {goldPenalty}");

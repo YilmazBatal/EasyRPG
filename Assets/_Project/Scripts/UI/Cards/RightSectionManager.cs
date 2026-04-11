@@ -1,7 +1,9 @@
 ﻿using TextBasedRPG.Events;
 using TextBasedRPG.Managers;
+using TextBasedRPG.Models;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 namespace Assets._Project.Scripts.UI.Cards
@@ -13,8 +15,10 @@ namespace Assets._Project.Scripts.UI.Cards
         [SerializeField] public Image playerAvatar;
         [SerializeField] private TMP_Text playerClass;
         [SerializeField] private TMP_Text playerHPValue;
+        [SerializeField] private Image playerGhostHPFill;
         [SerializeField] private Image playerHPFill;
         [SerializeField] private TMP_Text playerEXPValue;
+        [SerializeField] private Image playerGhostEXPFill;
         [SerializeField] private Image playerEXPFill;
         [SerializeField] private TMP_Text playerLevel;
         [SerializeField] private TMP_Text playerGold;
@@ -24,6 +28,8 @@ namespace Assets._Project.Scripts.UI.Cards
         [SerializeField] public TMP_Text attackVal;
         [SerializeField] public TMP_Text defenseVal;
         [SerializeField] public TMP_Text speedVal;
+        [SerializeField] public TMP_Text critRateVal;
+        [SerializeField] public TMP_Text critDmgVal;
 
         [Header("Equipments")]
         [SerializeField] private TMP_Text equippedWeaponName;
@@ -55,32 +61,40 @@ namespace Assets._Project.Scripts.UI.Cards
         }
         public void UpdatExpUI(GameContext context)
         {
+            float targetFill = (float)context.Player.CurExp / context.Player.ReqExp;
             playerLevel.text = $"{context.Player.Level}";
             playerEXPValue.text = $"{context.Player.CurExp}/{context.Player.ReqExp}";
 
-            LeanTween.value(playerEXPFill.gameObject, playerEXPFill.fillAmount, (float)context.Player.CurExp / context.Player.ReqExp, 0.5f).setOnUpdate((float val) =>
+            if (targetFill < playerEXPFill.fillAmount)
             {
-                playerEXPFill.fillAmount = val;
-            }).setEaseInOutCubic();
+                playerEXPFill.fillAmount = 0f;
+                playerGhostEXPFill.fillAmount = 0f;
+            }
+
+            UIExtensions.GhostBarFill(playerEXPFill, playerGhostEXPFill, targetFill);
 
             LeanTween.scale(playerEXPValue.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
             LeanTween.scale(playerEXPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.1f, 0.1f).setLoopPingPong(1);
         }
         public void UpdateHPUI(GameContext context)
         {
+            if (context.Player.CurHP <= context.Player.TotalHP * 0.3f)
+            {
+                //vignette thing fix here
+            }
+            float targetFill = (float)context.Player.CurHP / context.Player.TotalHP;
             playerHPValue.text = $"{context.Player.CurHP}/{context.Player.TotalHP}";
 
-            LeanTween.value(playerHPFill.gameObject, playerHPFill.fillAmount, (float)context.Player.CurHP / context.Player.TotalHP, 0.5f).setOnUpdate((float val) =>
-            {
-                playerHPFill.fillAmount = val;
-            }).setEaseInOutCubic();
+            UIExtensions.GhostBarFill(playerHPFill, playerGhostHPFill, targetFill);
 
             LeanTween.scale(playerHPValue.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
-            LeanTween.scale(playerHPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.1f, 0.1f).setLoopPingPong(1);
+            LeanTween.scale(playerHPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.05f, 0.1f).setLoopPingPong(1);
+
+            EventManager.CombatEvents.TriggerOnPlayerLowHP();
 
         }
         #endregion
-        
+
         #region UI Updates
         public void UpdateRightSection(GameContext context)
         {
@@ -100,9 +114,11 @@ namespace Assets._Project.Scripts.UI.Cards
             
             playerHPValue.text = $"{context.Player.CurHP}/{context.Player.TotalHP}";
             playerHPFill.fillAmount = (float)context.Player.CurHP / context.Player.TotalHP;
-            
+            playerGhostHPFill.fillAmount = (float)context.Player.CurHP / context.Player.TotalHP;
+
             playerEXPValue.text = $"{context.Player.CurExp}/{context.Player.ReqExp}";
             playerEXPFill.fillAmount = (float)context.Player.CurExp / context.Player.ReqExp;
+            playerGhostEXPFill.fillAmount = (float)context.Player.CurExp / context.Player.ReqExp;
 
             playerLevel.text = $"{context.Player.Level}";
             UpdateGoldUI(context);
@@ -112,11 +128,13 @@ namespace Assets._Project.Scripts.UI.Cards
             else
                 playerLocation.text = "Unknown";
         }
-        private void PlayerQuickStats(GameContext context)
+        public void PlayerQuickStats(GameContext context)
         {
-            attackVal.text = $"{context.Player.TotalATK}";
-            defenseVal.text = $"{context.Player.TotalDEF}";
-            speedVal.text = $"{context.Player.TotalSPD}";
+            attackVal.text = $"{context.Player.TotalATK} + <color=#8FCE00>{context.Player.BonusATK}</color>";
+            defenseVal.text = $"{context.Player.TotalDEF} + <color=#8FCE00>{context.Player.BonusDEF}</color>";
+            speedVal.text = $"{context.Player.TotalSPD} + <color=#8FCE00>{context.Player.BonusSPD}</color>";
+            critRateVal.text = $"{context.Player.CritRate} + <color=#8FCE00>{context.Player.BonusCritRate}</color>%";
+            critDmgVal.text = $"{context.Player.CritDamage} + <color=#8FCE00>{context.Player.BonusCritDMG}</color>%";
         }
         private void EquipmentCards(GameContext context)
         {

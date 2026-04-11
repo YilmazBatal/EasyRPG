@@ -4,10 +4,10 @@ using System;
 using System.Collections;
 using System.Linq;
 using TextBasedRPG.Core.Entities;
+using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Events;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +18,7 @@ namespace TextBasedRPG.Managers
     /// </summary>
     public class CombatManager : MonoBehaviour
     {
+        #region Variables
         [Header("Enemy UI References")]
         [SerializeField] TMP_Text entityName;
         [SerializeField] public Image entitySprite;
@@ -26,11 +27,13 @@ namespace TextBasedRPG.Managers
         [SerializeField] TMP_Text def;
         [SerializeField] TMP_Text speed;
         [SerializeField] TMP_Text hp;
+        [SerializeField] Image ghostFill;
         [SerializeField] Image healthSprite;
         [SerializeField] public TMP_Text damageText;
 
         [Header("Other")]
         [SerializeField] Image wobbleImage;
+        [SerializeField] Image vignette;
         [SerializeField] TMP_Text contentText;
         [SerializeField] public bool isPlayerTurn;
         [SerializeField] public bool isCombatActive = false;
@@ -39,21 +42,41 @@ namespace TextBasedRPG.Managers
         [SerializeField] public float shakeIntensity = 3f;
         [SerializeField] public float shakeDuration = 0.25f;
 
+        [Header("Focus And Guard")]
+        // Can't miss attack while focused. Focus resets if you hit.
+        // Each focus stack gives you +5% crit chance, +10% crit damage and +5% attack.
+        public int focusAmount = 0;
+        public int focusCap = 4;
+        // Guard gives stackable hp along the halving taken damage. Can't be used back to back
+        public int guardAmount = 0;
+        public int guardPerMove = 25; // %
+        public int maxShield = 100;
+        public bool didGuardLastTurn = false;
+
         public Entity generatedEnemy;
         CombatActions ca;
-
-
+        #endregion
+        private void Start()
+        {
+            focusCap = 4;
+            guardPerMove = (int)(GameManager.Instance.Context.Player.TotalHP * 0.10f); // %
+            maxShield = (int)(GameManager.Instance.Context.Player.TotalHP * 0.25f);
+        }
         #region OnEnable & OnDisable
         private void OnEnable()
         {
             StartCoroutine(SetupCombatRoutine());
-        }
 
+            EventManager.CombatEvents.OnPlayerGotHit += OnPlayerGotHit;
+            EventManager.CombatEvents.OnPlayerLowHP += OnPlayerLowHP;
+        }
+        
         private void OnDisable()
         {
             LeanTween.cancel(entitySprite.gameObject);
 
             EventManager.CombatEvents.OnPlayerGotHit -= OnPlayerGotHit;
+            EventManager.CombatEvents.OnPlayerLowHP -= OnPlayerLowHP;
         }
 
         private IEnumerator SetupCombatRoutine()
@@ -69,7 +92,6 @@ namespace TextBasedRPG.Managers
                 .setLoopPingPong()
                 .setEaseInOutCubic();
 
-            EventManager.CombatEvents.OnPlayerGotHit += OnPlayerGotHit;
         }
         #endregion
 
@@ -95,7 +117,10 @@ namespace TextBasedRPG.Managers
             contentText.text = string.Empty;
 
             ca = gameObject.GetComponent<CombatActions>();
-            ca.fleeBtn.GetComponentInChildren<TMP_Text>().text = $"Run Away - {CombatActions.CalculateRunAwayChance(GameManager.Instance.Context, generatedEnemy).ToString()}%";
+            //ca.OnFocusChanged();
+            //ca.OnGuardChanged();
+            ca.fleeBtn.GetComponentInChildren<TMP_Text>().text =
+                $"Run Away - {CombatActions.CalculateRunAwayChance(GameManager.Instance.Context, generatedEnemy).ToString()}%";
 
             StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{generatedEnemy.Name}</color> appears!"));
         }
@@ -136,13 +161,15 @@ namespace TextBasedRPG.Managers
             else if (result == CombatResult.Defeat)
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "You have Died! You will be penalized."));
-                GameManager.Instance.Context.Player.ApplyDeathPenalty();
+                StartCoroutine(WaitToPenalize(2f));
             } else if (result == CombatResult.RunAway)
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "Your journey continues..."));
                 
             }
             StartCoroutine(ClosePopup());
+
+            
         }
 
         private void DisableNavbar()
@@ -237,7 +264,7 @@ namespace TextBasedRPG.Managers
         {
             RightSectionManager rsm = UIManager.Instance.rightSection.gameObject.GetComponent<RightSectionManager>();
             RectTransform playerRect = rsm.playerAvatar.gameObject.GetComponent<RectTransform>();
-
+                
             if (isCrit)
             {
                 UIExtensions.Shake(playerRect, shakeIntensity + 7f, shakeDuration*2);
@@ -251,39 +278,93 @@ namespace TextBasedRPG.Managers
 
             UIExtensions.Flash(rsm.playerAvatar);
             UIExtensions.GenerateDamageText(rsm.damageText, isCrit, damage);
-
+        }
+        public void OnPlayerLowHP()
+        {
+            Hero player = GameManager.Instance.Context.Player;
+            if (vignette.gameObject != null)
+            {
+                if (player.CurHP >= player.TotalHP * 0.20f)
+                {
+                    LeanTween.cancel(vignette.gameObject);
+                    vignette.color = new Color(vignette.color.r, vignette.color.g, vignette.color.b, 0f);
+                }
+                else
+                {
+                    LeanTween.value(vignette.gameObject, 64f / 255f, 128f / 255f, 0.5f)
+                        .setEaseInOutCubic()
+                        .setOnUpdate((float val) => vignette.color = new Color(vignette.color.r, vignette.color.g, vignette.color.b, val)).
+                        setLoopPingPong();
+                }
+            } 
         }
         #endregion
 
         #region Enemy Actions
         public IEnumerator EnemyTurnRoutine()
         {
+            Hero player = GameManager.Instance.Context.Player;
+
             contentText.text = string.Empty;
             StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{generatedEnemy.Name}</color> is preparing to attack..."));
 
             yield return new WaitForSeconds(2.5f);
 
-
             IDamageCalculator damage = new DamageCalculator();
             int calculatedDamage = damage.CalculateDMG(
                 generatedEnemy.TotalATK,
-                GameManager.Instance.Context.Player.TotalDEF,
+                player.TotalDEF,
                 0f,
                 0f,
                 out bool isCrit);
 
-            string critText = isCrit ? "<color=#0F172A>Critical hit!</color>" : "";
+            if (didGuardLastTurn)
+            {
+                calculatedDamage = Mathf.CeilToInt(calculatedDamage * 0.5f);
+            }
+            int damageRemaining = calculatedDamage;
 
-            GameManager.Instance.Context.Player.CurHP -= calculatedDamage;
+            if (guardAmount > 0)
+            {
+                if (guardAmount >= damageRemaining)
+                {
+                    guardAmount -= damageRemaining;
+                    damageRemaining = 0;
+                }
+                else
+                {
+                    damageRemaining -= guardAmount;
+                    guardAmount = 0;
+                }
 
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage to you!"));
-            
-            EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage); 
+                EventManager.CombatEvents.TriggerOnGuardChanged();
+            }
+
+            if (damageRemaining > 0)
+            {
+                if (damageRemaining >= player.CurHP)
+                {
+                    damageRemaining = player.CurHP;
+                    player.CurHP = 0;
+                }
+                else
+                {
+                    player.CurHP -= damageRemaining;
+                }
+            }
+
+            didGuardLastTurn = false;
+            string critText = isCrit ? " <color=#0F172A>Critical hit!</color>" : "";
+
+            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
+                $"<color=#0F172A>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
+
+            EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage);
             EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
 
             yield return new WaitForSeconds(2.5f);
 
-            if (GameManager.Instance.Context.Player.CurHP <= 0)
+            if (player.CurHP <= 0)
             {
                 EndCombat(CombatResult.Defeat);
             }
@@ -295,22 +376,25 @@ namespace TextBasedRPG.Managers
             }
         }
         #endregion
+
+        #region mix
+        IEnumerator WaitToPenalize(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            GameManager.Instance.Context.Player.ApplyDeathPenalty();
+        }
         public void UpdateHealthUI(bool instant)
         {
             float targetFill = (float)generatedEnemy.CurHP / generatedEnemy.TotalHP;
             hp.text = $"{generatedEnemy.CurHP} / {generatedEnemy.TotalHP}";
 
             if (instant)
-                healthSprite.fillAmount = targetFill;
-            else
             {
-                LeanTween.value(healthSprite.gameObject, healthSprite.fillAmount, targetFill, 0.5f)
-                    .setEase(LeanTweenType.easeInOutQuad) 
-                    .setOnUpdate((float val) =>
-                    {
-                        healthSprite.fillAmount = val;
-                    });
+                healthSprite.fillAmount = targetFill;
+                ghostFill.fillAmount = targetFill;
             }
+            else
+                UIExtensions.GhostBarFill(healthSprite, ghostFill, targetFill);
         }
         public void SetButtonsInteractable(bool state)
         {
@@ -356,5 +440,6 @@ namespace TextBasedRPG.Managers
 
             return null;
         }
+        #endregion
     }
 }

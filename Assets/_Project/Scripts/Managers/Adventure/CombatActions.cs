@@ -1,19 +1,21 @@
 using Assets._Project.Scripts.UI;
+using Assets._Project.Scripts.UI.Cards;
 using System;
 using System.Collections;
 using TextBasedRPG.Core.Entities;
+using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Events;
 using TextBasedRPG.Managers;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using MathF = UnityEngine.Mathf;
 
 public class CombatActions : MonoBehaviour
 {
     #region References
-    [Header("CM & UI References")]
+    [Header("CM & Buttons")]
     [SerializeField] CombatManager combatManager;
     [SerializeField] TMP_Text contentText;
     [SerializeField] public Button attackBtn;
@@ -21,18 +23,41 @@ public class CombatActions : MonoBehaviour
     [SerializeField] public Button guardBtn;
     [SerializeField] public Button backpackBtn;
     [SerializeField] public Button fleeBtn;
+    [Header("Focus and Guard")]
+    [SerializeField] public Image focusBar;
+    [SerializeField] public Image focusBarGhost;
+    [SerializeField] public Image guardBar;
+    [SerializeField] public Image guardBarGhost;
+
+    // Move to datamanager - static data later
+    string[] focusMessages = {
+        "You guys started to make eye contact.",
+        "Inner peace found. Inner violence... loading.",
+        "You narrowed your eyes so much that you can barely see the enemy now. But hey, you're focused!",
+        "You're doing complex math in your head. 2+2 is... 4! Quick, attack before you forget!",
+        "You're staring at the enemy so intensely that it's starting to feel awkward for both of you."
+    };
+
     GameContext context;
+    RightSectionManager rsm;
     #endregion
 
     #region Enable & Disable
-    private void Start() => context = GameManager.Instance.Context;
+    private void Start() {
+        context = GameManager.Instance.Context;
+        rsm = GameObject.Find("RightStatusPanel").GetComponent<RightSectionManager>();
+    }
     private void OnEnable()
     {
         EventManager.CombatEvents.OnEntityGotHit += OnEntityGotHit;
+        EventManager.CombatEvents.OnGuardChanged += OnGuardChanged;
+        EventManager.CombatEvents.OnFocusChanged += OnFocusChanged;
     }
     private void OnDisable()
     {
         EventManager.CombatEvents.OnEntityGotHit -= OnEntityGotHit;
+        EventManager.CombatEvents.OnGuardChanged -= OnGuardChanged;
+        EventManager.CombatEvents.OnFocusChanged -= OnFocusChanged;
     }
     #endregion
 
@@ -45,18 +70,21 @@ public class CombatActions : MonoBehaviour
 
     private IEnumerator PlayerAttackRoutine()
     {
+        Hero p = context.Player;
         combatManager.SetButtonsInteractable(false);
 
+
         float hitAccuracy = Random.value;
-        if (hitAccuracy >= 0.95f)
+
+        if (combatManager.focusAmount > 0 || hitAccuracy <= 0.95f)
         {
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"{combatManager.generatedEnemy.Name} somehow dodged this."));
-            yield return new WaitForSeconds(2f);
-            combatManager.isPlayerTurn = false;
-            StartCoroutine(combatManager.EnemyTurnRoutine());
-        }
-        else
-        {
+            combatManager.focusAmount = 0;
+            p.BonusATK = 0;
+            p.BonusCritRate = 0;
+            p.BonusCritDMG = 0;
+            UIExtensions.GhostBarFill(focusBar, focusBarGhost, combatManager.focusAmount);
+            rsm.PlayerQuickStats(context);
+
             IDamageCalculator damage = new DamageCalculator();
             int calculatedDamage = damage.CalculateDMG(
                 context.Player.TotalATK,
@@ -68,18 +96,23 @@ public class CombatActions : MonoBehaviour
             if (calculatedDamage >= combatManager.generatedEnemy.CurHP)
             {
                 calculatedDamage = combatManager.generatedEnemy.CurHP;
-                combatManager.generatedEnemy.CurHP = calculatedDamage;
+                combatManager.generatedEnemy.CurHP = 0;
             }
             else
                 combatManager.generatedEnemy.CurHP -= calculatedDamage;
 
             string critText = isCrit ? "<color=#0F172A>Critical hit!</color>" : "";
+            bool wasFocused = false;
+            if (combatManager.focusAmount > 0)
+                wasFocused = true;
+            else
+                wasFocused = false;
 
-            EventManager.CombatEvents.TriggerOnEntityGotHit(isCrit, calculatedDamage);
+            EventManager.CombatEvents.TriggerOnEntityGotHit(isCrit, calculatedDamage, wasFocused);
 
             contentText.text = string.Empty;
 
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,combatManager.GetEnemyStatus(combatManager.generatedEnemy)));
+            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, combatManager.GetEnemyStatus(combatManager.generatedEnemy)));
 
             yield return new WaitForSeconds(2f);
 
@@ -99,6 +132,13 @@ public class CombatActions : MonoBehaviour
                 StartCoroutine(combatManager.EnemyTurnRoutine());
             }
         }
+        else if (hitAccuracy > 0.95f)
+        {
+            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"{combatManager.generatedEnemy.Name} somehow dodged this."));
+            yield return new WaitForSeconds(2f);
+            combatManager.isPlayerTurn = false;
+            StartCoroutine(combatManager.EnemyTurnRoutine());
+        }
     }
     #endregion
 
@@ -111,26 +151,25 @@ public class CombatActions : MonoBehaviour
 
     private IEnumerator PlayerFocusRoutine()
     {
+        Hero p = context.Player;
         combatManager.SetButtonsInteractable(false);
 
-        int damage = Mathf.Max(1, GameManager.Instance.Context.Player.TotalATK - combatManager.generatedEnemy.TotalDEF);
-        combatManager.generatedEnemy.CurHP -= damage;
+        combatManager.focusAmount = Mathf.Min(combatManager.focusAmount + 1, combatManager.focusCap);
+
+        p.BonusATK = (int)(p.BonuslessATK * 0.10 * combatManager.focusAmount);
+        p.BonusCritRate = (5 * combatManager.focusAmount);
+        p.BonusCritDMG = (10 * combatManager.focusAmount);
+
+        EventManager.CombatEvents.TriggerOnFocusChanged();
+
         contentText.text = string.Empty;
-        StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{combatManager.generatedEnemy.Name}</color> dealt {damage} damage to you!"));
+        string randomMsg = focusMessages[Random.Range(0, focusMessages.Length)];
+        StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, randomMsg));
+        yield return new WaitForSeconds(3f);
 
-        combatManager.UpdateHealthUI(false);
-
-        yield return new WaitForSeconds(1.2f);
-
-        if (combatManager.generatedEnemy.CurHP <= 0)
-        {
-            combatManager.EndCombat(CombatResult.Victory);
-        }
-        else
-        {
-            combatManager.isPlayerTurn = false;
-            StartCoroutine(combatManager.EnemyTurnRoutine());
-        }
+        // if posion or something that damages player at the end of turn
+        // add if section
+        StartCoroutine(combatManager.EnemyTurnRoutine());
     }
     #endregion
 
@@ -143,26 +182,31 @@ public class CombatActions : MonoBehaviour
 
     private IEnumerator PlayerGuardUpRoutine()
     {
+        Hero p = context.Player;
         combatManager.SetButtonsInteractable(false);
 
-        int damage = Mathf.Max(1, GameManager.Instance.Context.Player.TotalATK - combatManager.generatedEnemy.TotalDEF);
-        combatManager.generatedEnemy.CurHP -= damage;
-        contentText.text = string.Empty;
-        StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{combatManager.generatedEnemy.Name}</color> dealt {damage} damage to you!"));
-
-        combatManager.UpdateHealthUI(false);
-
-        yield return new WaitForSeconds(1.2f);
-
-        if (combatManager.generatedEnemy.CurHP <= 0)
+        if (combatManager.didGuardLastTurn)
         {
-            combatManager.EndCombat(CombatResult.Victory);
+            yield return StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "You can't spam that silly. You aren't gonna be immortal."));
+            yield return new WaitForSeconds(3f);
+            combatManager.SetButtonsInteractable(true);
+            yield break;
         }
-        else
-        {
-            combatManager.isPlayerTurn = false;
-            StartCoroutine(combatManager.EnemyTurnRoutine());
-        }
+
+        int gain = (int)(context.Player.TotalHP * 0.10f);
+        combatManager.guardAmount = Mathf.Min(combatManager.guardAmount + gain, combatManager.maxShield);
+        combatManager.didGuardLastTurn = true;
+
+        EventManager.CombatEvents.TriggerOnGuardChanged();
+
+        yield return StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "You prepared your shield!"));
+        yield return new WaitForSeconds(2f);
+
+        combatManager.isPlayerTurn = false;
+
+        // if posion or something that damages player at the end of turn
+        // add if section
+        StartCoroutine(combatManager.EnemyTurnRoutine());
     }
     #endregion
 
@@ -175,26 +219,13 @@ public class CombatActions : MonoBehaviour
 
     private IEnumerator PlayerBackpackRoutine()
     {
+        Hero p = context.Player;
         combatManager.SetButtonsInteractable(false);
 
-        int damage = Mathf.Max(1, GameManager.Instance.Context.Player.TotalATK - combatManager.generatedEnemy.TotalDEF);
-        combatManager.generatedEnemy.CurHP -= damage;
-        contentText.text = string.Empty;
-        StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{combatManager.generatedEnemy.Name}</color> dealt {damage} damage to you!"));
-
-        combatManager.UpdateHealthUI(false);
-
-        yield return new WaitForSeconds(1.2f);
-
-        if (combatManager.generatedEnemy.CurHP <= 0)
-        {
-            combatManager.EndCombat(CombatResult.Victory);
-        }
-        else
-        {
-            combatManager.isPlayerTurn = false;
-            StartCoroutine(combatManager.EnemyTurnRoutine());
-        }
+        yield return StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "Not implemented yet."));
+        yield return new WaitForSeconds(3f);
+        combatManager.SetButtonsInteractable(true);
+        yield break;
     }
     #endregion
 
@@ -215,7 +246,7 @@ public class CombatActions : MonoBehaviour
         if (success)
         {
             StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"You were so fast that your feets touched your cheeks. You've run away from the <color=#0F172A>{combatManager.generatedEnemy.Name}</color> <color=#17761E>successfuly</color>."));
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
             
             combatManager.EndCombat(CombatResult.RunAway);
         }
@@ -243,11 +274,16 @@ public class CombatActions : MonoBehaviour
     #endregion
 
     #region Events
-    private void OnEntityGotHit(bool isCrit, int damage)
+    private void OnEntityGotHit(bool isCrit, int damage, bool wasFocused)
     {
-        if (isCrit)
+        if (wasFocused)
         {
-            UIExtensions.Shake(combatManager.entitySprite.rectTransform,combatManager.shakeIntensity + 7f, combatManager.shakeDuration * 2);
+            UIExtensions.Shake(combatManager.entitySprite.rectTransform, combatManager.shakeIntensity + 20f, combatManager.shakeDuration * 3);
+            UIExtensions.Shake(GetComponent<RectTransform>(), combatManager.shakeIntensity + 20f, combatManager.shakeDuration * 3);
+        }
+        else if (isCrit)
+        {
+            UIExtensions.Shake(combatManager.entitySprite.rectTransform, combatManager.shakeIntensity + 7f, combatManager.shakeDuration * 2);
             UIExtensions.Shake(GetComponent<RectTransform>(), combatManager.shakeIntensity + 7f, combatManager.shakeDuration * 2);
         }
         else
@@ -263,6 +299,22 @@ public class CombatActions : MonoBehaviour
         UIExtensions.Flash(combatManager.entitySprite);
         UIExtensions.GenerateDamageText(combatManager.damageText, isCrit, damage);
     }
+    public void OnGuardChanged()
+    {
+        float mShield = combatManager.maxShield > 0 ? combatManager.maxShield : 1f;
+        float calculatedValue = Mathf.Clamp((float)combatManager.guardAmount / mShield, 0f, 1f);
 
+        UIExtensions.GhostBarFill(guardBar, guardBarGhost, calculatedValue);
+        if (rsm != null) rsm.PlayerQuickStats(context);
+    }
+
+    public void OnFocusChanged()
+    {
+        float fCap = combatManager.focusCap > 0 ? combatManager.focusCap : 1f;
+        float calculatedValue = Mathf.Clamp((float)combatManager.focusAmount / fCap, 0f, 1f);
+        Debug.Log($"Focus Amount: {combatManager.focusAmount}, Focus Cap: {combatManager.focusCap}, Calculated Value: {calculatedValue}");
+        UIExtensions.GhostBarFill(focusBar, focusBarGhost, calculatedValue);
+        if (rsm != null) rsm.PlayerQuickStats(context);
+    }
     #endregion
 }
