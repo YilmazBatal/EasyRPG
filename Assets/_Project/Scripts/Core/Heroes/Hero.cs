@@ -29,6 +29,7 @@ namespace TextBasedRPG.Core.Heroes
         public int Level { get; internal set; } = 1;
         public int CurExp { get; internal set; } = 0; 
         public int ReqExp => (int)(100 * Math.Pow(Level, 1.5));
+        public int TotalExp => (int)(100 * (Math.Pow(Level, 2.5) / 2.5));
         // Stat points
         public int UnusedStatPoints { get; internal set; } = 0;
         public int InvestedSTRPoints { get; internal set; } = 0;

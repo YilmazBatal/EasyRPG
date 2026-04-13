@@ -6,6 +6,10 @@ namespace TextBasedRPG.Managers
     internal static class LocationManager
     {
         public static Dictionary<string, string> locations = new ();
+        public static string GetLocationName(string locationID)
+        {
+            return locations.ContainsKey(locationID) ? locations[locationID] : "Unknown Location";
+        }
         public static int GetLocationIndex(GameContext context)
         {
             return locations.Keys.ToList().IndexOf(context.Player.ActiveLocation);
