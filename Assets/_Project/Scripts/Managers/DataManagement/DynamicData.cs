@@ -37,9 +37,13 @@ namespace TextBasedRPG.Managers.DataManagement
             context.Player.Gold = loadedData.Player?.Gold ?? 100;
             context.Player.Level = loadedData.Player?.Level ?? 1;
             context.Player.CurExp = loadedData.Player?.Experience ?? 0;
+            context.Player.TotalExp = loadedData.Player?.TotalExp ?? 0;
             context.Player.CurHP = loadedData.Player?.CurHP ?? 1;
             context.Player.ActiveLocation = loadedData.Player?.ActiveLocation ?? "L001";
             context.Player.UnlockedUntill = loadedData.Player?.UnlockedUntill ?? 1;
+            context.Player.Deaths = loadedData.Player?.Deaths ?? 0;
+            context.Player.EntitiesSlayed = loadedData.Player?.EntitiesSlayed ?? 0;
+            context.Player.HeaviestDamage = loadedData.Player?.HeaviestDamage ?? 0;
         }
         private static void LoadEquippedItems(GameContext context, Data loadedData)
         {
@@ -71,7 +75,6 @@ namespace TextBasedRPG.Managers.DataManagement
                         InventoryData itemToAdd = new InventoryData();
                         itemToAdd.ID = itemSave.ID;
                         itemToAdd.Quantity = itemSave.Quantity;
-
                         context.Player.Inventory?.Add(itemToAdd);
                     }
                 }

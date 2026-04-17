@@ -7,6 +7,7 @@ using TextBasedRPG.Core.Entities;
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Events;
+using TextBasedRPG.Managers.DataManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +68,7 @@ namespace TextBasedRPG.Managers
         {
             StartCoroutine(SetupCombatRoutine());
 
+            ca = gameObject.GetComponent<CombatActions>();
             EventManager.CombatEvents.OnPlayerGotHit += OnPlayerGotHit;
             EventManager.CombatEvents.OnPlayerLowHP += OnPlayerLowHP;
         }
@@ -116,9 +118,11 @@ namespace TextBasedRPG.Managers
             UpdateHealthUI(true);
             contentText.text = string.Empty;
 
-            ca = gameObject.GetComponent<CombatActions>();
-            //ca.OnFocusChanged();
-            //ca.OnGuardChanged();
+            focusAmount = 0;
+            guardAmount = 0;
+            ca.OnFocusChanged();
+            ca.OnGuardChanged();
+
             ca.fleeBtn.GetComponentInChildren<TMP_Text>().text =
                 $"Run Away - {CombatActions.CalculateRunAwayChance(GameManager.Instance.Context, generatedEnemy).ToString()}%";
 
@@ -127,7 +131,6 @@ namespace TextBasedRPG.Managers
         private void StartCombat()
         {
             isCombatActive = true;
-
             //StartWobble();
             isPlayerTurn = GameManager.Instance.Context.Player.TotalSPD >= generatedEnemy.CurrentSPD;
 
@@ -167,6 +170,7 @@ namespace TextBasedRPG.Managers
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "Your journey continues..."));
                 
             }
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
             StartCoroutine(ClosePopup());
 
             
@@ -255,6 +259,7 @@ namespace TextBasedRPG.Managers
             float expBase = (enemy.PowerScore * enemy.GeneratedLevel) / 5.0f;
             int finalExp = (int)Math.Round(expBase * levelDiffBonus);
             context.Player.CurExp += finalExp;
+            context.Player.TotalExp += finalExp;
             EventManager.HeroEvents.TriggerExpChanged(context);
         }
         #endregion
@@ -346,6 +351,7 @@ namespace TextBasedRPG.Managers
                 {
                     damageRemaining = player.CurHP;
                     player.CurHP = 0;
+                    player.Deaths += 1;
                 }
                 else
                 {

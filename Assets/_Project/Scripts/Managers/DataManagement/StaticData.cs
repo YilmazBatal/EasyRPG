@@ -156,7 +156,9 @@ namespace TextBasedRPG.Managers.DataManagement
                         data.Quantity,
                         data.WeaponATK,
                         weaponTypeResult,
-                        data.RequiredLevel
+                        data.RequiredLevel,
+                        data.Upgrade
+
                     );
                     context.Weapons.Add(mappedWeapon);
                 }

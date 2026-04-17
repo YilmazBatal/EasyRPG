@@ -13,6 +13,7 @@
         public string? WeaponType { get; set; }
         public int Level { get; set; }
         public int RequiredLevel { get; set; }
+        public int Upgrade { get; set; }
     }
     public class ArmorData
     {

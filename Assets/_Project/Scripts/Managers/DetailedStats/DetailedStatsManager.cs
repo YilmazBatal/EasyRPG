@@ -44,11 +44,10 @@ public class DetailedStatsManager : MonoBehaviour
         dex.text = p.InvestedDEXPoints.ToString();
         agi.text = p.InvestedAGIPoints.ToString();
         vit.text = p.InvestedVITPoints.ToString();
-
-    }
-    private void OnDisable()
-    {
-
+        
+        deaths.text = p.Deaths.ToString();
+        entitiesSlayed.text = p.EntitiesSlayed.ToString();
+        heaviestDamage.text = p.HeaviestDamage.ToString();
     }
     #endregion
 }

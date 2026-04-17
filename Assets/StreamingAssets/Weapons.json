@@ -46,12 +46,12 @@
 	{
 	  "ID": "W0005",
 	  "ItemType": "Weapon",
-	  "Name": "Dragon Slayer",
+	  "Name": "Admin Sword",
 	  "Description": "A legendary blade saID to pierce dragon scales.",
 	  "Price": 2500,
 	  "Rarity": "Legendary",
-	  "WeaponATK": 85,
+	  "WeaponATK": 850,
 	  "WeaponType": "Sword",
-	  "RequiredLevel": 15
+	  "RequiredLevel": 1
 	}
 ]

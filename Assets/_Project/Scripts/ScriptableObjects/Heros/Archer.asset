@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Archer
   m_EditorClassIdentifier: 
   className: Archer
-  description: Lorem Archer
-  classIcon: {fileID: -231113552, guid: eef1b3cfb7d9dfa4fb2faf62a79355aa, type: 3}
-  hp: 100
-  atk: 25
-  def: 15
-  spd: 15
+  description: A master of precision and agility. The Archer relies on unmatched
+    speed to strike first and strike often, overwhelming enemies before they can
+    even react
+  classIcon: {fileID: 21300000, guid: 00a576042b649fe45a4a17e0749ec243, type: 3}
+  hp: 90
+  atk: 15
+  def: 10
+  spd: 25

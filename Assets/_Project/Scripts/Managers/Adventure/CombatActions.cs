@@ -93,10 +93,13 @@ public class CombatActions : MonoBehaviour
                 context.Player.CritDamage,
                 out bool isCrit);
 
+            p.UpdateHeaviestDamage(calculatedDamage);
+
             if (calculatedDamage >= combatManager.generatedEnemy.CurHP)
             {
-                calculatedDamage = combatManager.generatedEnemy.CurHP;
+                //calculatedDamage = combatManager.generatedEnemy.CurHP;
                 combatManager.generatedEnemy.CurHP = 0;
+                p.EntitiesSlayed += 1;
             }
             else
                 combatManager.generatedEnemy.CurHP -= calculatedDamage;

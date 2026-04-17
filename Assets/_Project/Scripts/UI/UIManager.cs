@@ -129,11 +129,11 @@ public class UIManager : MonoBehaviour
     {
         rarityColors = new Dictionary<string, Color>
         {
-            { "Common", new Color(120f/255f, 122f/255f, 123f/255f) },
-            { "Uncommon", new Color(89f/255f, 197f/255f, 102f/255f) },
-            { "Rare", new Color(64f/255f, 201f/255f, 255/255f) },
-            { "Epic", new Color(187f/255f, 85f/255f, 255/255f) },
-            { "Legendary", new Color(1f, 0.75f, 0f) }
+            { "Common", new Color(100f/255f, 100f/255f, 100f/255f) }, 
+            { "Uncommon", new Color(50f/255f, 205f/255f, 50f/255f) }, 
+            { "Rare", new Color(0f/255f, 160f/255f, 255f/255f) }, 
+            { "Epic", new Color(160f/255f, 32f/255f, 240f/255f) }, 
+            { "Legendary", new Color(255f/255f, 140f/255f, 0f/255f) }
         };
     }
     

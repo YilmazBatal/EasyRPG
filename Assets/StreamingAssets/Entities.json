@@ -86,7 +86,7 @@
     "BaseATK": 35,
     "BaseDEF": 15,
     "BaseSPD": 18,
-    "EntitySprite": "wolf",
+    "EntitySprite": "goblin_king",
     "EntityType": "Boss",
     "GoldMultiplier": 5,
     "LootTable": {
@@ -98,6 +98,23 @@
   },
   {
     "ID": "B0002",
+    "Name": "Wolf King",
+    "BaseHP": 250,
+    "BaseATK": 35,
+    "BaseDEF": 15,
+    "BaseSPD": 18,
+    "EntitySprite": "wolf_king",
+    "EntityType": "Boss",
+    "GoldMultiplier": 5,
+    "LootTable": {
+      "W0004": 100,
+      "A0002": 50,
+      "M0004": 100
+    },
+    "Locations" : ["L001"]
+  },
+  {
+    "ID": "B0003",
     "Name": "Ancient Golem",
     "BaseHP": 500,
     "BaseATK": 20,

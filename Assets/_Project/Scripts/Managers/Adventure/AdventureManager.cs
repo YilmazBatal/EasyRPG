@@ -35,7 +35,7 @@ namespace Assets._Project.Scripts.Managers.Adventure
             int roll = Random.Range(0, 101);
 
             if (roll <= itemDropChance)
-                adventureText.text = "Item dropped";
+                GenerateItem();
             else if (roll <= enemyEncounterChance)
                 GenerateArena();
             else
@@ -51,7 +51,7 @@ namespace Assets._Project.Scripts.Managers.Adventure
             }).setEaseInOutCubic().setOnComplete(() =>
             {
                 adventureButton.interactable = true;
-                
+
                 cooldownBar.fillAmount = 0f;
             });
         }
@@ -68,9 +68,16 @@ namespace Assets._Project.Scripts.Managers.Adventure
             string activeLocation = GameManager.Instance.Context.Player.ActiveLocation;
             int maxTextCount = GameManager.Instance.Context.Locations.Find(l => l.ID == activeLocation)?.AdventureTexts.Count ?? 0;
             string randomText = GameManager.Instance.Context.Locations.Find(l => l.ID == activeLocation).AdventureTexts[Random.Range(0, maxTextCount)];
-            
-             activeRoutine = StartCoroutine(UIManager.BruteForceTypeWriterRoutine(adventureText, randomText));
+
+            activeRoutine = StartCoroutine(UIManager.BruteForceTypeWriterRoutine(adventureText, randomText));
         }
-        
+        private void GenerateItem()
+        {
+            activeRoutine = StartCoroutine(UIManager.BruteForceTypeWriterRoutine(adventureText, "You found an item!"));
+            itemPopup.SetActive(true);
+            itemPopup.transform.localScale = Vector3.zero;
+            LeanTween.scale(itemPopup, Vector3.one, 0.5f).setEaseOutBack();
+
+        }
     }
 }

@@ -4,6 +4,7 @@ public enum GameState
     MainMenu,
     DetailedStats,
     Inventory,
+    TradeCenter,
     Blacksmith,
     Training,
     Adventure,

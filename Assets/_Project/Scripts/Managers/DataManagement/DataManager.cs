@@ -31,8 +31,12 @@ namespace  TextBasedRPG.Managers.DataManagement
                     ActiveLocation = context.Player.ActiveLocation,
                     UnlockedUntill = context.Player.UnlockedUntill,
                     Experience = context.Player.CurExp,
+                    TotalExp = context.Player.TotalExp,
                     CurHP = context.Player.CurHP,
                     Gold = context.Player.Gold,
+                    Deaths = context.Player.Deaths,
+                    EntitiesSlayed = context.Player.EntitiesSlayed,
+                    HeaviestDamage = context.Player.HeaviestDamage,
                     EquippedWeapon = context.Player.EquippedWeapon?.ID,
                     EquippedArmor = context.Player.EquippedArmor?.ID,
 
@@ -56,7 +60,9 @@ namespace  TextBasedRPG.Managers.DataManagement
                     var itemData = new InventoryData
                     {
                         ID = item.ID,
-                        Quantity = item.Quantity
+                        Quantity = item.Quantity,
+                        Upgrade = item.Upgrade,
+                        
                     };
                     convertedInventory.Add(itemData);
                 }

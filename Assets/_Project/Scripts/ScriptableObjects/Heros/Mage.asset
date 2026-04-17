@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   className: Mage
-  description: Lorem Mage
-  classIcon: {fileID: -231113552, guid: eef1b3cfb7d9dfa4fb2faf62a79355aa, type: 3}
-  hp: 150
-  atk: 18
-  def: 15
-  spd: 12
+  description: A conduit of raw arcane power. Though physically fragile, the Mage
+    commands devastating magic capable of incinerating foes in a single, well-timed
+    blast.
+  classIcon: {fileID: 21300000, guid: c427f18ea5111604094d3b2884e0c75b, type: 3}
+  hp: 80
+  atk: 30
+  def: 5
+  spd: 15

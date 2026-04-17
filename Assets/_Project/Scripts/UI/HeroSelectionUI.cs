@@ -32,12 +32,14 @@ namespace Assets._Project.Scripts.UI
 
             if (selectedHero != null)
             {
-                GameManager.Instance.Context.Player = selectedHero;
+                GameManager.Instance.Context.Player = selectedHero; 
                 GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
                 GameManager.Instance.ChangeState(GameState.MainMenu);
 
                 UIManager.Instance.rightSection.gameObject.SetActive(true);
                 UIManager.Instance.leftSection.gameObject.SetActive(true);
+
+                UIManager.Instance.raycastBlocker1.gameObject.SetActive(false);
 
                 Destroy(UIManager.Instance._activePopUp.gameObject);
             }

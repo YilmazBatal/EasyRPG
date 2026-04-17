@@ -7,10 +7,14 @@ namespace TextBasedRPG.Models
         public string? Class { get; set; }
         public int? Level { get; set; }
         public int? Experience { get; set; }
+        public int? TotalExp { get; set; }
         public int? Gold { get; set; }
         public int? CurHP { get; set; }
         public string? ActiveLocation { get; set; }
         public int? UnlockedUntill { get; set; }
+        public int? Deaths { get; set; }
+        public int? EntitiesSlayed { get; set; }
+        public int? HeaviestDamage { get; set; }
         public string? EquippedWeapon { get; set; }
         public string? EquippedArmor { get; set; }
         public List<InventoryData>? Inventory { get; set; }
@@ -26,7 +30,19 @@ namespace TextBasedRPG.Models
     }
     public class InventoryData
     {
+        public string InstanceID { get; set; }
         public string? ID { get; set; }
         public int Quantity { get; set; }
+        public int Upgrade { get; set; }
+    }
+    public class EquippedWeaponData
+    {
+        public string? ID { get; set; }
+        public int Upgrade { get; set; }
+    }
+     public class EquippedArmorData
+    {
+        public string? ID { get; set; }
+        public int Upgrade { get; set; }
     }
 }

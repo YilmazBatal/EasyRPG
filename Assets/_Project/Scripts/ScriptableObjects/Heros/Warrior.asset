@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Warrior
   m_EditorClassIdentifier: 
   className: Warrior
-  description: Lorem Warrior
-  classIcon: {fileID: -231113552, guid: eef1b3cfb7d9dfa4fb2faf62a79355aa, type: 3}
+  description: A seasoned frontline veteran. With high health and defensive prowess,
+    the Warrior stands as an unbreakable wall, outlasting any foe through sheer endurance.
+  classIcon: {fileID: 21300000, guid: d9fd2822786208e449a16dfaf1891236, type: 3}
   hp: 120
-  atk: 20
-  def: 20
+  atk: 18
+  def: 22
   spd: 10

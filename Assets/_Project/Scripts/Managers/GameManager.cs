@@ -81,15 +81,15 @@ public class GameManager : MonoBehaviour
 [System.Serializable]
 public class GameContext
 {
-    public Hero? Player { get; set; }
+    public Hero Player { get; set; }
     public bool IsAutoSaveOn { get; set; }
-    public List<Entity>? Entities { get; set; }
-    public List<Location>? Locations { get; set; }
-    public List<Weapon>? Weapons { get; set; }
-    public List<Armor>? Armors { get; set; }
-    public List<Material>? Materials { get; set; }
-    public List<Consumable>? Consumables { get; set; }
-    public List<Shop>? Shops { get; set; }
+    public List<Entity> Entities { get; set; }
+    public List<Location> Locations { get; set; }
+    public List<Weapon> Weapons { get; set; }
+    public List<Armor> Armors { get; set; }
+    public List<Material> Materials { get; set; }
+    public List<Consumable> Consumables { get; set; }
+    public List<Shop> Shops { get; set; }
     public Dictionary<string, string> ClassWeaponCheck { get; private set; } = new();
     public Dictionary<string, Item> MasterItemBook { get; private set; } = new();
     public void InitializeMasterBook()
