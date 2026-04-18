@@ -28,6 +28,7 @@
         public int ExtraHP { get; set; }
         public int Level { get; set; }
         public int RequiredLevel { get; set; }
+        public int Upgrade { get; set; }
     }
     public class MaterialData
     {

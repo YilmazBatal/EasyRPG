@@ -1,4 +1,4 @@
-﻿namespace TextBasedRPG.Core.Items
+namespace TextBasedRPG.Core.Items
 {
     public abstract class Item
     {
@@ -19,6 +19,10 @@
             Price = price;
             Rarity = rarity;
             Quantity = quantity;
+        }
+        public virtual Item Clone()
+        {
+            return (Item)this.MemberwiseClone();
         }
     }
 }

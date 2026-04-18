@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace TextBasedRPG.Models
 {
@@ -15,8 +15,8 @@ namespace TextBasedRPG.Models
         public int? Deaths { get; set; }
         public int? EntitiesSlayed { get; set; }
         public int? HeaviestDamage { get; set; }
-        public string? EquippedWeapon { get; set; }
-        public string? EquippedArmor { get; set; }
+        public EquippedWeaponData? EquippedWeapon { get; set; }
+        public EquippedArmorData? EquippedArmor { get; set; }
         public List<InventoryData>? Inventory { get; set; }
         public StatData? Stats { get; set; }
     }
@@ -34,6 +34,18 @@ namespace TextBasedRPG.Models
         public string? ID { get; set; }
         public int Quantity { get; set; }
         public int Upgrade { get; set; }
+
+        public bool ShouldSerializeQuantity()
+        {
+            if (string.IsNullOrEmpty(ID)) return true;
+            return !(ID.StartsWith("W") || ID.StartsWith("A"));
+        }
+
+        public bool ShouldSerializeUpgrade()
+        {
+            if (string.IsNullOrEmpty(ID)) return false;
+            return ID.StartsWith("W") || ID.StartsWith("A");
+        }
     }
     public class EquippedWeaponData
     {

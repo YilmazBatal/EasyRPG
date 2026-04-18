@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using TextBasedRPG.Core.Items;
@@ -37,8 +37,8 @@ namespace  TextBasedRPG.Managers.DataManagement
                     Deaths = context.Player.Deaths,
                     EntitiesSlayed = context.Player.EntitiesSlayed,
                     HeaviestDamage = context.Player.HeaviestDamage,
-                    EquippedWeapon = context.Player.EquippedWeapon?.ID,
-                    EquippedArmor = context.Player.EquippedArmor?.ID,
+                    EquippedWeapon = context.Player.EquippedWeapon != null ? new EquippedWeaponData { ID = context.Player.EquippedWeapon.ID, Upgrade = context.Player.EquippedWeapon.Upgrade } : null,
+                    EquippedArmor = context.Player.EquippedArmor != null ? new EquippedArmorData { ID = context.Player.EquippedArmor.ID, Upgrade = context.Player.EquippedArmor.Upgrade } : null,
 
                     Stats = new StatData
                     {

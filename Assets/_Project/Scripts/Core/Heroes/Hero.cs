@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Events;
@@ -45,8 +45,8 @@ namespace TextBasedRPG.Core.Heroes
         public int BonusSPD { get; internal set; }
         public float BonusCritRate { get; internal set; } // %
         public float BonusCritDMG { get; internal set; } // %
-        public int BonuslessATK => BaseATK + (EquippedWeapon?.WeaponATK ?? 5) +(int)Math.Round(InvestedSTRPoints * 1.5);
-        public int BonuslessDEF => BaseDEF + (EquippedArmor?.ArmorDef ?? 5) +(int)Math.Round(InvestedVITPoints * 1.5);
+        public int BonuslessATK => BaseATK + (int)Math.Round((EquippedWeapon?.WeaponATK ?? 5) * (1f + (EquippedWeapon?.Upgrade ?? 0) * 0.05f)) + (int)Math.Round(InvestedSTRPoints * 1.5);
+        public int BonuslessDEF => BaseDEF + (int)Math.Round((EquippedArmor?.ArmorDef ?? 5) * (1f + (EquippedArmor?.Upgrade ?? 0) * 0.05f)) + (int)Math.Round(InvestedVITPoints * 1.5);
         public int BonuslessSPD => BaseSPD + (int)Math.Round(InvestedAGIPoints * 1.5);
         public float BonuslessCritRate => 5f + (InvestedDEXPoints * 1.0f / 3.0f);
         public float BonuslessCritDamage => 150f + (InvestedSTRPoints);

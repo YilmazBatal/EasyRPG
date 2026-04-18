@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Models;
@@ -47,12 +47,38 @@ namespace TextBasedRPG.Managers.DataManagement
         }
         private static void LoadEquippedItems(GameContext context, Data loadedData)
         {
-            string? savedWeaponID = loadedData.Player?.EquippedWeapon ?? null;
-            string? savedArmorID = loadedData.Player?.EquippedArmor ?? null;
-            context.Player.EquippedWeapon = string.IsNullOrEmpty(savedWeaponID)
-                ? null : context.Weapons?.FirstOrDefault(x => x.ID == savedWeaponID);
-            context.Player.EquippedArmor = string.IsNullOrEmpty(savedArmorID)
-                ? null : context.Armors?.FirstOrDefault(x => x.ID == savedArmorID);
+            var savedWeapon = loadedData.Player?.EquippedWeapon;
+            var savedArmor = loadedData.Player?.EquippedArmor;
+
+            if (savedWeapon != null && !string.IsNullOrEmpty(savedWeapon.ID))
+            {
+                var masterWeapon = context.Weapons?.FirstOrDefault(x => x.ID == savedWeapon.ID);
+                if (masterWeapon != null)
+                {
+                    context.Player.EquippedWeapon = masterWeapon.Clone() as Weapon;
+                    if (context.Player.EquippedWeapon != null)
+                        context.Player.EquippedWeapon.Upgrade = savedWeapon.Upgrade;
+                }
+            }
+            else
+            {
+                context.Player.EquippedWeapon = null;
+            }
+
+            if (savedArmor != null && !string.IsNullOrEmpty(savedArmor.ID))
+            {
+                var masterArmor = context.Armors?.FirstOrDefault(x => x.ID == savedArmor.ID);
+                if (masterArmor != null)
+                {
+                    context.Player.EquippedArmor = masterArmor.Clone() as Armor;
+                    if (context.Player.EquippedArmor != null)
+                        context.Player.EquippedArmor.Upgrade = savedArmor.Upgrade;
+                }
+            }
+            else
+            {
+                context.Player.EquippedArmor = null;
+            }
         }
         private static void LoadInventory(GameContext context, Data loadedData)
         {
@@ -75,6 +101,7 @@ namespace TextBasedRPG.Managers.DataManagement
                         InventoryData itemToAdd = new InventoryData();
                         itemToAdd.ID = itemSave.ID;
                         itemToAdd.Quantity = itemSave.Quantity;
+                        itemToAdd.Upgrade = itemSave.Upgrade;
                         context.Player.Inventory?.Add(itemToAdd);
                     }
                 }

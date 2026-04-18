@@ -196,7 +196,8 @@ namespace TextBasedRPG.Managers.DataManagement
                         data.Quantity,
                         data.ArmorDef,
                         data.ExtraHP,
-                        data.RequiredLevel
+                        data.RequiredLevel,
+                        data.Upgrade
                     );
                     context.Armors.Add(mappedArmor);
                 }
