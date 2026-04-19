@@ -176,16 +176,5 @@ public class UIManager : MonoBehaviour
             currentDisplayedText += targetChar;
             textComponent.text = currentDisplayedText;
         }
-    }
-    public void ClosePanel(GameObject panel)
-    {
-        panel.transform.Find("ClosePanel").GetComponent<Button>().interactable = false;
-        LeanTween.value(panel.gameObject, 1f, 0f, 0.2f).setEaseInOutCubic().setOnUpdate((float val) =>
-        {
-            panel.transform.localScale = new Vector3(val, val, val);
-        }).setOnComplete(() =>
-        {
-            panel.SetActive(false);
-        });
-    }
+    } 
 }

@@ -1,4 +1,4 @@
-﻿using TextBasedRPG.Events;
+using TextBasedRPG.Events;
 using TextBasedRPG.Managers;
 using TextBasedRPG.Models;
 using TMPro;
@@ -42,6 +42,7 @@ namespace Assets._Project.Scripts.UI.Cards
             EventManager.HeroEvents.OnGoldChanged += UpdateGoldUI;
             EventManager.HeroEvents.OnExpChanged += UpdatExpUI;
             EventManager.HeroEvents.OnHPValueChanged += UpdateHPUI;
+            EventManager.HeroEvents.OnEquipmentChanged += UpdateEquipmentUI;
         }
 
         private void OnDisable()
@@ -49,6 +50,7 @@ namespace Assets._Project.Scripts.UI.Cards
             EventManager.HeroEvents.OnGoldChanged -= UpdateGoldUI;
             EventManager.HeroEvents.OnExpChanged -= UpdatExpUI;
             EventManager.HeroEvents.OnHPValueChanged -= UpdateHPUI;
+            EventManager.HeroEvents.OnEquipmentChanged -= UpdateEquipmentUI;
         }
         #endregion
         
@@ -92,6 +94,12 @@ namespace Assets._Project.Scripts.UI.Cards
 
             EventManager.CombatEvents.TriggerOnPlayerLowHP();
 
+        }
+        public void UpdateEquipmentUI(GameContext context)
+        {
+            PlayerQuickStats(context);
+            EquipmentCards(context);
+            UpdateHPUI(context);
         }
         #endregion
 

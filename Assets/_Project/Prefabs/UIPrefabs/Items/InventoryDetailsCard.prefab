@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 8353791511278894193}
   - component: {fileID: 7327640662935907565}
   m_Layer: 5
-  m_Name: ClosePanel
+  m_Name: CloseBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -923,20 +923,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9600195bdcc67341ae2a6c48a402b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  background: {fileID: 5879509202354871277}
   title: {fileID: 8185838575955481638}
   desc: {fileID: 1016581744405815525}
-  icon1: {fileID: 0}
-  value1: {fileID: 0}
-  icon2: {fileID: 0}
-  value2: {fileID: 0}
-  icon3: {fileID: 0}
-  value3: {fileID: 0}
-  icon4: {fileID: 0}
-  value4: {fileID: 0}
-  icon5: {fileID: 0}
-  value5: {fileID: 0}
-  gold: {fileID: 0}
-  action: {fileID: 0}
+  itemIcon: {fileID: 5862277411320669979}
+  icon1: {fileID: 2824694280677993080}
+  value1: {fileID: 4803034369516914349}
+  icon2: {fileID: 8224140661160701368}
+  value2: {fileID: 5061330932427872667}
+  icon3: {fileID: 8499977941897894603}
+  value3: {fileID: 1085528529902010098}
+  icon4: {fileID: 2397318542067691662}
+  value4: {fileID: 7844696526667040721}
+  icon5: {fileID: 8582099339801963320}
+  value5: {fileID: 8985267893108944928}
+  gold: {fileID: 2415020686073776491}
+  action: {fileID: 6285764815506013538}
+  closeBTN: {fileID: 7327640662935907565}
 --- !u!1 &4566083813261724250
 GameObject:
   m_ObjectHideFlags: 0

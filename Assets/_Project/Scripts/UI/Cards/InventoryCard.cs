@@ -18,6 +18,7 @@ public class InventoryCard : MonoBehaviour
     [SerializeField] public Button actionBTN;
     [SerializeField] public TMP_Text actionBTNText;
     [SerializeField] public Button detailsBTN;
+    [SerializeField] public TMP_Text detailsBTNText;
 
     [Header("Icons")]
     [SerializeField] public Sprite attackIcon;
@@ -33,6 +34,5 @@ public class InventoryCard : MonoBehaviour
     [SerializeField] public Sprite meatIcon;
     [SerializeField] public Sprite speedIcon;
     [SerializeField] public Sprite questIcon;
-
 
 }

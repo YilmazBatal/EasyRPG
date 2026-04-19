@@ -149,6 +149,7 @@ MonoBehaviour:
   actionBTN: {fileID: 797832674298880026}
   actionBTNText: {fileID: 6493124880922437146}
   detailsBTN: {fileID: 4870089964896770376}
+  detailsBTNText: {fileID: 3432444701633185624}
   attackIcon: {fileID: 21300000, guid: c943fd0b12d95064d830dc0cecd85ff1, type: 3}
   swordIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   bowIcon: {fileID: 21300000, guid: eff4cd086581ecc4eb3935ecd63ca133, type: 3}
@@ -811,7 +812,7 @@ GameObject:
   - component: {fileID: 9134284761470448320}
   - component: {fileID: 3432444701633185624}
   m_Layer: 5
-  m_Name: actionText
+  m_Name: detailsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,9 +1,12 @@
+using Assets._Project.Scripts.UI.Cards;
+using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Managers.Inventory;
+using TextBasedRPG.Models;
+using TextBasedRPG.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets._Project.Scripts.UI.Cards;
 using Material = TextBasedRPG.Core.Items.Material;
 
 public class BackpackManager : MonoBehaviour
@@ -29,7 +32,6 @@ public class BackpackManager : MonoBehaviour
         GenerateItemCards();
         inventoryCapacityText.text = $"{context.Player.Inventory.Count}/20"; // hard coded 20 for now
     }
-
     private void OnDisable()
     {
         if (inventoryFilter != null)
@@ -37,7 +39,6 @@ public class BackpackManager : MonoBehaviour
             inventoryFilter.onFilterChanged.RemoveListener(GenerateItemCards);
         }
     }
-
     public void GenerateItemCards()
     {
         ClearItems();
@@ -68,7 +69,6 @@ public class BackpackManager : MonoBehaviour
             }
         }
     }
-
     private void ModifyItemCard(Item item, bool isEquipped = false)
     {
         GameObject newCard = Instantiate(itemCardPrefab, inventoryContent.transform);
@@ -78,23 +78,95 @@ public class BackpackManager : MonoBehaviour
         card.itemName.text = item.Name;
         card.itemRarity.effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
         card.price.text = $"{item.Price}G";
-        
+
         if (card.detailsBTN != null)
         {
             card.detailsBTN.interactable = true;
-            card.detailsBTN.onClick.RemoveAllListeners();
-            card.detailsBTN.onClick.AddListener(() => ShowDetails(item));
+            card.detailsBTN.onClick.AddListener(() => ShowDetails(item, card));
+        }
+
+        if (card.actionBTN != null) card.actionBTN.gameObject.SetActive(true); // ensure it is active by default
+
+        // Specific properties
+        ModifyWeaponCard(item, isEquipped, card);
+        ModifyArmorCard(item, isEquipped, card);
+        ModifyMaterialCard(item, isEquipped, card);
+        ModifyConsumableCard(item, isEquipped, card);
+    }
+    private void ShowDetails(Item item, InventoryCard itemCard)
+    {
+        if (detailsCardPrefab == null)
+        {
+            Debug.LogError("detailsCardPrefab is missing! Please assign it in the inspector.");
+            return;
+        }
+
+
+        GameObject detailsObj = Instantiate(detailsCardPrefab, transform);
+
+        OpenDetailsMenu(detailsObj);
+
+        DetailsCard dc = detailsObj.transform.GetChild(0).GetComponent<DetailsCard>();
+        if (dc == null) return;
+        // common properties
+        dc.title.text = item.Name;
+        dc.desc.text = item.Description;
+        dc.gold.text = $"{item.Price}G";
+        dc.itemIcon.sprite = itemCard.itemIcon.sprite;
+        dc.itemIcon.transform.parent.GetComponent<Outline>().effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
+
+        ModifyWeaponDetailsCard(item, itemCard, dc);
+        ModifyArmorDetailsCard(item, itemCard, dc);
+        ModifyMaterialDetailsCard(item, itemCard, dc);
+        ModifyConsumableDetailsCard(item, itemCard, dc);
+    }
+    private Item GetItemWithID(string ID)
+    {
+        if (context.MasterItemBook.TryGetValue(ID, out var itemData))
+        {
+            return itemData;
         }
         else
         {
-            Debug.LogWarning("Details button is not assigned in the InventoryCard prefab!");
+            Debug.LogWarning($"Item with ID {ID} not found in MasterItemBook.");
+            return null;
         }
-        
-        if (card.actionBTN != null) card.actionBTN.gameObject.SetActive(true); // ensure it is active by default
-        
-        // Specific properties
+    }
+    private void ClearItems()
+    {
+        foreach (Transform child in inventoryContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void OpenDetailsMenu(GameObject dim)
+    {
+        Image image = dim.GetComponent<Image>();
+        image.color = new Color(0f, 0f, 0f, 0f);
+        GameObject panel = dim.transform.GetChild(0).gameObject;
+        panel.transform.localScale = Vector3.zero;
+
+        LeanTween.value(dim.gameObject, 0, 0.5f, 0.1f).setEaseLinear().setOnUpdate((float val) =>
+        {
+            image.color = new Color(0f, 0f, 0f, val);
+        }).setOnComplete(() =>
+        {
+            LeanTween.value(panel, 0, 1f, 0.3f).setEaseInOutCubic().setOnUpdate((float val) =>
+            {
+                panel.transform.localScale = new Vector3(val, val, val);
+            });
+        });
+    }
+
+    #region Item Card & Item Details Card Modifiers
+    // Items Card
+    private void ModifyWeaponCard(Item item, bool isEquipped, InventoryCard card)
+    {
         if (item is Weapon w)
         {
+            card.actionBTN.onClick.AddListener(() => EquipItem(item));
+
             card.itemIcon.sprite = w.WeaponType switch
             {
                 WeaponType.Sword => card.swordIcon,
@@ -121,8 +193,12 @@ public class BackpackManager : MonoBehaviour
                 card.actionBTN.interactable = false;
             }
         }
-        else if (item is Armor a)
+    }
+    private void ModifyArmorCard(Item item, bool isEquipped, InventoryCard card)
+    {
+        if (item is Armor a)
         {
+            card.actionBTN.onClick.AddListener(() => EquipItem(item));
             card.itemIcon.sprite = card.armorIcon;
 
             card.subStatIcon1.sprite = card.armorIcon;
@@ -143,7 +219,10 @@ public class BackpackManager : MonoBehaviour
                 card.actionBTN.interactable = false;
             }
         }
-        else if (item is Material m)
+    }
+    private void ModifyMaterialCard(Item item, bool isEquipped, InventoryCard card)
+    {
+        if (item is Material m)
         {
             card.itemIcon.sprite = card.materialIcon;
 
@@ -152,12 +231,12 @@ public class BackpackManager : MonoBehaviour
 
             card.subStatIcon2.gameObject.SetActive(false);
             card.subStat2.gameObject.SetActive(false);
-            
+
             card.subStatIcon3.gameObject.SetActive(false);
             card.subStat3.gameObject.SetActive(false);
 
             if (card.actionBTN != null) card.actionBTN.gameObject.SetActive(false);
-            
+
             // Make details button full width with 24px padding and set its text to "Details"
             if (card.detailsBTN != null)
             {
@@ -170,12 +249,15 @@ public class BackpackManager : MonoBehaviour
                     dRt.offsetMax = new Vector2(-24f, dRt.offsetMax.y);
                 }
 
-                TMP_Text detailsText = card.detailsBTN.GetComponentInChildren<TMP_Text>();
-                if (detailsText != null) detailsText.text = "Details";
+                card.detailsBTNText.text = "Details";
             }
         }
-        else if (item is Consumable c)
+    }
+    private void ModifyConsumableCard(Item item, bool isEquipped, InventoryCard card)
+    {
+        if (item is Consumable c)
         {
+            card.actionBTN.onClick.AddListener(() => ConsumeItem());
             card.itemIcon.sprite = card.meatIcon;
 
             card.subStatIcon1.sprite = card.meatIcon;
@@ -189,106 +271,189 @@ public class BackpackManager : MonoBehaviour
 
             //card.detailsBTN
             card.actionBTNText.text = "Use";
-
         }
     }
-
-    private Item GetItemWithID(string ID)
+    // Item Details Card
+    private void ModifyWeaponDetailsCard(Item item, InventoryCard itemCard, DetailsCard dc)
     {
-        if (context.MasterItemBook.TryGetValue(ID, out var itemData))
-        {
-            return itemData;
-        }
-        else
-        {
-            Debug.LogWarning($"Item with ID {ID} not found in MasterItemBook.");
-            return null;
-        }
-    }
-    private void ClearItems()
-    {
-        foreach (Transform child in inventoryContent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-
-    private void ShowDetails(Item item)
-    {
-        if (detailsCardPrefab == null) 
-        {
-            Debug.LogError("detailsCardPrefab is missing! Please assign it in the inspector.");
-            return;
-        }
-        
-        Canvas parentCanvas = GetComponentInParent<Canvas>();
-        Transform parentTransform = parentCanvas != null ? parentCanvas.transform : transform;
-        
-        GameObject detailsObj = Instantiate(detailsCardPrefab, parentTransform);
-        DetailsCard dc = detailsObj.GetComponent<DetailsCard>();
-        if (dc == null) return;
-        
-        if (dc.title != null) dc.title.text = item.Name;
-        if (dc.desc != null) dc.desc.text = item.Description;
-        if (dc.gold != null) dc.gold.text = $"{item.Price}G";
-        
-        if (dc.icon1 != null) dc.icon1.gameObject.SetActive(false);
-        if (dc.value1 != null) dc.value1.gameObject.SetActive(false);
-        if (dc.icon2 != null) dc.icon2.gameObject.SetActive(false);
-        if (dc.value2 != null) dc.value2.gameObject.SetActive(false);
-        if (dc.icon3 != null) dc.icon3.gameObject.SetActive(false);
-        if (dc.value3 != null) dc.value3.gameObject.SetActive(false);
-        if (dc.icon4 != null) dc.icon4.gameObject.SetActive(false);
-        if (dc.value4 != null) dc.value4.gameObject.SetActive(false);
-        if (dc.icon5 != null) dc.icon5.gameObject.SetActive(false);
-        if (dc.value5 != null) dc.value5.gameObject.SetActive(false);
-
         if (item is Weapon w)
         {
-            SetDetailStat(dc, 1, "ATK", w.WeaponATK.ToString());
-            SetDetailStat(dc, 2, "LVL", w.RequiredLevel.ToString());
-            SetDetailStat(dc, 3, "UPG", $"+{w.Upgrade}");
-        }
-        else if (item is Armor a)
-        {
-            SetDetailStat(dc, 1, "DEF", a.ArmorDef.ToString());
-            SetDetailStat(dc, 2, "HP", $"+{a.ExtraHP}");
-            SetDetailStat(dc, 3, "LVL", a.RequiredLevel.ToString());
-            SetDetailStat(dc, 4, "UPG", $"+{a.Upgrade}");
-        }
-        else if (item is Material m)
-        {
-            SetDetailStat(dc, 1, "QTY", $"x{m.Quantity}");
-        }
-        else if (item is Consumable c)
-        {
-            SetDetailStat(dc, 1, "EFF", c.Effect);
-            SetDetailStat(dc, 2, "VAL", $"{c.Value}%");
-        }
-        
-        if (dc.action != null)
-        {
-             dc.action.onClick.RemoveAllListeners();
-             dc.action.onClick.AddListener(() => Destroy(detailsObj));
-             TMP_Text btnText = dc.action.GetComponentInChildren<TMP_Text>();
-             if (btnText != null) btnText.text = "Close";
-        }
-    }
+            dc.icon1.sprite = w.WeaponType switch
+            {
+                WeaponType.Sword => itemCard.swordIcon,
+                WeaponType.Bow => itemCard.bowIcon,
+                WeaponType.Staff => itemCard.staffIcon,
+                _ => itemCard.swordIcon
+            }; ;
+            dc.value1.text = w.WeaponATK.ToString();
 
-    private void SetDetailStat(DetailsCard dc, int index, string iconText, string valueText)
-    {
-        TMP_Text icon = null;
-        TMP_Text val = null;
-        switch (index)
-        {
-            case 1: icon = dc.icon1; val = dc.value1; break;
-            case 2: icon = dc.icon2; val = dc.value2; break;
-            case 3: icon = dc.icon3; val = dc.value3; break;
-            case 4: icon = dc.icon4; val = dc.value4; break;
-            case 5: icon = dc.icon5; val = dc.value5; break;
+            dc.icon2.sprite = itemCard.levelIcon;
+            dc.value2.text = w.RequiredLevel.ToString();
+
+            dc.icon3.sprite = itemCard.upgradeIcon;
+            dc.value3.text = $"+{w.Upgrade}";
+
+            dc.icon4.gameObject.SetActive(false);
+            dc.value4.gameObject.SetActive(false);
+            dc.icon5.gameObject.SetActive(false);
+            dc.value5.gameObject.SetActive(false);
+
+            bool isEquipped = context.Player.EquippedWeapon != null && context.Player.EquippedWeapon.ID == w.ID && context.Player.EquippedWeapon.Upgrade == w.Upgrade;
+            string text = isEquipped ? "Unequip" : "Equip";
+
+            dc.action.transform.GetChild(0).GetComponent<TMP_Text>().text = text;
+            dc.action.onClick.AddListener(() => EquipItem(item));
         }
-        
-        if (icon != null) { icon.gameObject.SetActive(true); icon.text = iconText; }
-        if (val != null) { val.gameObject.SetActive(true); val.text = valueText; }
     }
+    private void ModifyArmorDetailsCard(Item item, InventoryCard itemCard, DetailsCard dc)
+    {
+        if (item is Armor a)
+        {
+            dc.icon1.sprite = itemCard.armorIcon;
+            dc.value1.text = a.ArmorDef.ToString();
+
+            dc.icon2.sprite = itemCard.levelIcon;
+            dc.value2.text = a.RequiredLevel.ToString();
+
+            dc.icon3.sprite = itemCard.upgradeIcon;
+            dc.value3.text = $"+{a.Upgrade}";
+
+            dc.icon4.sprite = itemCard.hpIcon;
+            dc.value4.text = a.ExtraHP.ToString();
+
+            dc.icon5.gameObject.SetActive(false);
+            dc.value5.gameObject.SetActive(false);
+
+            dc.action.onClick.AddListener(() => EquipItem(item));
+        }
+    }
+    private void ModifyMaterialDetailsCard(Item item, InventoryCard itemCard, DetailsCard dc)
+    {
+        if (item is Material m)
+        {
+            dc.icon1.sprite = itemCard.quantityIcon;
+            dc.value1.text = $"x{m.Quantity}";
+
+            dc.icon2.gameObject.SetActive(false);
+            dc.value2.gameObject.SetActive(false);
+            dc.icon3.gameObject.SetActive(false);
+            dc.value3.gameObject.SetActive(false);
+            dc.icon4.gameObject.SetActive(false);
+            dc.value4.gameObject.SetActive(false);
+            dc.icon5.gameObject.SetActive(false);
+            dc.value5.gameObject.SetActive(false);
+        }
+    }
+    private void ModifyConsumableDetailsCard(Item item, InventoryCard itemCard, DetailsCard dc)
+    {
+        if (item is Consumable c)
+        {
+            //dc.icon1.sprite = itemCard.;
+            //dc.value1.text = $"x{m.Quantity}";
+
+            dc.icon1.sprite = itemCard.quantityIcon;
+            dc.value1.text = $"x{c.Quantity}";
+
+            dc.action.GetComponent<TMP_Text>().text = "Consume";
+            dc.action.onClick.AddListener(() => ConsumeItem());
+        }
+    }
+    #endregion
+    
+    #region Inventory Actions
+    private void EquipItem(Item item)
+    {
+        Hero p = GameManager.Instance.Context.Player;
+        if (item is Weapon w) 
+        {
+            if (p.EquippedWeapon == w)
+            {
+                // Unequip
+                p.Inventory.Add(new InventoryData
+                {
+                    InstanceID = System.Guid.NewGuid().ToString(),
+                    ID = p.EquippedWeapon.ID,
+                    Upgrade = p.EquippedWeapon.Upgrade,
+                    Quantity = 1
+                });
+                p.EquippedWeapon = null;
+            }
+            else
+            {
+                // Equip new weapon, first unequip current if any
+                if (p.EquippedWeapon != null)
+                {
+                    p.Inventory.Add(new InventoryData
+                    {
+                        InstanceID = System.Guid.NewGuid().ToString(),
+                        ID = p.EquippedWeapon.ID,
+                        Upgrade = p.EquippedWeapon.Upgrade,
+                        Quantity = 1
+                    });
+                }
+                p.EquippedWeapon = w;
+
+                // Remove the equipped weapon from inventory
+                for (int i = 0; i < p.Inventory.Count; i++)
+                {
+                    if (p.Inventory[i].ID == w.ID && p.Inventory[i].Upgrade == w.Upgrade)
+                    {
+                        p.Inventory.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+        else if (item is Armor a) 
+        {
+            if (p.EquippedArmor == a)
+            {
+                // Unequip
+                p.Inventory.Add(new InventoryData
+                {
+                    InstanceID = System.Guid.NewGuid().ToString(),
+                    ID = p.EquippedArmor.ID,
+                    Upgrade = p.EquippedArmor.Upgrade,
+                    Quantity = 1
+                });
+                p.EquippedArmor = null;
+            }
+            else
+            {
+                // Equip new armor, first unequip current if any
+                if (p.EquippedArmor != null)
+                {
+                    p.Inventory.Add(new InventoryData
+                    {
+                        InstanceID = System.Guid.NewGuid().ToString(),
+                        ID = p.EquippedArmor.ID,
+                        Upgrade = p.EquippedArmor.Upgrade,
+                        Quantity = 1
+                    });
+                }
+                p.EquippedArmor = a;
+
+                // Remove the equipped armor from inventory
+                for (int i = 0; i < p.Inventory.Count; i++)
+                {
+                    if (p.Inventory[i].ID == a.ID && p.Inventory[i].Upgrade == a.Upgrade)
+                    {
+                        p.Inventory.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        GenerateItemCards();
+        if (inventoryCapacityText != null)
+            inventoryCapacityText.text = $"{p.Inventory.Count}/20";
+            
+        EventManager.HeroEvents.TriggerEquipmentChanged(GameManager.Instance.Context);
+    }
+    private void ConsumeItem()
+    {
+
+    }
+    #endregion
 }

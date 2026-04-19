@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace TextBasedRPG.Events
 {
@@ -24,9 +24,11 @@ namespace TextBasedRPG.Events
             public static event Action<GameContext> OnGoldChanged;
             public static event Action<GameContext> OnExpChanged;
             public static event Action<GameContext> OnHPValueChanged;
+            public static event Action<GameContext> OnEquipmentChanged;
             public static void TriggerGoldChanged(GameContext context) => OnGoldChanged?.Invoke(context);
             public static void TriggerExpChanged(GameContext context) => OnExpChanged?.Invoke(context);
             public static void TriggerHPValueChanged(GameContext context) => OnHPValueChanged?.Invoke(context);
+            public static void TriggerEquipmentChanged(GameContext context) => OnEquipmentChanged?.Invoke(context);
         }
     }
 }
