@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+
     [Header("Essential Objects")]
     [SerializeField] private Transform canvas;
     [SerializeField] private Transform middleSection;
@@ -34,6 +35,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Configuration")]
     [SerializeField] [InspectorRange(0.01f,0.03f)] float typeWriterSpeed = 0.015f;
+
+    [Header("Icon Database")]
+    [SerializeField] private IconDatabase iconDB;
+    public IconDatabase IconDB => iconDB;
 
     [System.Serializable]
     public struct PanelMapping

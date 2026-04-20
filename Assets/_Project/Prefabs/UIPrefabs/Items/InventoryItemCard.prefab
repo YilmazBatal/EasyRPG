@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424826fc55e43f541997d0ea2a70437c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detailsCardPrefab: {fileID: 5365541892018999021, guid: b4263ba10ed1098419de0f7ff05fc3b5, type: 3}
   itemName: {fileID: 4324131122826390394}
   itemRarity: {fileID: 1080711611405370053}
   itemIcon: {fileID: 1295225921826879303}
@@ -150,19 +151,6 @@ MonoBehaviour:
   actionBTNText: {fileID: 6493124880922437146}
   detailsBTN: {fileID: 4870089964896770376}
   detailsBTNText: {fileID: 3432444701633185624}
-  attackIcon: {fileID: 21300000, guid: c943fd0b12d95064d830dc0cecd85ff1, type: 3}
-  swordIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
-  bowIcon: {fileID: 21300000, guid: eff4cd086581ecc4eb3935ecd63ca133, type: 3}
-  staffIcon: {fileID: 21300000, guid: 653e1c73260f940498544f2d14d501da, type: 3}
-  armorIcon: {fileID: 21300000, guid: 0176b4f8f61b10d428dbb23b30d43de6, type: 3}
-  materialIcon: {fileID: 21300000, guid: 4c54dabd98239e44b9a504f6a52844f8, type: 3}
-  quantityIcon: {fileID: 21300000, guid: 536300a3516598d47a8fd1eaa885faab, type: 3}
-  upgradeIcon: {fileID: 21300000, guid: 59546d398aff0694586199e1f7f0b46a, type: 3}
-  hpIcon: {fileID: 21300000, guid: 2741e766a0db83a449a94bac8be278b9, type: 3}
-  levelIcon: {fileID: 21300000, guid: 3aa9b3363e75ce54aab85612d94852ea, type: 3}
-  meatIcon: {fileID: 21300000, guid: 305c328dd1671a14f9c462df1186efa3, type: 3}
-  speedIcon: {fileID: 21300000, guid: d8bd17f2773309049ada7ee7496aab32, type: 3}
-  questIcon: {fileID: 21300000, guid: 826532dc469190b4982a27e8f1c8dff0, type: 3}
 --- !u!1 &1985720781708888817
 GameObject:
   m_ObjectHideFlags: 0

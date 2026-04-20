@@ -73,6 +73,96 @@ namespace TextBasedRPG.Core.Heroes
             }
         }
 
+        public void EquipItem(Item item)
+        {
+            if (item is Weapon w)
+            {
+                if (EquippedWeapon == w)
+                {
+                    // Unequip
+                    Inventory.Add(new InventoryData
+                    {
+                        InstanceID = System.Guid.NewGuid().ToString(),
+                        ID = EquippedWeapon.ID,
+                        Upgrade = EquippedWeapon.Upgrade,
+                        Quantity = 1
+                    });
+                    EquippedWeapon = null;
+                }
+                else
+                {
+                    // Equip new weapon, first unequip current if any
+                    if (EquippedWeapon != null)
+                    {
+                        Inventory.Add(new InventoryData
+                        {
+                            InstanceID = System.Guid.NewGuid().ToString(),
+                            ID = EquippedWeapon.ID,
+                            Upgrade = EquippedWeapon.Upgrade,
+                            Quantity = 1
+                        });
+                    }
+                    EquippedWeapon = w;
+
+                    // Remove the equipped weapon from inventory
+                    for (int i = 0; i < Inventory.Count; i++)
+                    {
+                        if (Inventory[i].ID == w.ID && Inventory[i].Upgrade == w.Upgrade)
+                        {
+                            Inventory.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (item is Armor a)
+            {
+                if (EquippedArmor == a)
+                {
+                    // Unequip
+                    Inventory.Add(new InventoryData
+                    {
+                        InstanceID = System.Guid.NewGuid().ToString(),
+                        ID = EquippedArmor.ID,
+                        Upgrade = EquippedArmor.Upgrade,
+                        Quantity = 1
+                    });
+                    EquippedArmor = null;
+                }
+                else
+                {
+                    // Equip new armor, first unequip current if any
+                    if (EquippedArmor != null)
+                    {
+                        Inventory.Add(new InventoryData
+                        {
+                            InstanceID = System.Guid.NewGuid().ToString(),
+                            ID = EquippedArmor.ID,
+                            Upgrade = EquippedArmor.Upgrade,
+                            Quantity = 1
+                        });
+                    }
+                    EquippedArmor = a;
+
+                    // Remove the equipped armor from inventory
+                    for (int i = 0; i < Inventory.Count; i++)
+                    {
+                        if (Inventory[i].ID == a.ID && Inventory[i].Upgrade == a.Upgrade)
+                        {
+                            Inventory.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            EventManager.HeroEvents.TriggerEquipmentChanged(GameManager.Instance.Context);
+        }
+        public void ConsumeItem()
+        {
+
+        }
+
         public void FullHeal()
         {
             CurHP = TotalHP;
