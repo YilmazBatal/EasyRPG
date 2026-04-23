@@ -1,5 +1,6 @@
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
+using TextBasedRPG.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,10 +12,12 @@ namespace Assets._Project.Scripts.UI.Cards
     {
         [SerializeField] public Image background;
 
+        [Header("Main Components")]
         [SerializeField] public TMP_Text title;
         [SerializeField] public TMP_Text desc;
         [SerializeField] public Image itemIcon;
 
+        [Header("Other Components")]
         [SerializeField] public Image icon1;
         [SerializeField] public TMP_Text value1;
         [SerializeField] public Image icon2;
@@ -25,11 +28,22 @@ namespace Assets._Project.Scripts.UI.Cards
         [SerializeField] public TMP_Text value4;
         [SerializeField] public Image icon5;
         [SerializeField] public TMP_Text value5;
-
         [SerializeField] public TMP_Text gold;
 
-        public Button action;
-        public Button closeBTN;
+        [Header("Buttons")]
+        [SerializeField] public Button action;
+        [SerializeField] public Button closeBTN;
+        [SerializeField] public Button discardBTN;
+
+        [Header("Discard Confirmation")]
+        [SerializeField] public TMP_InputField amountText;
+        [SerializeField] public Button discardPlusBTN;
+        [SerializeField] public Button discardMinusBTN;
+        [SerializeField] public Button proceedBTN;
+
+        [Header("Popup")]
+        [SerializeField] public GameObject popup;
+
 
         Hero player => GameManager.Instance.Context.Player;
         IconDatabase iconDB => UIManager.Instance.IconDB;
@@ -47,6 +61,15 @@ namespace Assets._Project.Scripts.UI.Cards
             gold.text = $"{item.Price}G";
             itemIcon.sprite = itemCard.itemIcon.sprite;
             itemIcon.transform.parent.GetComponent<Outline>().effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
+
+            // Initialize discard state so +/- buttons work immediately
+            currentItem = item;
+            currentDiscardAmount = 1;
+            maxDiscardAmount = item.Quantity;
+            var context = GameManager.Instance.Context;
+            var entry = context.Player.Inventory.Find(x => x.ID == item.ID);
+            if (entry != null) maxDiscardAmount = Mathf.Max(1, entry.Quantity);
+            amountText.text = currentDiscardAmount.ToString();
 
             ModifyWeaponDetailsCard(item, itemCard);
             ModifyArmorDetailsCard(item, itemCard);
@@ -74,10 +97,23 @@ namespace Assets._Project.Scripts.UI.Cards
                 value5.gameObject.SetActive(false);
 
                 bool isEquipped = player.EquippedWeapon != null && player.EquippedWeapon.ID == w.ID && player.EquippedWeapon.Upgrade == w.Upgrade;
-                string text = isEquipped ? "Unequip" : "Equip";
+                var actionLabel = action.transform.GetChild(0).GetComponent<TMP_Text>();
+                actionLabel.text = isEquipped ? "Unequip" : "Equip";
 
-                action.transform.GetChild(0).GetComponent<TMP_Text>().text = text;
-                action.onClick.AddListener(() => player.EquipItem(item));
+                action.onClick.RemoveAllListeners();
+                action.onClick.AddListener(() =>
+                {
+                    player.EquipItem(item);
+                    // Toggle button text based on new equipped state
+                    bool nowEquipped = player.EquippedWeapon != null && player.EquippedWeapon.ID == w.ID && player.EquippedWeapon.Upgrade == w.Upgrade;
+                    actionLabel.text = nowEquipped ? "Unequip" : "Equip";
+                });
+
+                DisableDiscardSystem(discardPlusBTN, discardMinusBTN, proceedBTN, amountText);
+
+                if (w.RequiredLevel >= GameManager.Instance.Context.Player.Level) // or not enough str etc for the future implementations
+                    action.interactable = false;
+
             }
         }
         private void ModifyArmorDetailsCard(Item item, InventoryCard itemCard)
@@ -99,7 +135,23 @@ namespace Assets._Project.Scripts.UI.Cards
                 icon5.gameObject.SetActive(false);
                 value5.gameObject.SetActive(false);
 
-                action.onClick.AddListener(() => player.EquipItem(item));
+                bool isEquipped = player.EquippedArmor != null && player.EquippedArmor.ID == a.ID && player.EquippedArmor.Upgrade == a.Upgrade;
+                var actionLabel = action.transform.GetChild(0).GetComponent<TMP_Text>();
+                actionLabel.text = isEquipped ? "Unequip" : "Equip";
+
+                action.onClick.RemoveAllListeners();
+                action.onClick.AddListener(() =>
+                {
+                    player.EquipItem(item);
+                    // Toggle button text based on new equipped state
+                    bool nowEquipped = player.EquippedArmor != null && player.EquippedArmor.ID == a.ID && player.EquippedArmor.Upgrade == a.Upgrade;
+                    actionLabel.text = nowEquipped ? "Unequip" : "Equip";
+                });
+
+                DisableDiscardSystem(discardPlusBTN, discardMinusBTN, proceedBTN, amountText);
+
+                if (a.RequiredLevel >= GameManager.Instance.Context.Player.Level) // or not enough str etc for the future implementations
+                    action.interactable = false;
             }
         }
         private void ModifyMaterialDetailsCard(Item item, InventoryCard itemCard)
@@ -108,6 +160,8 @@ namespace Assets._Project.Scripts.UI.Cards
             {
                 icon1.sprite = iconDB.quantityIcon;
                 value1.text = $"x{m.Quantity}";
+
+                action.gameObject.SetActive(false);
 
                 icon2.gameObject.SetActive(false);
                 value2.gameObject.SetActive(false);
@@ -123,14 +177,14 @@ namespace Assets._Project.Scripts.UI.Cards
         {
             if (item is Consumable c)
             {
-                //icon1.sprite = itemCard.;
-                //value1.text = $"x{m.Quantity}";
-
                 icon1.sprite = iconDB.quantityIcon;
                 value1.text = $"x{c.Quantity}";
 
-                action.GetComponent<TMP_Text>().text = "Consume";
+                var actionText = action.transform.GetChild(0).GetComponent<TMP_Text>();
+                actionText.text = "Consume";
+                action.onClick.RemoveAllListeners();
                 action.onClick.AddListener(() => player.ConsumeItem());
+
             }
         }
         #endregion
@@ -174,6 +228,112 @@ namespace Assets._Project.Scripts.UI.Cards
             });
         }
         #endregion
+        #region Discard System
 
+        private Item currentItem;
+        private int currentDiscardAmount;
+        private int maxDiscardAmount;
+
+
+        private void UpdateDiscardAmountDisplay()
+        {
+            amountText.text = currentDiscardAmount.ToString();
+        }
+
+        public void ReduceAmount()
+        {
+            if (currentDiscardAmount > 1)
+            {
+                Debug.Log($"Decreasing discard amount: {currentDiscardAmount} -> {currentDiscardAmount - 1}");
+                currentDiscardAmount--;
+                UpdateDiscardAmountDisplay();
+            }
+        }
+
+        public void IncreaseAmount()
+        {
+            if (currentDiscardAmount < maxDiscardAmount)
+            {
+                Debug.Log($"Increasing discard amount: {currentDiscardAmount} -> {currentDiscardAmount + 1}");
+                currentDiscardAmount++;
+                UpdateDiscardAmountDisplay();
+            }
+        }
+
+        /// <summary>
+        /// Called when the Proceed (save-icon) button is clicked.
+        /// Reads the current amount and shows a confirmation popup.
+        /// </summary>
+        public void ProceedDiscard()
+        {
+            if (currentItem == null) return;
+
+            // Read amount from input field in case user typed a value directly
+            if (int.TryParse(amountText.text, out int typedAmount))
+            {
+                currentDiscardAmount = Mathf.Clamp(typedAmount, 1, maxDiscardAmount);
+            }
+
+            if (currentDiscardAmount <= 0) return;
+
+            Debug.Log($"Proceeding to discard {currentDiscardAmount} of {currentItem.Name}");
+
+            UIManager.Instance.GeneratePopUp(
+                "Discard Item",
+                $"Are you sure you want to discard {currentDiscardAmount}x {currentItem.Name}?",
+                ExecuteDiscard
+            );
+        }
+
+        /// <summary>
+        /// Actually removes items from the inventory. Called after user confirms the popup.
+        /// </summary>
+        private void ExecuteDiscard()
+        {
+            InventoryManager.RemoveFromInventory(
+                GameManager.Instance.Context,
+                currentItem.ID,
+                currentDiscardAmount
+            );
+
+            // Close the confirmation popup
+            if (UIManager.Instance._activePopUp != null)
+            {
+                UIManager.Instance._activePopUp.GetComponent<PopUpManager>().Close();
+            }
+
+            // Hide the discard amount picker
+            ResetDiscardState();
+
+            // Close the details card entirely
+            CloseDetailsMenu(background.gameObject);
+        }
+        public void InputUpdated()
+        {
+            if (int.TryParse(amountText.text, out int value))
+            {
+                currentDiscardAmount = Mathf.Clamp(value, 1, maxDiscardAmount);
+                UpdateDiscardAmountDisplay();
+            }
+        }
+
+        private void ResetDiscardState()
+        {
+            currentItem = null;
+            currentDiscardAmount = 1;
+            maxDiscardAmount = 0;
+
+            if (popup != null) popup.SetActive(false);
+        }
+
+        #endregion
+
+        void DisableDiscardSystem(Button incrementBTN, Button reducementBTN, Button proceedBTN, TMP_InputField amountInput)
+        {
+            incrementBTN.gameObject.SetActive(false);
+            reducementBTN.gameObject.SetActive(false);
+            proceedBTN.gameObject.SetActive(false);
+            amountInput.gameObject.SetActive(false);
+        }
     }
 }

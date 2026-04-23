@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform middleSection;
     [SerializeField] public Transform rightSection;
     [SerializeField] public Transform leftSection;
+    [SerializeField] public Transform popupHolder;
 
     [SerializeField] public Image raycastBlocker1;
     [SerializeField] public Image raycastBlocker2;
@@ -96,8 +97,10 @@ public class UIManager : MonoBehaviour
     public void GeneratePopUp(string title, string description, UnityAction onConfirm)
     {
         GameObject PopUp = Instantiate(_popUp);
-        PopUp.transform.SetParent(middleSection.transform, false);
         PopUpManager Config = PopUp.GetComponent<PopUpManager>();
+        PopUp.transform.SetParent(popupHolder, false);
+
+        PopUp.SetActive(true);
 
         Config.title.text = title;
         Config.description.text = description;
@@ -108,6 +111,15 @@ public class UIManager : MonoBehaviour
         _activePopUp = PopUp;
 
         raycastBlocker1.gameObject.SetActive(true);
+        LeanTween.value(raycastBlocker1.gameObject, 0f, 0.5f, 0.2f).setEaseInOutCubic().setOnUpdate((float val) =>
+        {
+            raycastBlocker1.color = new Color(0f, 0f, 0f, val);
+        });
+        PopUp.transform.localScale = Vector3.zero;
+        LeanTween.value(PopUp, 0f, 1f, 0.3f).setEaseInOutCubic().setOnUpdate((float val) =>
+        {
+            PopUp.transform.localScale = new Vector3(val, val, val);
+        });
     }
     public void GenerateClassSelection()
     {

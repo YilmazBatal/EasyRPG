@@ -96,7 +96,6 @@ public class BackpackManager : MonoBehaviour
             card2.ModifyItemCard(equippedArmor, true);
         }
     }
-   
     private Item GetItemWithID(string ID)
     {
         if (context.MasterItemBook.TryGetValue(ID, out var itemData))
@@ -116,25 +115,6 @@ public class BackpackManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
-    //public void OpenDetailsMenu(GameObject dim)
-    //{
-    //    Image image = dim.GetComponent<Image>();
-    //    image.color = new Color(0f, 0f, 0f, 0f);
-    //    GameObject panel = dim.transform.GetChild(0).gameObject;
-    //    panel.transform.localScale = Vector3.zero;
-
-    //    LeanTween.value(dim.gameObject, 0, 0.5f, 0.1f).setEaseLinear().setOnUpdate((float val) =>
-    //    {
-    //        image.color = new Color(0f, 0f, 0f, val);
-    //    }).setOnComplete(() =>
-    //    {
-    //        LeanTween.value(panel, 0, 1f, 0.3f).setEaseInOutCubic().setOnUpdate((float val) =>
-    //        {
-    //            panel.transform.localScale = new Vector3(val, val, val);
-    //        });
-    //    });
-    //}
 
     #region Events
     private void OnEquipmentChanged(GameContext context) => GenerateItemCards();

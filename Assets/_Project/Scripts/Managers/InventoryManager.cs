@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using TextBasedRPG.Events;
 using TextBasedRPG.Models;
 
 namespace TextBasedRPG.Managers
@@ -21,42 +22,33 @@ namespace TextBasedRPG.Managers
                 context.Player.Inventory!.Add(itemToAdd);
             }
         }
-        //public static void DiscardFromInventory(GameContext context, InventoryData invData)
-        //{
-        //    Console.ForegroundColor = ConsoleColor.Yellow;
-        //    Console.Write("[INVENTORY] How many do you want to discard? > ");
-        //    string amount = Console.ReadLine()!;
-        //    if (int.TryParse(amount, out int result) && result > 0 && result <= invData.Quantity)
-        //    {
-        //        Console.Write($"\n[INVENTORY] Are you sure you want to discard? [Y/Any Key] > ");
-        //        string selection = Console.ReadLine()!.ToUpper();
-        //        if (selection == "Y")
-        //        {
-        //            invData.Quantity -= result;
 
-        //            if (invData.Quantity <= 0)
-        //            {
-        //                context.Player!.Inventory!.Remove(invData);
-        //            }
+        /// <summary>
+        /// Removes a given amount of an item from the player's inventory.
+        /// If the remaining quantity drops to zero or below, the entry is removed entirely.
+        /// Fires the EquipmentChanged event to refresh the UI afterwards.
+        /// </summary>
+        /// <returns>True if the item was found and discarded, false otherwise.</returns>
+        public static bool RemoveFromInventory(GameContext context, string itemId, int amount)
+        {
+            var inventory = context.Player.Inventory;
+            if (inventory == null) return false;
 
-        //            Console.ForegroundColor = ConsoleColor.Red;
-        //            Console.Write($"\n[INVENTORY] {invData.Quantity}x {context.MasterItemBook[invData.ID].Name} is discarded!");
-        //            Console.ResetColor();
-        //            Console.ReadKey(true);
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if (inventory[i].ID == itemId)
+                {
+                    inventory[i].Quantity -= amount;
 
-        //        }
-        //        else
-        //        {
-        //            MenuUI.ColoredMsg(ConsoleColor.Cyan, $"[INVENTORY] You have canceled the operation. ");
-        //            Console.ReadKey(true);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        MenuUI.ColoredMsg(ConsoleColor.Yellow, "[INVENTORY] Invalid input.");
-        //        Console.ReadKey(true);
-        //    }
-        //}
-    
+                    if (inventory[i].Quantity <= 0)
+                        inventory.RemoveAt(i);
+
+                    EventManager.HeroEvents.TriggerEquipmentChanged(context);
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

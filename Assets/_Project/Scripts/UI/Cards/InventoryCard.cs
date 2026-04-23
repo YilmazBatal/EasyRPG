@@ -1,9 +1,11 @@
 using Assets._Project.Scripts.UI.Cards;
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
+using TextBasedRPG.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using Material = TextBasedRPG.Core.Items.Material;
 
 public class InventoryCard : MonoBehaviour
@@ -25,10 +27,16 @@ public class InventoryCard : MonoBehaviour
     [SerializeField] public Button actionBTN;
     [SerializeField] public TMP_Text actionBTNText;
     [SerializeField] public Button detailsBTN;
+    [SerializeField] public Image detailsBTNIcon;
     [SerializeField] public TMP_Text detailsBTNText;
+    [SerializeField] public Button discardBTN;
 
     Hero player => GameManager.Instance.Context.Player;
     IconDatabase iconDB => UIManager.Instance.IconDB;
+
+    // discard confirmation state
+    private bool _awaitingDiscardConfirm = false;
+    private Coroutine _discardCoroutine = null;
 
     public void ModifyItemCard(Item item, bool isEquipped = false)
     {
@@ -37,13 +45,21 @@ public class InventoryCard : MonoBehaviour
         itemRarity.effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
         price.text = $"{item.Price}G";
 
+        if (actionBTN != null)
+            actionBTN.gameObject.SetActive(true);
+        
         if (detailsBTN != null)
         {
             detailsBTN.interactable = true;
             detailsBTN.onClick.AddListener(() => ShowDetails(item));
         }
 
-        if (actionBTN != null) actionBTN.gameObject.SetActive(true); // ensure it is active by default
+        if (discardBTN != null)
+        {
+            discardBTN.interactable = true;
+            discardBTN.onClick.AddListener(() => QuickDiscard(item));
+        }
+
 
         // Specific properties
         ModifyWeaponCard(item, isEquipped);
@@ -81,9 +97,9 @@ public class InventoryCard : MonoBehaviour
             actionBTNText.text = text;
 
             if (w.RequiredLevel >= player.Level) // or not enough str etc for the future implementations
-            {
                 actionBTN.interactable = false;
-            }
+            else
+                actionBTN.interactable = true;
         }
     }
     private void ModifyArmorCard(Item item, bool isEquipped)
@@ -106,10 +122,10 @@ public class InventoryCard : MonoBehaviour
             string text = isEquipped ? "Unequip" : "Equip";
             actionBTNText.text = text;
 
-            if (a.RequiredLevel >= GameManager.Instance.Context.Player.Level) // or not enough str etc for the future implementations
-            {
+            if (a.RequiredLevel >= player.Level) // or not enough str etc for the future implementations
                 actionBTN.interactable = false;
-            }
+            else
+                actionBTN.interactable = true;
         }
     }
     private void ModifyMaterialCard(Item item, bool isEquipped)
@@ -132,16 +148,16 @@ public class InventoryCard : MonoBehaviour
             // Make details button full width with 24px padding and set its text to "Details"
             if (detailsBTN != null)
             {
+                detailsBTNText.text = "Details";
+                Destroy(detailsBTNIcon);
                 RectTransform dRt = detailsBTN.GetComponent<RectTransform>();
                 if (dRt != null)
                 {
                     dRt.anchorMin = new Vector2(0f, dRt.anchorMin.y);
                     dRt.anchorMax = new Vector2(1f, dRt.anchorMax.y);
                     dRt.offsetMin = new Vector2(24f, dRt.offsetMin.y);
-                    dRt.offsetMax = new Vector2(-24f, dRt.offsetMax.y);
+                    dRt.offsetMax = new Vector2(-48-12f, dRt.offsetMax.y);
                 }
-
-                detailsBTNText.text = "Details";
             }
         }
     }
@@ -177,6 +193,55 @@ public class InventoryCard : MonoBehaviour
         GameObject detailsObj = Instantiate(detailsCardPrefab, transform.parent.transform.parent.transform.parent.transform.parent.transform);
 
         detailsObj.transform.GetChild(0).GetComponent<DetailsCard>().OpenDetailsMenu(detailsObj, item, this);
+    }
+    private void QuickDiscard(Item item)
+    {
+        if (discardBTN == null) return;
+
+        Image discImg = discardBTN.GetComponent<Image>();
+
+        // First click: switch to confirm icon and start timeout
+        if (!_awaitingDiscardConfirm)
+        {
+            _awaitingDiscardConfirm = true;
+            discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.confirmIcon;
+            discImg.transform.GetChild(0).GetComponent<Image>().color = UIManager.Instance.rarityColors[Rarity.Uncommon.ToString()];
+
+            // start timeout to revert icon after 3 seconds
+            if (_discardCoroutine != null) StopCoroutine(_discardCoroutine);
+            _discardCoroutine = StartCoroutine(DiscardConfirmTimeout(discImg));
+            return;
+        }
+
+        // Second click within 3 seconds: perform discard
+        if (_awaitingDiscardConfirm)
+        {
+            _awaitingDiscardConfirm = false;
+            if (_discardCoroutine != null) { StopCoroutine(_discardCoroutine); _discardCoroutine = null; }
+
+            discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.trashIcon;
+
+            // Remove one quantity via centralized InventoryManager
+            InventoryManager.RemoveFromInventory(GameManager.Instance.Context, item.ID, 1);
+
+            // Shake the containing panel
+            RectTransform panelRect = GetComponentInParent<RectTransform>();
+            if (panelRect != null)
+            {
+                Assets._Project.Scripts.UI.UIExtensions.Shake(panelRect, 8f, 0.45f);
+            }
+
+            return;
+        }
+    }
+
+    private IEnumerator DiscardConfirmTimeout(Image discImg)
+    {
+        yield return new WaitForSeconds(3f);
+        _awaitingDiscardConfirm = false;
+        _discardCoroutine = null;
+        discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.trashIcon;
+        discImg.transform.GetChild(0).GetComponent<Image>().color = new Color(209f/255f, 52f/255f, 52f/255f);
     }
 
 
