@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2cce9aaaa00c574684d4c4be57f3c30, type: 3}
   m_Name: IconDatabase
   m_EditorClassIdentifier: 
+  fistIcon: {fileID: 0}
   swordIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   bowIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   staffIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
@@ -36,3 +37,5 @@ MonoBehaviour:
   plusIcon: {fileID: 21300000, guid: 45bc87df80cf56345bf54e95e56bdd8f, type: 3}
   questionMarkIcon: {fileID: 21300000, guid: 4165b354fe9e09b4eb77f176ef262ff6, type: 3}
   questIcon: {fileID: 21300000, guid: 89b281cf96142a542b39bc780e83bbc9, type: 3}
+  confirmIcon: {fileID: 21300000, guid: aa9532d8eb87e8a44af715ac96fa14fd, type: 3}
+  trashIcon: {fileID: 21300000, guid: 957f78f430ca3ec4ab8a3b687029fc50, type: 3}
