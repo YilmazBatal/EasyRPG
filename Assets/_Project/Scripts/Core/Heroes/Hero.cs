@@ -58,7 +58,7 @@ namespace TextBasedRPG.Core.Heroes
         public int CurHP { get; internal set; } = 100;
         public float CritRate => BonuslessCritRate + BonusCritRate; // %
         public float CritDamage => BonuslessCritDamage + BonusCritDMG; // %
-        public float EvasionRate => 5f + InvestedAGIPoints * 1.0f / 3.0f;
+        public float EvasionRate => 5f + InvestedAGIPoints * 0.2f;
         // Other
         public int Deaths { get; internal set; } = 0;
         public int EntitiesSlayed { get; internal set; } = 0;
@@ -68,9 +68,8 @@ namespace TextBasedRPG.Core.Heroes
         public void UpdateHeaviestDamage(int damage)
         {
             if (damage > HeaviestDamage)
-            {
                 HeaviestDamage = damage;
-            }
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
         }
 
         public void EquipItem(Item item)
@@ -155,17 +154,19 @@ namespace TextBasedRPG.Core.Heroes
                     }
                 }
             }
-
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
             EventManager.HeroEvents.TriggerEquipmentChanged(GameManager.Instance.Context);
         }
         public void ConsumeItem()
         {
-
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
         }
 
         public void FullHeal()
         {
             CurHP = TotalHP;
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+
         }
 
         public void ApplyDeathPenalty()
@@ -183,12 +184,9 @@ namespace TextBasedRPG.Core.Heroes
             EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
             EventManager.HeroEvents.TriggerGoldChanged(GameManager.Instance.Context);
             EventManager.HeroEvents.TriggerExpChanged(GameManager.Instance.Context);
-
-            // Spawn penalty notification somewhere 
-            //MenuUI.ColoredMsg(ConsoleColor.Red, "\n[DEATH] You have died and suffered penalties.");
-            //MenuUI.ColoredMsg(ConsoleColor.Yellow, $"[PENALTY] Lost Gold: {goldPenalty}");
-            //MenuUI.ColoredMsg(ConsoleColor.Cyan, $"[PENALTY] Lost Experience: {expPenalty}");
-            //MenuUI.ColoredMsg(ConsoleColor.Yellow, $"[SYSTEM] You will be resurrected.");
+            
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+            Toaster.Instance.ShowToast($"You have died and suffered penalties. Lost Gold: {goldPenalty}, Lost Experience: {expPenalty}", UIManager.Instance.IconDB.boneIcon);
         }
         #endregion
     }

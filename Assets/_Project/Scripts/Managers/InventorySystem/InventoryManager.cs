@@ -20,6 +20,7 @@ namespace TextBasedRPG.Managers
                 itemToAdd.Quantity = amount;
 
                 context.Player.Inventory!.Add(itemToAdd);
+                GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
             }
         }
 
@@ -44,6 +45,8 @@ namespace TextBasedRPG.Managers
                         inventory.RemoveAt(i);
 
                     EventManager.HeroEvents.TriggerEquipmentChanged(context);
+                    GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+
                     return true;
                 }
             }

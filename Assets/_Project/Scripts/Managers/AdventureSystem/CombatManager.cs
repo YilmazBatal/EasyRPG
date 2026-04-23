@@ -238,7 +238,7 @@ namespace TextBasedRPG.Managers
                         if (itemTemplate != null)
                         {
                             InventoryManager.AddToInventory(context, loot, amount);
-                            //MenuUI.ColoredMsg(ConsoleColor.Green, $"You found {amount}x {itemTemplate.Name}!");
+                            //Toaster.Instance.ShowToast($"You found {amount}x {itemTemplate.Name}!", UIManager.Instance.IconDB.confirmIcon);
                         }
 
                         break;
@@ -261,6 +261,8 @@ namespace TextBasedRPG.Managers
             context.Player.CurExp += finalExp;
             context.Player.TotalExp += finalExp;
             EventManager.HeroEvents.TriggerExpChanged(context);
+
+            Toaster.Instance.ShowToast($"You got {finalGold} gold and {finalExp} EXP!", UIManager.Instance.IconDB.confirmIcon);
         }
         #endregion
 

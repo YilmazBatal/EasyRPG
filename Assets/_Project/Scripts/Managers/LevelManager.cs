@@ -10,7 +10,8 @@
                 p.CurExp -= p.ReqExp;
                 p.Level++;
                 p.UnusedStatPoints += 4;
-                //Console.WriteLine($"\n[SYSTEM] Congratulations! You're now level {p.Level}!");
+                Toaster.Instance.ShowToast($"GG! You are one step closer to achieving your villain dreams! You are now level {p.Level}!", UIManager.Instance.IconDB.confirmIcon);
+                GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);    
             }
         }
     }

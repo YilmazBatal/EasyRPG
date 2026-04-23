@@ -146,6 +146,7 @@ namespace Assets._Project.Scripts.UI.Cards
                     // Toggle button text based on new equipped state
                     bool nowEquipped = player.EquippedArmor != null && player.EquippedArmor.ID == a.ID && player.EquippedArmor.Upgrade == a.Upgrade;
                     actionLabel.text = nowEquipped ? "Unequip" : "Equip";
+                    GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
                 });
 
                 DisableDiscardSystem(discardPlusBTN, discardMinusBTN, proceedBTN, amountText);
