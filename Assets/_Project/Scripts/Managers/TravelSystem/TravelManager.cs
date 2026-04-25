@@ -104,4 +104,6 @@ public class TravelManager : MonoBehaviour
     {
         foreach (Transform child in content.transform) Destroy(child.gameObject);
     }
+
+    
 }

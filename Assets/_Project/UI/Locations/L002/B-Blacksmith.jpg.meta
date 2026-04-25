@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bfa13ab767faae9419592321ad51d48e
+guid: f964fc16abb96ad4ebcf284dc3ec2232
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 319, y: 0, z: 234, w: 0}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -93,27 +93,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Inventory_0
+      name: B-Blacksmith_0
       rect:
         serializedVersion: 2
-        x: 295
+        x: 524
         y: 0
-        width: 2232
-        height: 1532
+        width: 2230
+        height: 1536
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d300a0f6c270b564c8ae2e87c2973471
-      internalID: -158723915
+      spriteID: 266f1a72140e52840873d9ef91d04395
+      internalID: 740567274
       vertices: []
       indices: 
       edges: []
@@ -122,8 +135,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 57db80e3e5c5bf84294b7feebfeacd67
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -132,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Inventory_0: -158723915
+      B-Blacksmith_0: 740567274
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163638f5abd6fa646abbee2b14ebb9e0, type: 3}
+  m_Name: LocationSO 1
+  m_EditorClassIdentifier: 
+  locationID: 2
+  locationName: 
+  townBG: {fileID: 1792239736, guid: 9563178c0d7b3a446bd4e8a7f0dca8cf, type: 3}
+  adventureBG: {fileID: -16528999, guid: 5ec3e5f2b06915141805518c8ab0b071, type: 3}
+  inventoryBG: {fileID: -797333237, guid: 59d02a41a21d5524cb03f796fa64568c, type: 3}
+  trainingBG: {fileID: 405829930, guid: 182a01db5d6d790458da3f3483780e1c, type: 3}
+  blacksmithBG: {fileID: 740567274, guid: f964fc16abb96ad4ebcf284dc3ec2232, type: 3}
+  tradecenterBG: {fileID: 321464710, guid: 3684428161c52e047ae5c32ccc4312e3, type: 3}

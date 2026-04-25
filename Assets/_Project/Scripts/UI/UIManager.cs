@@ -2,6 +2,8 @@
 using Assets._Project.Scripts.UI.Cards;
 using System.Collections;
 using System.Collections.Generic;
+using TextBasedRPG.Events;
+using TextBasedRPG.Managers;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -39,6 +41,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Icon Database")]
     [SerializeField] private IconDatabase iconDB;
+
+    [Header("Region Panels")]
+    [SerializeField] private LocationSO[] locations;
+
+    [SerializeField] private Image _town, _adventure, _inventory, _training, _blacksmith, _tradeCenter, _dungeon, _map, _quest, _insights, _settings;
+
     public IconDatabase IconDB => iconDB;
 
     [System.Serializable]
@@ -46,6 +54,12 @@ public class UIManager : MonoBehaviour
     {
         public GameState state;
         public GameObject panelObject;
+    }
+
+    private void OnEnable()
+    {
+        BackgroundConfiguration(GameManager.Instance.Context);
+        EventManager.HeroEvents.OnLocationChanged += BackgroundConfiguration;
     }
 
     void Awake()
@@ -58,12 +72,6 @@ public class UIManager : MonoBehaviour
             p.panelObject.SetActive(false);
         }
             InitializeRarityColors();
-
-    }
-    private void Start()
-    {
-
-        //foreach (var p in panels) p.panelObject.SetActive(false);
     }
 
     public void SwitchPanel(GameState newState)
@@ -93,7 +101,27 @@ public class UIManager : MonoBehaviour
             });
         }
     }
+    void BackgroundConfiguration(GameContext context)
+    {
+        string rawID = GameManager.Instance.Context.Player.ActiveLocation; // "L003"
+        int idNumber = int.Parse(rawID.Substring(1)); // Result : 3
 
+        LocationSO activeBackground = locations[idNumber - 1];
+
+        _town.sprite = activeBackground.townBG;
+        _adventure.sprite = activeBackground.adventureBG;
+        _inventory.sprite = activeBackground.inventoryBG;
+        _training.sprite = activeBackground.trainingBG;
+        _tradeCenter.sprite = activeBackground.tradecenterBG;
+        _blacksmith.sprite = activeBackground.blacksmithBG;
+        _quest.sprite = activeBackground.townBG;
+        _map.sprite = activeBackground.adventureBG;
+        _dungeon.sprite = activeBackground.adventureBG;
+        _insights.sprite = activeBackground.townBG;
+        _settings.sprite = activeBackground.townBG;
+
+
+    }
     public void GeneratePopUp(string title, string description, UnityAction onConfirm)
     {
         GameObject PopUp = Instantiate(_popUp);

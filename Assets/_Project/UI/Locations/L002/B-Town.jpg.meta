@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 866f375e43a4fae49a34b4fb22501dc9
+guid: 9563178c0d7b3a446bd4e8a7f0dca8cf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -93,16 +93,29 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: InventoryBlur_0
+      name: B-Town_0
       rect:
         serializedVersion: 2
-        x: 288
+        x: 357
         y: 0
-        width: 2235
+        width: 2230
         height: 1536
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -112,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0941bc5ee0d3ea542a84060faa99ebb2
-      internalID: -130959426
+      spriteID: c7f4919e6bd59d645890f6b833d31860
+      internalID: 1792239736
       vertices: []
       indices: 
       edges: []
@@ -122,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6262d8150d669824b91c576d8337e39a
+    spriteID: 2d0be2f4346b03f448518f582f7c43e0
     internalID: 0
     vertices: []
     indices: 
@@ -132,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      InventoryBlur_0: -130959426
+      B-Town_0: 1792239736
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
