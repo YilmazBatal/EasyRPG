@@ -2,8 +2,9 @@
   {
     "ID": "L001",
     "Name": "The Awakening Wilds",
-    "Description" : "A soft breeze carries the scent of blooming wildflowers. It is a place of beginnings, yet the distant rustling suggests you are not alone.",
-    "LevelCap" : 20,
+    "Description" : "A peaceful forest where your journey begins. The sun is warm and the birds are singing.",
+    "Tag": "Forest",
+    "LevelCap": 15,
     "AdventureTexts": [
         "You found a suspicious looking rock. It looked back. You decided to walk away slowly.",
         "You tried to count your steps, but you forgot what comes after twelve. Sad.",
@@ -54,8 +55,9 @@
   {
     "ID": "L002",
     "Name": "Whistling Crags",
-    "Description": "The vegetation is sparse here, replaced by cold granite and ancient dust. Every step rings out, announcing your presence to the heights.",
-    "LevelCap" : 40,
+    "Description": "High, rocky mountains. The wind makes a loud whistling sound as you climb higher.",
+    "Tag": "Mountains",
+    "LevelCap": 30,
     "Entities" : ["E0002", "E0003", "B0002"],
     "AdventureTexts": [
       "The wind here doesn't just whistle; it sounds like a flute solo from a very confused bard.",
@@ -103,9 +105,10 @@
   },
   {
     "ID": "L003",
-    "Name": "Amber Woods",
-    "Description": "The shadows are longer and darker here. As the orange leaves crunch under your boots, you feel the weight of eyes watching from the thicket.",
-    "LevelCap" : 60,
+    "Name": "Echo Tunnels",
+    "Description": "Deep caves hidden inside the mountains. It is dark here, and every sound echoes.",
+    "Tag": "Caves",
+    "LevelCap": 45,
     "AdventureTexts": [
         "The crunching of leaves under your feet sounds like hundreds of tiny bones. Comforting.",
         "You saw a shadow move behind a tree. When you looked, the tree was gone too. Wait, what?",
@@ -123,6 +126,159 @@
         { "ID": "M0004", "DropChance": 45, "MaxAmount": 5 },
         { "ID": "A0003", "DropChance": 5, "MaxAmount": 1 },
         { "ID": "W0002", "DropChance": 5, "MaxAmount": 1 }
+    ]
+  },
+  {
+    "ID": "L004",
+    "Name": "Sunken Mire",
+    "Tag": "Swamp",
+    "AdventureTexts": [
+      "A frog stared at you for three minutes. It eventually sighed and hopped away. You feel judged.",
+      "Your left boot got stuck in the mud. It belongs to the swamp now. You are walking with a 'squish' sound.",
+      "You found a glowing mushroom. You ate it. Now you can see sounds. Everything sounds blue.",
+      "A mosquito tried to bite your armor. It broke its beak. You laughed, but then you realized mosquitos here are the size of birds.",
+      "You saw a sign: 'Watch out for Shrek'. You don't know who that is, but you feel afraid.",
+      "You found a bottle of 'Swamp Water'. The label says it's 100% organic. It tastes like a dirty sock.",
+      "A bubble rose from the mud and popped. It smelled so bad you gained a temporary 'Despair' buff.",
+      "You tried to catch a firefly, but it turned out to be a very small, very angry fire elemental.",
+      "The mud is tickling your toes through your boots. You hope it's just mud.",
+      "You found an old boat. You tried to row it, but it sank instantly. The swamp wins again."
+    ]
+  },
+  {
+    "ID": "L005",
+    "Name": "Gilded Sands",
+    "Tag": "Desert",
+    "AdventureTexts": [
+      "You saw a giant lake with cold water! You ran to it, but it was just a very shiny rock. Cruel desert.",
+      "You found sand in your pockets. You haven't even opened your pockets yet. How does it get in there?!",
+      "A cactus looked like it wanted a hug. You decided against it. Your skin thanked you.",
+      "The sun is so hot that your shadow decided to hide under your boots. Smart shadow.",
+      "You tried to make a sandcastle. A desert wind blew it down. Nature is a bully.",
+      "You found a camel wearing sunglasses. It looked cooler than you will ever be.",
+      "A tumbleweed raced you. You lost. You need to train your Agility.",
+      "You heard a voice in the dunes: 'Buy a map!'. You followed it, but it was just a parrot in a turban.",
+      "Your water bottle is now 90% sand. At least it's crunchy.",
+      "You saw a pyramid in the distance. When you got closer, it was just a very organized pile of rocks."
+    ]
+  },
+  {
+    "ID": "L006",
+    "Name": "Fire Rock Pass",
+    "Tag": "Volcanic",
+    "AdventureTexts": [
+      "You tried to play 'The Floor is Lava'. You realized that here, the floor is actually lava. You stopped playing.",
+      "Your armor is getting so hot you could cook a steak on your chest. You are suddenly very hungry.",
+      "A small lava slime tried to follow you. It left a trail of burnt grass. It's like a very dangerous puppy.",
+      "You found a 'Fire-Proof' cloak. It caught fire instantly. You should ask for a refund.",
+      "The sky is red and the air smells like a burnt grilled cheese sandwich.",
+      "You tried to sit on a rock to rest. Your pants started smoking. No resting today.",
+      "You saw a dragon flying high above. You waved, but it just sneezed a fireball near you. Rude.",
+      "A volcanic vent hissed at you. You hissed back to show dominance. The vent didn't care.",
+      "You found a blackened skeleton holding a fan. He died trying to stay cool. Respect.",
+      "The heat is making your brain feel like mashed potatoes. Mashed potatoes with extra butter."
+    ]
+  },
+  {
+    "ID": "L007",
+    "Name": "Ashen Ruins",
+    "Tag": "Ruins",
+    "AdventureTexts": [
+      "You found an old statue. You tried to high-five it, but its arm fell off. You feel like a monster.",
+      "You heard a ghostly whisper. It said: 'Did you leave the stove on in Town?'. Now you're worried.",
+      "You found a dusty book. You opened it, sneezed, and accidentally destroyed a thousand years of history.",
+      "The ash on the ground is so deep you keep losing your coins. Somewhere, a ghost is getting rich.",
+      "A stone gargoyle winked at you. When you looked back, it was just a regular stone. Creepy.",
+      "You found a sign: 'Welcome to the Glorious City!'. Someone crossed out 'Glorious' and wrote 'Dead'.",
+      "You saw a shadow moving behind a wall. It was just your own shadow, but it looked very suspicious.",
+      "You tried to sit on a broken throne. You felt like a king for three seconds before the chair collapsed.",
+      "A piece of a roof fell near your head. The ruins are tired of guests.",
+      "The dust here makes your hair look grey. You look 50 years older. Very distinguished."
+    ]
+  },
+  {
+    "ID": "L008",
+    "Name": "Mist Peaks",
+    "Tag": "Mountains",
+    "AdventureTexts": [
+      "The mist is so thick you accidentally walked into a tree. You apologized to the tree. It said nothing.",
+      "You found a mountain goat wearing a tiny scarf. It looked at your clothes with pure disdain.",
+      "You tried to shout from the peak to hear your echo. The echo replied: 'Be quiet, I have a headache!'.",
+      "A gust of cold wind tried to push you off the path. You stood your ground and flexed your muscles.",
+      "You can't see your own feet. You hope they are still there.",
+      "You found a rare mountain flower. It sneezed on you. Now you have 'Mist Allergies'.",
+      "The clouds are so low you tried to eat one. It tasted like damp air and regret.",
+      "A mysterious bird flew past. It sounded like a flute playing a sad song. Very dramatic.",
+      "You stepped on a loose rock. It screamed 'Wheeeee!' all the way down the mountain. Show-off.",
+      "The air is getting chilly. You wish you had bought that extra-thick wool sweater."
+    ]
+  },
+  {
+    "ID": "L009",
+    "Name": "The Frozen Gate",
+    "Tag": "Frozen",
+    "AdventureTexts": [
+      "You licked a frozen metal pillar. You are now stuck. This is your life now. Good luck.",
+      "You tried to walk gracefully on the ice, but you slipped and did a 360-degree spin. 10/10 style!",
+      "Your nose is so cold it feels like it belongs to someone else.",
+      "You saw a penguin wearing a tiny crown. You bowed. It ignored you. Typical royalty.",
+      "The wind is so sharp it's basically giving you a free shave. Too bad it's taking skin too.",
+      "You found a frozen traveler. He was mid-sneeze. It’s a masterpiece of awkwardness.",
+      "You tried to start a campfire. The snow laughed and put it out instantly.",
+      "A snowflake landed on your tongue. It tasted like magic and refrigerator ice.",
+      "Your breath is freezing into tiny ice crystals. You are basically a dragon, but colder.",
+      "You found a pair of frozen boots. You tried to put them on, but they're just two blocks of ice."
+    ]
+  },
+  {
+    "ID": "L010",
+    "Name": "Ice-Cloud Tower",
+    "Tag": "Ruins",
+    "AdventureTexts": [
+      "You are so high up that the clouds look like mashed potatoes. You're getting hungry again.",
+      "You slipped on a magic ice stair. You fell upwards for a second. Physics is drunk today.",
+      "A ghost made of frost passed through you. You got the shivers and a sudden craving for hot cocoa.",
+      "You found a telescope. You looked through it and saw the developer eating a sandwich. Hi again!",
+      "The tower is swaying in the wind. You tell yourself it's just the 'Magic', not 'Structural Failure'.",
+      "You found a frozen library. All the books are just blocks of ice. Very hard to read.",
+      "A magic blue fire is burning in a bowl. It’s cold to the touch. Magic is confusing.",
+      "You reached a balcony. The view is amazing, but your eyelashes just froze shut.",
+      "You found a golden bell. You rang it, and a nearby mountain fell over. Oops.",
+      "The stairs here go up, then left, then down, then... wait, where are you?"
+    ]
+  },
+  {
+    "ID": "L011",
+    "Name": "The Silent Forest",
+    "Tag": "Forest",
+    "AdventureTexts": [
+      "It is so quiet you can hear your own hair growing. It sounds like grass rustling.",
+      "You tried to hide behind a black tree. The tree stepped aside. It doesn't want to be involved.",
+      "A crow looked at you from a frozen branch and whispered 'Cringe.' You didn't know crows knew that word.",
+      "The trees are covered in white frost. They look like giant, angry ghosts.",
+      "You stepped on a frozen twig. The sound was so loud it felt like a gunshot. You jumped ten feet.",
+      "You found a frozen berry. It's like a tiny, purple rock. Your teeth are not happy.",
+      "The shadows here are long and purple. They seem to move when you aren't looking.",
+      "You saw a white wolf. It winked at you and vanished into the mist. Cool wolf.",
+      "You tried to whistle a tune, but the cold air turned your breath into a small ice cube.",
+      "A sign says: 'Keep Quiet'. You accidentally sneezed. Now you're waiting for something to attack."
+    ]
+  },
+  {
+    "ID": "L012",
+    "Name": "Deep Crystal Caves",
+    "Tag": "Caves",
+    "AdventureTexts": [
+      "You tapped a blue crystal. It played a perfect 'Middle C'. You spent an hour making crystal music.",
+      "You found your own reflection in a giant gem. You look... tired. You should take a nap later.",
+      "An echo said 'Hello'. You said 'Who's there?'. The echo said 'I'm not falling for that again.'",
+      "The light from the crystals is making everything look like a disco. You did a tiny dance.",
+      "You found a crystal shaped like a sandwich. It was a very disappointing discovery.",
+      "You heard a deep humming sound. It’s the sound of the earth sleeping. It snores loudly.",
+      "A tiny crystal spider crawled on your arm. It's shiny, but it still has eight legs. Too many legs.",
+      "You found a pool of water so clear you thought it was empty. Now your boots are soaked. Again.",
+      "The cave walls are sparkling. It’s like being inside a giant diamond, but with more monsters.",
+      "You feel the weight of the mountain above you. You hope the crystals are strong enough to hold it."
     ]
   }
 ]

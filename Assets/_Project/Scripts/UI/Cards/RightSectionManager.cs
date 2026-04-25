@@ -1,9 +1,7 @@
 using TextBasedRPG.Events;
 using TextBasedRPG.Managers;
-using TextBasedRPG.Models;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 namespace Assets._Project.Scripts.UI.Cards
@@ -43,6 +41,7 @@ namespace Assets._Project.Scripts.UI.Cards
             EventManager.HeroEvents.OnExpChanged += UpdatExpUI;
             EventManager.HeroEvents.OnHPValueChanged += UpdateHPUI;
             EventManager.HeroEvents.OnEquipmentChanged += UpdateEquipmentUI;
+            EventManager.HeroEvents.OnLocationChanged += UpdateRightSection;
         }
 
         private void OnDisable()
@@ -51,6 +50,7 @@ namespace Assets._Project.Scripts.UI.Cards
             EventManager.HeroEvents.OnExpChanged -= UpdatExpUI;
             EventManager.HeroEvents.OnHPValueChanged -= UpdateHPUI;
             EventManager.HeroEvents.OnEquipmentChanged -= UpdateEquipmentUI;
+            EventManager.HeroEvents.OnLocationChanged -= UpdateRightSection;
         }
         #endregion
         

@@ -25,10 +25,12 @@ namespace TextBasedRPG.Events
             public static event Action<GameContext> OnExpChanged;
             public static event Action<GameContext> OnHPValueChanged;
             public static event Action<GameContext> OnEquipmentChanged;
+            public static event Action<GameContext> OnLocationChanged;
             public static void TriggerGoldChanged(GameContext context) => OnGoldChanged?.Invoke(context);
             public static void TriggerExpChanged(GameContext context) => OnExpChanged?.Invoke(context);
             public static void TriggerHPValueChanged(GameContext context) => OnHPValueChanged?.Invoke(context);
             public static void TriggerEquipmentChanged(GameContext context) => OnEquipmentChanged?.Invoke(context);
+            public static void TriggerLocationChanged(GameContext context) => OnLocationChanged?.Invoke(context);
         }
     }
 }

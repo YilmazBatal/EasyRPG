@@ -1,12 +1,8 @@
-using Assets._Project.Scripts.UI.Cards;
-using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Managers.Inventory;
-using TextBasedRPG.Models;
 using TextBasedRPG.Events;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Material = TextBasedRPG.Core.Items.Material;
 
 public class BackpackManager : MonoBehaviour

@@ -39,3 +39,6 @@ MonoBehaviour:
   questIcon: {fileID: 21300000, guid: 89b281cf96142a542b39bc780e83bbc9, type: 3}
   confirmIcon: {fileID: 21300000, guid: aa9532d8eb87e8a44af715ac96fa14fd, type: 3}
   trashIcon: {fileID: 21300000, guid: 957f78f430ca3ec4ab8a3b687029fc50, type: 3}
+  travelIcon: {fileID: 21300000, guid: fd2c8bec25a6d20488a7cade6c6a43a8, type: 3}
+  locationIcon: {fileID: 21300000, guid: e0bae58984490f54fac07bb957776b20, type: 3}
+  lockedIcon: {fileID: 21300000, guid: 8f25822d83402b049b0d9cf50b52276b, type: 3}
