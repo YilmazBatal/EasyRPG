@@ -36,6 +36,6 @@ public class TravelCard : MonoBehaviour
         p.ActiveLocation = locationID;
         Toaster.Instance.ShowToast($"Traveled to {LocationManager.GetLocationName(locationID)}", UIManager.Instance.IconDB.confirmIcon);
         travelManager.Transition();
-        EventManager.HeroEvents.TriggerLocationChanged(GameManager.Instance.Context);
+        EventManager.HeroEvents.TriggerLocationChanged(GameManager.Instance.Context, true);
     }
 }

@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         if (Context.Player != null)
         {
             _currentState = GameState.MainMenu;
-            UIManager.Instance.rightSection.GetComponent<RightSectionManager>().UpdateRightSection(Context);
+            UIManager.Instance.rightSection.GetComponent<RightSectionManager>().UpdateRightSection(Context, false);
         }
         else
         {

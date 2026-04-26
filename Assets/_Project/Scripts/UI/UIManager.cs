@@ -61,6 +61,10 @@ public class UIManager : MonoBehaviour
         BackgroundConfiguration(GameManager.Instance.Context);
         EventManager.HeroEvents.OnLocationChanged += BackgroundConfiguration;
     }
+    private void OnDisable()
+    {
+        EventManager.HeroEvents.OnLocationChanged -= BackgroundConfiguration;
+    }
 
     void Awake()
     {
@@ -101,26 +105,38 @@ public class UIManager : MonoBehaviour
             });
         }
     }
-    void BackgroundConfiguration(GameContext context)
+    void BackgroundConfiguration(GameContext context, bool setDelay = false)
+    {
+        StartCoroutine(BgConfigCoroutine(context, setDelay));
+    }
+    IEnumerator BgConfigCoroutine(GameContext context, bool setDelay = false)
     {
         string rawID = GameManager.Instance.Context.Player.ActiveLocation; // "L003"
         int idNumber = int.Parse(rawID.Substring(1)); // Result : 3
 
         LocationSO activeBackground = locations[idNumber - 1];
 
-        _town.sprite = activeBackground.townBG;
-        _adventure.sprite = activeBackground.adventureBG;
-        _inventory.sprite = activeBackground.inventoryBG;
-        _training.sprite = activeBackground.trainingBG;
-        _tradeCenter.sprite = activeBackground.tradecenterBG;
-        _blacksmith.sprite = activeBackground.blacksmithBG;
-        _quest.sprite = activeBackground.townBG;
-        _map.sprite = activeBackground.adventureBG;
-        _dungeon.sprite = activeBackground.adventureBG;
-        _insights.sprite = activeBackground.townBG;
-        _settings.sprite = activeBackground.townBG;
+        if (setDelay)
+            yield return new WaitForSeconds(0.5f);
+
+        ApplyBG(activeBackground);
+
+        yield return null;
 
 
+    }
+    private void ApplyBG(LocationSO data)
+    {
+        _town.sprite = data.townBG;
+        _adventure.sprite = data.adventureBG;
+        _inventory.sprite = data.inventoryBG;
+        _training.sprite = data.trainingBG;
+        _tradeCenter.sprite = data.tradecenterBG;
+        _blacksmith.sprite = data.blacksmithBG;
+        _quest.sprite = data.townBG;
+        _map.sprite = data.adventureBG;
+        _dungeon.sprite = data.adventureBG;
+        _insights.sprite = data.townBG;
     }
     public void GeneratePopUp(string title, string description, UnityAction onConfirm)
     {

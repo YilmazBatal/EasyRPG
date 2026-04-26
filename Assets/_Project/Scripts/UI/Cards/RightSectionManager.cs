@@ -104,7 +104,7 @@ namespace Assets._Project.Scripts.UI.Cards
         #endregion
 
         #region UI Updates
-        public void UpdateRightSection(GameContext context)
+        public void UpdateRightSection(GameContext context, bool setDelay)
         {
             if (context.Player != null)
             {
