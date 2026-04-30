@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TextBasedRPG.Interfaces;
+using TextBasedRPG.Models;
 
 namespace TextBasedRPG.Core.Entities
 {
@@ -19,7 +20,7 @@ namespace TextBasedRPG.Core.Entities
         public int BaseSPD;
         public string EntitySprite;
         public int Level;
-        public Dictionary<string, int>? LootTable;  // ID, Chances%
+        public List<Loots>? Loots;  // ID, Chances%
         public List<string> Locations;
         public float GoldMultiplier;
         public EntityType EntityType;

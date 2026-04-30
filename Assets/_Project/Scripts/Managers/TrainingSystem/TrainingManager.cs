@@ -45,7 +45,7 @@ public class TrainingManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(points.text) || !int.TryParse(points.text, out int pointsToInvest))
         {
-            Toaster.Instance.ShowToast("Put an actual number please.", null);
+            Toaster.Instance.ShowToast("Put an actual number please.", UIManager.Instance.IconDB.questionMarkIcon);
             return;
         }
 
@@ -60,7 +60,7 @@ public class TrainingManager : MonoBehaviour
             }
             p.UnusedStatPoints -= pointsToInvest;
             UpdateUI();
-            Toaster.Instance.ShowToast($"{pointsToInvest} points invested in {stat}. You can feel that you are getting stronger.", null);
+            Toaster.Instance.ShowToast($"{pointsToInvest} points invested in {stat}. You can feel that you are getting stronger.", UIManager.Instance.IconDB.confirmIcon);
             GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
         }
         

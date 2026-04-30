@@ -108,7 +108,7 @@ namespace TextBasedRPG.Managers.DataManagement
                     mappedEntity.BaseSPD = data.BaseSPD;
                     mappedEntity.EntitySprite = data.EntitySprite;
                     mappedEntity.GoldMultiplier = data.GoldMultiplier;
-                    mappedEntity.LootTable = data.LootTable ?? new();
+                    mappedEntity.Loots = data.Loots ?? new();
                     mappedEntity.Locations = data.Locations ?? new();
                     if (Enum.TryParse<EntityType>(data.EntityType.ToString(), true, out var type))
                     {

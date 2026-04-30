@@ -133,6 +133,7 @@ public class CombatActions : MonoBehaviour
                 combatManager.isPlayerTurn = false;
                 StartCoroutine(combatManager.EnemyTurnRoutine());
             }
+            //AudioManager.Instance.PlaySFX(AudioManager.Instance.audioDB.[wolfHit[random]], 1f);
         }
         else if (hitAccuracy > 0.95f)
         {

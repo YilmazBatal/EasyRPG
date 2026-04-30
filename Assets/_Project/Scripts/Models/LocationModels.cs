@@ -16,7 +16,7 @@ namespace TextBasedRPG.Models
     public class Loots
     {
         public string ID { get; set; }
-        public int DropChance { get; set; }
+        public int Weight { get; set; }
         public int MaxAmount { get; set; }
     }
 }

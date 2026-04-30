@@ -14,7 +14,7 @@ namespace TextBasedRPG.Models
         public int Level { get; set; }
         public int Scaling { get; set; }
         public int EliteChance { get; set; }
-        public Dictionary<string, int> LootTable { get; set; } = new(); // ID, Chances%
+        public List<Loots> Loots { get; set; } = new();
         public List<string> Locations { get; set; } = new();
         public float GoldMultiplier { get; set; }
         public string EntityType = string.Empty;

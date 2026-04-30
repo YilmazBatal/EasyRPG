@@ -38,6 +38,8 @@ public class IconDatabase : ScriptableObject
     public Sprite travelIcon;
     public Sprite locationIcon;
     public Sprite lockedIcon;
+    public Sprite upIcon;
+    public Sprite downIcon;
 
     public Sprite GetWeaponIcon(WeaponType type) => type switch
     {

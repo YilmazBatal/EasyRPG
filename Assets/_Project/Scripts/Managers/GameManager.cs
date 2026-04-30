@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
             { GameState.Quests, new QuestState() },
             { GameState.Wipe, new WipeState() },
             { GameState.Dungeon, new DungeonState() },
+            { GameState.Settings, new DetailedStatsState() },
         };
     }
 

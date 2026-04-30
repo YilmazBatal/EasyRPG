@@ -47,9 +47,11 @@
         "You reached a clearing where the sunlight feels like a warm hug. Then a squirrel threw an acorn at your head. Nature is balanced."
     ],
     "AdventureLoots": [
-        { "ID": "M0001", "DropChance": 50, "MaxAmount": 3 },
-        { "ID": "M0002", "DropChance": 43, "MaxAmount": 2 },
-        { "ID": "W0001", "DropChance": 7, "MaxAmount": 1 }
+        { "ID": "M0001", "Weight": 1, "MaxAmount": 3 },
+        { "ID": "M0002", "Weight": 1, "MaxAmount": 2 },
+	{ "ID": "C0002", "Weight": 1, "MaxAmount": 1 },
+        { "ID": "W0001", "Weight": 300, "MaxAmount": 1 },
+	{ "ID": "A0004", "Weight": 30, "MaxAmount": 1 },
     ]
   },
   {
@@ -98,9 +100,9 @@
       "You found a chest! It was empty, but it had a very nice personality."
     ],
     "AdventureLoots": [
-        { "ID": "M0003", "DropChance": 80, "MaxAmount": 5 },
-        { "ID": "A0002", "DropChance": 10, "MaxAmount": 1 },
-        { "ID": "W0002", "DropChance": 10, "MaxAmount": 1 }
+        { "ID": "M0003", "Weight": 80, "MaxAmount": 5 },
+        { "ID": "A0002", "Weight": 10, "MaxAmount": 1 },
+        { "ID": "W0002", "Weight": 10, "MaxAmount": 1 }
     ]
   },
   {
@@ -122,10 +124,10 @@
         "You realized the 'wind' is actually the forest breathing. It has terrible morning breath."
     ],
     "AdventureLoots": [
-        { "ID": "M0003", "DropChance": 45, "MaxAmount": 3 },
-        { "ID": "M0004", "DropChance": 45, "MaxAmount": 5 },
-        { "ID": "A0003", "DropChance": 5, "MaxAmount": 1 },
-        { "ID": "W0002", "DropChance": 5, "MaxAmount": 1 }
+        { "ID": "M0003", "Weight": 45, "MaxAmount": 3 },
+        { "ID": "M0004", "Weight": 45, "MaxAmount": 5 },
+        { "ID": "A0003", "Weight": 5, "MaxAmount": 1 },
+        { "ID": "W0002", "Weight": 5, "MaxAmount": 1 }
     ]
   },
   {

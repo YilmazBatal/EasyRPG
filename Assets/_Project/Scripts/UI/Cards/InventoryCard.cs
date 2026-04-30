@@ -222,7 +222,7 @@ public class InventoryCard : MonoBehaviour
             discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.trashIcon;
 
             // Remove one quantity via centralized InventoryManager
-            InventoryManager.RemoveFromInventory(GameManager.Instance.Context, item.ID, 1);
+            InventoryManager.RemoveFromInventory(item.ID, 1);
 
             // Shake the containing panel
             RectTransform panelRect = GetComponentInParent<RectTransform>();

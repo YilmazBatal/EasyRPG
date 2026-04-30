@@ -19,7 +19,7 @@ namespace TextBasedRPG.Core.Entities
             this.Level = template.Level;
             this.Scaling = template.Scaling;
             this.EliteChance = template.EliteChance;
-            this.LootTable = template.LootTable;
+            this.Loots = template.Loots;
             this.GoldMultiplier = template.GoldMultiplier;
             this.EntityType = template.EntityType;
             this.Locations = template.Locations;

@@ -75,9 +75,7 @@ namespace Assets._Project.Scripts.Managers.Adventure
         {
             activeRoutine = StartCoroutine(UIManager.BruteForceTypeWriterRoutine(adventureText, "You found an item!"));
             itemPopup.SetActive(true);
-            itemPopup.transform.localScale = Vector3.zero;
-            LeanTween.scale(itemPopup, Vector3.one, 0.5f).setEaseOutBack();
-
+            //LeanTween.scale(itemPopup, Vector3.one, 0.5f).setEaseOutBack();
         }
     }
 }

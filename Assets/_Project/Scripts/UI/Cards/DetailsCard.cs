@@ -292,7 +292,6 @@ namespace Assets._Project.Scripts.UI.Cards
         private void ExecuteDiscard()
         {
             InventoryManager.RemoveFromInventory(
-                GameManager.Instance.Context,
                 currentItem.ID,
                 currentDiscardAmount
             );

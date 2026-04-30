@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2cce9aaaa00c574684d4c4be57f3c30, type: 3}
   m_Name: IconDatabase
   m_EditorClassIdentifier: 
-  fistIcon: {fileID: 0}
+  fistIcon: {fileID: 21300000, guid: 374daa7e041ec6d4d9019c7e8c5ea8d8, type: 3}
   swordIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   bowIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   staffIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
   armorIcon: {fileID: 21300000, guid: 0176b4f8f61b10d428dbb23b30d43de6, type: 3}
   boneIcon: {fileID: 21300000, guid: 4c54dabd98239e44b9a504f6a52844f8, type: 3}
   meatIcon: {fileID: 21300000, guid: 305c328dd1671a14f9c462df1186efa3, type: 3}
-  potIcon: {fileID: 0}
+  potIcon: {fileID: 21300000, guid: ab2ada6066d203941bcf6c7285438b59, type: 3}
   attackIcon: {fileID: 21300000, guid: c943fd0b12d95064d830dc0cecd85ff1, type: 3}
   levelIcon: {fileID: 21300000, guid: 3aa9b3363e75ce54aab85612d94852ea, type: 3}
   upgradeIcon: {fileID: 21300000, guid: 59546d398aff0694586199e1f7f0b46a, type: 3}
@@ -37,8 +37,10 @@ MonoBehaviour:
   plusIcon: {fileID: 21300000, guid: 45bc87df80cf56345bf54e95e56bdd8f, type: 3}
   questionMarkIcon: {fileID: 21300000, guid: 4165b354fe9e09b4eb77f176ef262ff6, type: 3}
   questIcon: {fileID: 21300000, guid: 89b281cf96142a542b39bc780e83bbc9, type: 3}
-  confirmIcon: {fileID: 21300000, guid: aa9532d8eb87e8a44af715ac96fa14fd, type: 3}
+  confirmIcon: {fileID: 21300000, guid: ead930b4190775340ae6001d28bee680, type: 3}
   trashIcon: {fileID: 21300000, guid: 957f78f430ca3ec4ab8a3b687029fc50, type: 3}
   travelIcon: {fileID: 21300000, guid: fd2c8bec25a6d20488a7cade6c6a43a8, type: 3}
   locationIcon: {fileID: 21300000, guid: e0bae58984490f54fac07bb957776b20, type: 3}
   lockedIcon: {fileID: 21300000, guid: 8f25822d83402b049b0d9cf50b52276b, type: 3}
+  upIcon: {fileID: 21300000, guid: 1a9ac38ea7828d14e8da8b0181f29604, type: 3}
+  downIcon: {fileID: 21300000, guid: 8fe7dd2f747a8c34589d3a8acda64e93, type: 3}

@@ -1,4 +1,5 @@
-﻿using Assets._Project.Scripts.UI;
+using Assets._Project.Scripts.Managers.AdventureSystem;
+using Assets._Project.Scripts.UI;
 using Assets._Project.Scripts.UI.Cards;
 using System;
 using System.Collections;
@@ -7,7 +8,6 @@ using TextBasedRPG.Core.Entities;
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Events;
-using TextBasedRPG.Managers.DataManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +33,7 @@ namespace TextBasedRPG.Managers
         [SerializeField] public TMP_Text damageText;
 
         [Header("Other")]
-        [SerializeField] Image wobbleImage;
+        //[SerializeField] Image wobbleImage;
         [SerializeField] Image vignette;
         [SerializeField] TMP_Text contentText;
         [SerializeField] public bool isPlayerTurn;
@@ -154,7 +154,6 @@ namespace TextBasedRPG.Managers
         {
             isCombatActive = false;
             SetButtonsInteractable(false);
-            StartWobble();
 
             if (result == CombatResult.Victory)
             {
@@ -188,23 +187,6 @@ namespace TextBasedRPG.Managers
             gameObject.SetActive(false);
         }
 
-        public void StartWobble()
-        {
-            if (isCombatActive)
-            {
-                LeanTween.rotateAroundLocal(wobbleImage.gameObject, Vector3.forward, 2f, 2.5f)
-                .setEaseInOutSine()
-                .setLoopPingPong();
-
-                LeanTween.scale(wobbleImage.gameObject, new Vector3(1.05f, 1.05f, 1f), 3f)
-                    .setEaseInOutSine()
-                    .setLoopPingPong();
-            }
-            else
-            {
-                LeanTween.cancel(wobbleImage.gameObject);
-            }
-        }
 
         #endregion
 
@@ -212,39 +194,21 @@ namespace TextBasedRPG.Managers
         private void GiveLoot(GameContext context, Entity enemy)
         {
             RewardGoldAndExp(context, enemy);
-            RewardItem(context);
+            RewardItem(context, enemy);
         }
 
-        private static void RewardItem(GameContext context)
+        private static void RewardItem(GameContext context, Entity enemy)
         {
-            var currentMap = context.Locations.FirstOrDefault(l => l.ID == context.Player.ActiveLocation);
+            LootResult ls = LootManager.EnemyLootGenerator(enemy);
+            
+            var itemTemplate = LootManager.FindItemByID(ls.ID);
 
-            if (currentMap?.AdventureLoots != null && currentMap.AdventureLoots.Count > 0)
+            if (itemTemplate != null)
             {
-                int totalWeight = currentMap.AdventureLoots.Sum(x => x.DropChance);
-                int roll = UnityEngine.Random.Range(0, totalWeight);
-                int currentWeight = 0;
-
-                foreach (var loot in currentMap.AdventureLoots)
-                {
-                    currentWeight += loot.DropChance;
-
-                    if (roll < currentWeight)
-                    {
-                        int amount = UnityEngine.Random.Range(1, loot.MaxAmount + 1);
-
-                        var itemTemplate = FindItemByID(context, loot.ID);
-
-                        if (itemTemplate != null)
-                        {
-                            InventoryManager.AddToInventory(context, loot, amount);
-                            //Toaster.Instance.ShowToast($"You found {amount}x {itemTemplate.Name}!", UIManager.Instance.IconDB.confirmIcon);
-                        }
-
-                        break;
-                    }
-                }
+                InventoryManager.AddToInventory(ls);
+                //Toaster.Instance.ShowToast($"You found {amount}x {itemTemplate.Name}!", UIManager.Instance.IconDB.confirmIcon);
             }
+            
         }
 
         private static void RewardGoldAndExp(GameContext context, Entity enemy)
@@ -439,15 +403,7 @@ namespace TextBasedRPG.Managers
             string panicName = $"<color={red}>{enemy.Name}</color>";
             return $"{panicName} is panicking!";
         }
-        private static Item? FindItemByID(GameContext context, string id)
-        {
-            if (id.StartsWith("W")) return context.Weapons?.FirstOrDefault(i => i.ID == id);
-            if (id.StartsWith("A")) return context.Armors?.FirstOrDefault(i => i.ID == id);
-            if (id.StartsWith("M")) return context.Materials?.FirstOrDefault(i => i.ID == id);
-            if (id.StartsWith("C")) return context.Consumables?.FirstOrDefault(i => i.ID == id);
-
-            return null;
-        }
+        
         #endregion
     }
 }
