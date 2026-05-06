@@ -3,10 +3,8 @@ using Assets._Project.Scripts.UI;
 using Assets._Project.Scripts.UI.Cards;
 using System;
 using System.Collections;
-using System.Linq;
 using TextBasedRPG.Core.Entities;
 using TextBasedRPG.Core.Heroes;
-using TextBasedRPG.Core.Items;
 using TextBasedRPG.Events;
 using TMPro;
 using UnityEngine;
@@ -56,6 +54,7 @@ namespace TextBasedRPG.Managers
 
         public Entity generatedEnemy;
         CombatActions ca;
+        AudioManager audioManager => AudioManager.Instance;
         #endregion
         private void Start()
         {
@@ -281,58 +280,73 @@ namespace TextBasedRPG.Managers
 
             yield return new WaitForSeconds(2.5f);
 
-            IDamageCalculator damage = new DamageCalculator();
-            int calculatedDamage = damage.CalculateDMG(
-                generatedEnemy.TotalATK,
-                player.TotalDEF,
-                0f,
-                0f,
-                out bool isCrit);
+            float isHit = UnityEngine.Random.Range(0, 101);
 
-            if (didGuardLastTurn)
+            if (isHit <= 95)
             {
-                calculatedDamage = Mathf.CeilToInt(calculatedDamage * 0.5f);
-            }
-            int damageRemaining = calculatedDamage;
+                IDamageCalculator damage = new DamageCalculator();
+                int calculatedDamage = damage.CalculateDMG(
+                    generatedEnemy.TotalATK,
+                    player.TotalDEF,
+                    0f,
+                    0f,
+                    out bool isCrit);
 
-            if (guardAmount > 0)
+                if (didGuardLastTurn)
+                {
+                    calculatedDamage = Mathf.CeilToInt(calculatedDamage * 0.5f);
+                }
+                int damageRemaining = calculatedDamage;
+
+                if (guardAmount > 0)
+                {
+                    if (guardAmount >= damageRemaining)
+                    {
+                        guardAmount -= damageRemaining;
+                        damageRemaining = 0;
+                    }
+                    else
+                    {
+                        damageRemaining -= guardAmount;
+                        guardAmount = 0;
+                    }
+
+                    EventManager.CombatEvents.TriggerOnGuardChanged();
+                }
+
+                if (damageRemaining > 0)
+                {
+                    if (damageRemaining >= player.CurHP)
+                    {
+                        damageRemaining = player.CurHP;
+                        player.CurHP = 0;
+                        player.Deaths += 1;
+                    }
+                    else
+                    {
+                        player.CurHP -= damageRemaining;
+                    }
+                }
+
+                didGuardLastTurn = false;
+                string critText = isCrit ? " <color=#0F172A>Critical hit!</color>" : "";
+
+                StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
+                    $"<color=#0F172A>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
+
+                EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage);
+                EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
+
+                float randomPitch = UnityEngine.Random.Range(0.95f, 1.05f);
+
+                int audioListCount = audioManager.audioDB.gettingHit.Count;
+                AudioManager.Instance.PlaySFX(audioManager.audioDB.gettingHit[UnityEngine.Random.Range(0, audioListCount)], randomPitch);
+            } else
             {
-                if (guardAmount >= damageRemaining)
-                {
-                    guardAmount -= damageRemaining;
-                    damageRemaining = 0;
-                }
-                else
-                {
-                    damageRemaining -= guardAmount;
-                    guardAmount = 0;
-                }
-
-                EventManager.CombatEvents.TriggerOnGuardChanged();
+                StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
+                    $"<color=#0F172A>{generatedEnemy.Name}</color> couldn't land the attack."));
             }
-
-            if (damageRemaining > 0)
-            {
-                if (damageRemaining >= player.CurHP)
-                {
-                    damageRemaining = player.CurHP;
-                    player.CurHP = 0;
-                    player.Deaths += 1;
-                }
-                else
-                {
-                    player.CurHP -= damageRemaining;
-                }
-            }
-
-            didGuardLastTurn = false;
-            string critText = isCrit ? " <color=#0F172A>Critical hit!</color>" : "";
-
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
-                $"<color=#0F172A>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
-
-            EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage);
-            EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
+            
 
             yield return new WaitForSeconds(2.5f);
 

@@ -103,6 +103,18 @@ public class CombatActions : MonoBehaviour
             else
                 combatManager.generatedEnemy.CurHP -= calculatedDamage;
 
+            string typeID = combatManager.generatedEnemy.EntityTypeID;
+            Debug.Log($"[COMBAT] Ses isteği gönderiliyor. ID: '{typeID}'");
+
+            if (AudioManager.Instance == null)
+            {
+                Debug.LogError("[COMBAT] AudioManager Instance NULL!");
+            }
+            else
+            {
+                AudioManager.Instance.PlayHitSound(typeID);
+            }
+
             string critText = isCrit ? "<color=#0F172A>Critical hit!</color>" : "";
             bool wasFocused = false;
             if (combatManager.focusAmount > 0)

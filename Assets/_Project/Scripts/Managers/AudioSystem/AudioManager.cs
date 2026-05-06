@@ -35,13 +35,14 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip clip, float pitch = 1.0f)
     {
         if (clip == null) return;
-        sfxSource.pitch = pitch; // Sesin perdesini değiştirerek çeşitlilik katabilirsin
+        sfxSource.pitch = pitch;
         sfxSource.PlayOneShot(clip);
     }
 
-    public void PlayUI(AudioClip clip)
+    public void PlayUI(AudioClip clip, float pitch = 1.0f)
     {
         if (clip == null) return;
+        uiSource.pitch = pitch;
         uiSource.PlayOneShot(clip);
     }
 
@@ -51,5 +52,15 @@ public class AudioManager : MonoBehaviour
         musicSource.clip = clip;
         musicSource.loop = loop;
         musicSource.Play();
+    }
+
+    public void PlayHitSound(string entityTypeID)
+    {
+        AudioClip clip = audioDB.GetHitSound(entityTypeID);
+        if (clip != null)
+        {
+            sfxSource.pitch = Random.Range(0.9f, 1.1f);
+            sfxSource.PlayOneShot(clip);
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace TextBasedRPG.Core.Entities
         public Enemy(Entity template)
         {
             this.ID = template.ID;
+            this.EntityTypeID = template.EntityTypeID;
             this.Name = template.Name;
             this.BaseHP = template.BaseHP;
             this.BaseATK = template.BaseATK;
@@ -26,6 +27,8 @@ namespace TextBasedRPG.Core.Entities
         }
         public override void Initialize(int playerLevel, int regionCap)
         {
+            UnityEngine.Debug.Log($"[ENEMY INIT] Name: {this.Name}, TypeID: '{this.EntityTypeID}'");
+
             isElite = Random.Range(0, 100) < EliteChance;
             int enemyLevel = Random.Range(playerLevel - LevelInterval, playerLevel + LevelInterval + 1);
             if (enemyLevel > regionCap)

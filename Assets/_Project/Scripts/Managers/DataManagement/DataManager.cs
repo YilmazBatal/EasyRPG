@@ -13,17 +13,71 @@ namespace  TextBasedRPG.Managers.DataManagement
     internal class DataManager : ISaveService
     {
         private readonly string _savePath = Path.Combine(Application.persistentDataPath, "save.json");
+        private readonly string _webSaveKey = "TextBasedRPG_SaveData";
 
-        #region Save
         public void SaveGame(GameContext context)
         {
-            if (context == null) return; // if there is no hero, it means no game progress
+            if (context == null) return;
 
-            // Mapping
-            var saveData = new Data
+            var saveData = MapContextToData(context);
+            string jsonString = JsonConvert.SerializeObject(saveData, Newtonsoft.Json.Formatting.Indented);
+
+            #if UNITY_WEBGL && !UNITY_EDITOR
+                PlayerPrefs.SetString(_webSaveKey, jsonString);
+                PlayerPrefs.Save();
+            #else
+                File.WriteAllText(_savePath, jsonString);
+            #endif
+        }
+
+        public GameContext LoadGame()
+        {
+            bool saveExists = false;
+
+            #if UNITY_WEBGL && !UNITY_EDITOR
+                saveExists = PlayerPrefs.HasKey(_webSaveKey);
+            #else
+                saveExists = File.Exists(_savePath);
+            #endif
+
+            if (!saveExists)
+            {
+                return CreateNewContext();
+            }
+
+            try
+            {
+                string jsonString = "";
+
+                #if UNITY_WEBGL && !UNITY_EDITOR
+                    jsonString = PlayerPrefs.GetString(_webSaveKey);
+                #else
+                    jsonString = File.ReadAllText(_savePath);
+                #endif
+
+                Data loadedData = JsonConvert.DeserializeObject<Data>(jsonString);
+                var context = new GameContext();
+                StaticData.LoadStaticDatas(context);
+
+                if (loadedData != null)
+                {
+                    DynamicData.LoadPlayerData(context, loadedData);
+                }
+
+                InitializeEvents(context);
+                return context;
+            }
+            catch (System.Exception)
+            {
+                return CreateNewContext();
+            }
+        }
+
+        private Data MapContextToData(GameContext context)
+        {
+            var data = new Data
             {
                 IsAutoSaveOn = context.IsAutoSaveOn,
-
                 Player = new Player
                 {
                     Class = context.Player.ClassName,
@@ -39,7 +93,6 @@ namespace  TextBasedRPG.Managers.DataManagement
                     HeaviestDamage = context.Player.HeaviestDamage,
                     EquippedWeapon = context.Player.EquippedWeapon != null ? new EquippedWeaponData { ID = context.Player.EquippedWeapon.ID, Upgrade = context.Player.EquippedWeapon.Upgrade } : null,
                     EquippedArmor = context.Player.EquippedArmor != null ? new EquippedArmorData { ID = context.Player.EquippedArmor.ID, Upgrade = context.Player.EquippedArmor.Upgrade } : null,
-
                     Stats = new StatData
                     {
                         UnusedStatPoints = context.Player.UnusedStatPoints,
@@ -50,128 +103,40 @@ namespace  TextBasedRPG.Managers.DataManagement
                     }
                 }
             };
-            // convert items to itemdata and append to player inventory json
-            List<InventoryData> convertedInventory = new List<InventoryData>();
 
+            List<InventoryData> convertedInventory = new List<InventoryData>();
             if (context.Player.Inventory != null)
             {
                 foreach (var item in context.Player.Inventory)
                 {
-                    var itemData = new InventoryData
+                    convertedInventory.Add(new InventoryData
                     {
                         ID = item.ID,
                         Quantity = item.Quantity,
-                        Upgrade = item.Upgrade,
-                        
-                    };
-                    convertedInventory.Add(itemData);
+                        Upgrade = item.Upgrade
+                    });
                 }
             }
-
-            saveData.Player.Inventory = convertedInventory;
-
-            string jsonString = JsonConvert.SerializeObject(saveData, Newtonsoft.Json.Formatting.Indented);
-
-            // Update the file
-            File.WriteAllText(_savePath, jsonString);
-
-            Debug.Log($"[SYSTEM] Game Saved.");
-            Debug.Log($"[SYSTEM] Auto Save is {(saveData.IsAutoSaveOn ? "ENABLED" : "DISABLED")}.");
-
+            data.Player.Inventory = convertedInventory;
+            return data;
         }
-        #endregion
 
-        #region Load
-        //public GameContext LoadGame()
-        //{
-        //    if (!File.Exists(_savePath))
-        //    {
-        //        Debug.LogWarning($"[SYSTEM] No Save file found.");
-        //        Debug.Log($"[SYSTEM] Creating new save file.");
-
-        //        var newContext = new GameContext();
-
-        //        StaticData.LoadStaticDatas(newContext);
-
-        //        newContext.Player = null;
-
-        //        InitializeEvents(newContext);
-
-        //        return newContext;
-        //    }
-
-        //    // Read File and cache it as a string
-        //    string jsonString = File.ReadAllText(_savePath);
-        //    // Convert to Data object
-        //    Data? loadedData = JsonConvert.DeserializeObject<Data>(jsonString);
-        //    // Convert to context so we can use it in the game
-        //    var context = new GameContext();
-
-        //    // Load Database to Cache
-        //    StaticData.LoadStaticDatas(context);
-
-        //    // Data Mapping
-        //    DynamicData.LoadPlayerData(context, loadedData!);
-
-        //    InitializeEvents(context);
-
-        //    Debug.Log($"[SYSTEM] Game Loaded successfuly");
-
-        //    return context;
-        //}
-        #endregion
-
-        public GameContext LoadGame()
+        private GameContext CreateNewContext()
         {
-            if (!File.Exists(_savePath))
-            {
-                Debug.LogWarning($"[SYSTEM] No save file Found. Creating new save file...");
+            var newContext = new GameContext();
 
-                var newContext = new GameContext();
+            StaticData.LoadStaticDatas(newContext);
+            DynamicData.LoadPlayerData(newContext, null);
 
-                StaticData.LoadStaticDatas(newContext);
+            InitializeEvents(newContext);
 
-                newContext.Player = null;
-
-                InitializeEvents(newContext);
-
-                return newContext;
-            }
-
-            try
-            {
-                string jsonString = File.ReadAllText(_savePath);
-                Data loadedData = JsonConvert.DeserializeObject<Data>(jsonString);
-
-                var context = new GameContext();
-                StaticData.LoadStaticDatas(context);
-
-                if (loadedData != null)
-                {
-                    DynamicData.LoadPlayerData(context, loadedData);
-                }
-
-                InitializeEvents(context);
-                Debug.Log($"[SYSTEM] Game loaded successfully");
-                return context;
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"[LOAD ERROR] There was a problem while loading the file: {e.Message}");
-                return new GameContext();
-            }
+            return newContext;
         }
 
-
-        /// <summary>
-        /// Subscribe to events
-        /// </summary>
-        /// <param name="context"></param>
         private static void InitializeEvents(GameContext context)
         {
-            // clearing in case cuz defensive programming
-            EventManager.HeroEvents.OnExpChanged -= (context) => LevelManager.CheckLevelUp(context);
-            EventManager.HeroEvents.OnExpChanged += (context) => LevelManager.CheckLevelUp(context);
+            EventManager.HeroEvents.OnExpChanged -= (ctx) => LevelManager.CheckLevelUp(ctx);
+            EventManager.HeroEvents.OnExpChanged += (ctx) => LevelManager.CheckLevelUp(ctx);
         }
 
     }

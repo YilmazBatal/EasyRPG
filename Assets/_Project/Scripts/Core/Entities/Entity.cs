@@ -13,6 +13,7 @@ namespace TextBasedRPG.Core.Entities
 
         // JSON datas
         public string ID = string.Empty;
+        public string EntityTypeID = string.Empty;
         public string Name = string.Empty;
         public int BaseHP;
         public int BaseATK;

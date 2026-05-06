@@ -5,6 +5,7 @@ namespace TextBasedRPG.Models
     public class MobData
     {
         public string ID { get; set; }
+        public string EntityTypeID { get; set; }
         public string Name { get; set; }
         public int BaseHP { get; set; }
         public int BaseATK { get; set; }

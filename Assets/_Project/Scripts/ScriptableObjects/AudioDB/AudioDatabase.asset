@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e61a8d8ae58f6b6439af0b37c1db5740, type: 3}
+  m_Name: AudioDatabase
+  m_EditorClassIdentifier: 
+  regions: []
+  gettingHit:
+  - {fileID: 8300000, guid: d06a4c987d876164cba57a9a14107121, type: 3}
+  enemyHitSounds:
+  - EntityTypeID: slime
+    hitSounds:
+    - {fileID: 8300000, guid: ba6e4dffd36180a46af713352debddc9, type: 3}
+    - {fileID: 8300000, guid: d35945c4da0d0bb4bb88aabeea080f52, type: 3}
+    - {fileID: 8300000, guid: 6ffa542c6c17f874b9b029cff81416a3, type: 3}
+    - {fileID: 8300000, guid: 4d6f83a4311a85b4692ba8f1127efa23, type: 3}
+  - EntityTypeID: wolf
+    hitSounds:
+    - {fileID: 8300000, guid: 22ec394b283c4134b9fcfd63e1233aad, type: 3}
+    - {fileID: 8300000, guid: 0e586caead43d1745bdaee65cdaf230e, type: 3}
+    - {fileID: 8300000, guid: 91d8cc16ffe118c4faefce1604c326a3, type: 3}
+    - {fileID: 8300000, guid: 0359aa2180c64b54198a6e1890c2ca1b, type: 3}
+  - EntityTypeID: skeleton
+    hitSounds:
+    - {fileID: 8300000, guid: 2797afa142667f14098e063c5afec175, type: 3}
+    - {fileID: 8300000, guid: 72228410bccc3f74f81c495d07070938, type: 3}
+    - {fileID: 8300000, guid: 22752c33469688c49a981f46daa355b3, type: 3}
+    - {fileID: 8300000, guid: 9f4d693078c4223448dd80f9ad599897, type: 3}
+  typewriter: {fileID: 8300000, guid: d79b09e8d9345fd40ad100029476c11a, type: 3}

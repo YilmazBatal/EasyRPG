@@ -30,7 +30,8 @@ public class DetailedStatsManager : MonoBehaviour
     {
         GameContext context = GameManager.Instance.Context;
         Hero p = context.Player;
-        string locationName = LocationManager.GetLocationName(context.Player.ActiveLocation);
+        string locationName = LocationManager.locations[$"L{context.Player.UnlockedUntill:D3}"];
+        Debug.Log(locationName);
 
         atk.text = p.TotalATK.ToString();
         def.text = p.TotalDEF.ToString();

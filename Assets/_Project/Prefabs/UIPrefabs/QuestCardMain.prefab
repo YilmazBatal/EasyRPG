@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -137.73212, y: 94}
+  m_AnchoredPosition: {x: -137.73212, y: 108}
   m_SizeDelta: {x: 120.162766, y: 40.23944}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1355320575189214822
@@ -148,7 +148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.24185944, y: -249.3}
+  m_AnchoredPosition: {x: -0.24185944, y: -257.09998}
   m_SizeDelta: {x: 404.6859, y: 41.5401}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1401536892035506578
@@ -460,7 +460,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -8.5, y: 93.999985}
+  m_AnchoredPosition: {x: -8.5, y: 107.99999}
   m_SizeDelta: {x: 120.162766, y: 40.23944}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1661536388558735368
@@ -498,7 +498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 120, y: 93.999985}
+  m_AnchoredPosition: {x: 120, y: 107.99999}
   m_SizeDelta: {x: 120.162766, y: 40.23944}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1877501554468205232
@@ -535,7 +535,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1.885, y: -265.5}
+  m_AnchoredPosition: {x: -1.885, y: -273.3}
   m_SizeDelta: {x: 401.41, y: 2.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8625333289492032793
@@ -745,10 +745,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1041094332533083407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 170.8931, y: -47.024048}
-  m_SizeDelta: {x: 296.9578, y: 38.574005}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -60.86, y: -47.023926}
+  m_SizeDelta: {x: 284.45, y: 38.574}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6363789634400837532
 CanvasRenderer:
@@ -778,7 +778,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The Awakening Wiilds
+  m_text: Quest Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1008a78204792bd44980cfd2cb4aab58, type: 2}
   m_sharedMaterial: {fileID: -8391097080556734088, guid: 1008a78204792bd44980cfd2cb4aab58, type: 2}
@@ -805,12 +805,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
+  m_fontSize: 22
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 20
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 4096
@@ -1127,7 +1127,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9355978b3c0455043a3918b9415ece30, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5448e6a9fae62c7478fda4cdf049f9b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1174,7 +1174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.24238586, y: 35.262177}
+  m_AnchoredPosition: {x: -0.24238586, y: 40.2}
   m_SizeDelta: {x: -45.313, y: 41.3243}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8901027971178789073
@@ -1643,7 +1643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -54.106903, y: -215.6}
+  m_AnchoredPosition: {x: -54.106903, y: -223.4}
   m_SizeDelta: {x: 296.95776, y: 25.0238}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4790819393719009257
@@ -1811,7 +1811,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9c54f71005974974fa40f8590a0efc9a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ead930b4190775340ae6001d28bee680, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2334,6 +2334,7 @@ GameObject:
   - component: {fileID: 5116198452292513505}
   - component: {fileID: 3317790642659524409}
   - component: {fileID: 1300007516274938420}
+  - component: {fileID: 5491715494118575067}
   m_Layer: 5
   m_Name: QuestCardMain
   m_TagString: Untagged
@@ -2369,7 +2370,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 475, y: 425}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5116198452292513505
 CanvasRenderer:
@@ -2429,6 +2430,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &5491715494118575067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7157638308106103624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: 3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &7481951891928481526
 GameObject:
   m_ObjectHideFlags: 0
@@ -2633,9 +2649,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3039742516850851599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 102.341835, y: 30.4}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 102.341835, y: 9.4}
   m_SizeDelta: {x: 200, y: 19.5439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4437482471110889092

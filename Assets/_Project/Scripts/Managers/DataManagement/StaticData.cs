@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -101,6 +101,7 @@ namespace TextBasedRPG.Managers.DataManagement
                         mappedEntity = new Enemy();
 
                     mappedEntity.ID = data.ID;
+                    mappedEntity.EntityTypeID = data.EntityTypeID;
                     mappedEntity.Name = data.Name;
                     mappedEntity.BaseHP = data.BaseHP;
                     mappedEntity.BaseATK = data.BaseATK;
@@ -110,6 +111,9 @@ namespace TextBasedRPG.Managers.DataManagement
                     mappedEntity.GoldMultiplier = data.GoldMultiplier;
                     mappedEntity.Loots = data.Loots ?? new();
                     mappedEntity.Locations = data.Locations ?? new();
+
+                    Debug.Log($"[DEBUG] Attempting to parse EntityTypeID: {data.EntityTypeID}");
+
                     if (Enum.TryParse<EntityType>(data.EntityType.ToString(), true, out var type))
                     {
                         mappedEntity.EntityType = type;

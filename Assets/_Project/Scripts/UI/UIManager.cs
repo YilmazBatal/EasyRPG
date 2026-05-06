@@ -1,4 +1,4 @@
-﻿using Assets._Project.Scripts.UI;
+using Assets._Project.Scripts.UI;
 using Assets._Project.Scripts.UI.Cards;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
     public Dictionary<string, Color> rarityColors;
 
     [Header("Configuration")]
-    [SerializeField] [InspectorRange(0.01f,0.03f)] float typeWriterSpeed = 0.015f;
+    [SerializeField] [Range(0.01f,0.5f)] static float typeWriterSpeed = 0.015f;
 
     [Header("Icon Database")]
     [SerializeField] private IconDatabase iconDB;
@@ -58,7 +58,8 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BackgroundConfiguration(GameManager.Instance.Context);
+        if (GameManager.Instance?.Context?.Player?.ActiveLocation != null)
+            BackgroundConfiguration(GameManager.Instance.Context);
         EventManager.HeroEvents.OnLocationChanged += BackgroundConfiguration;
     }
     private void OnDisable()
@@ -111,6 +112,9 @@ public class UIManager : MonoBehaviour
     }
     IEnumerator BgConfigCoroutine(GameContext context, bool setDelay = false)
     {
+        if (context?.Player?.ActiveLocation == null)
+            yield break;
+
         string rawID = GameManager.Instance.Context.Player.ActiveLocation; // "L003"
         int idNumber = int.Parse(rawID.Substring(1)); // Result : 3
 
@@ -231,9 +235,11 @@ public class UIManager : MonoBehaviour
             for (int j = 0; j < 3; j++)
             {
                 textComponent.text = currentDisplayedText + chars[Random.Range(0, chars.Length)];
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(typeWriterSpeed);
             }
 
+            float pitch = Random.Range(0.75f, 0.9f);
+            AudioManager.Instance.PlayUI(AudioManager.Instance.audioDB.typewriter, pitch);
             currentDisplayedText += targetChar;
             textComponent.text = currentDisplayedText;
         }

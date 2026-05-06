@@ -32,11 +32,12 @@ namespace Assets._Project.Scripts.Managers.Adventure
             if (activeRoutine != null) StopCoroutine(activeRoutine);
             activeRoutine = null;
 
-            int roll = Random.Range(0, 101);
+            int totalChance = itemDropChance + enemyEncounterChance + adventureTextChance;
+            int roll = Random.Range(0, totalChance);
 
-            if (roll <= itemDropChance)
+            if (roll < itemDropChance)
                 GenerateItem();
-            else if (roll <= enemyEncounterChance)
+            else if (roll < itemDropChance + enemyEncounterChance)
                 GenerateArena();
             else
                 GenerateAdventureText();

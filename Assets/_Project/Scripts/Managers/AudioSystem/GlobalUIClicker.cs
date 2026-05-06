@@ -7,12 +7,15 @@ public class GlobalUIClicker : MonoBehaviour
 
     void Start()
     {
-        Button[] allButtons = FindObjectsByType<Button>(FindObjectsSortMode.None);
+        Button[] allButtons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         foreach (Button btn in allButtons)
         {
-            btn.onClick.AddListener(() => PlayDefaultClick());
+            btn.onClick.RemoveListener(PlayDefaultClick);
+            btn.onClick.AddListener(PlayDefaultClick);
         }
+
+        Debug.Log($"[UI] Toplam {allButtons.Length} butona ses atandı (Kapalılar dahil).");
     }
 
     private void PlayDefaultClick()
