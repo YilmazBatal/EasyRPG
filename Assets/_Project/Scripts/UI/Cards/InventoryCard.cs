@@ -96,10 +96,12 @@ public class InventoryCard : MonoBehaviour
             string text = isEquipped ? "Unequip" : "Equip";
             actionBTNText.text = text;
 
-            if (w.RequiredLevel >= player.Level) // or not enough str etc for the future implementations
+            if (w.RequiredLevel > player.Level) // or not enough str etc for the future implementations
                 actionBTN.interactable = false;
             else
                 actionBTN.interactable = true;
+
+            Debug.Log($"Weapon: {w.Name}, Required Level: {w.RequiredLevel}, Player Level: {player.Level}");
         }
     }
     private void ModifyArmorCard(Item item, bool isEquipped)
@@ -122,7 +124,7 @@ public class InventoryCard : MonoBehaviour
             string text = isEquipped ? "Unequip" : "Equip";
             actionBTNText.text = text;
 
-            if (a.RequiredLevel >= player.Level) // or not enough str etc for the future implementations
+            if (a.RequiredLevel > player.Level) // or not enough str etc for the future implementations
                 actionBTN.interactable = false;
             else
                 actionBTN.interactable = true;

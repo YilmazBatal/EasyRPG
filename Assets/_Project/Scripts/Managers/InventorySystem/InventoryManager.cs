@@ -9,21 +9,69 @@ namespace TextBasedRPG.Managers
     {
         public static void AddToInventory(LootResult loot)
         {
-            GameContext context = GameManager.Instance.Context;
-            var existingItem = context.Player.Inventory!.FirstOrDefault(x => x.ID == loot.ID);
-            if (existingItem != null)
+            if (loot == null || string.IsNullOrEmpty(loot.ID)) return;
+
+            if (GameManager.Instance == null)
             {
-                existingItem.Quantity += loot.Amount;
+                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance is null! (Are you calling this after the game stopped or before Awake?)");
+                return;
+            }
+
+            GameContext context = GameManager.Instance.Context;
+            if (context == null)
+            {
+                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance.Context is null!");
+                return;
+            }
+
+            if (context.Player == null)
+            {
+                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance.Context.Player is null! (Are you trying to add an item before selecting a hero?)");
+                return;
+            }
+
+            if (context.Player.Inventory == null)
+            {
+                context.Player.Inventory = new System.Collections.Generic.List<InventoryData>();
+            }
+
+            char itemTypeID = loot.ID[0];
+
+            bool isStackable = (itemTypeID != 'W' && itemTypeID != 'A');
+
+            if (isStackable)
+            {
+                var existingStack = context.Player.Inventory!.FirstOrDefault(x => x != null && x.ID == loot.ID);
+
+                if (existingStack != null)
+                {
+                    existingStack.Quantity += loot.Amount;
+                    UnityEngine.Debug.Log($"[INVENTORY] Updated stack for: {loot.ID}, new qty: {existingStack.Quantity}");
+                }
+                else
+                {
+                    CreateNewInventoryEntry(context, loot);
+                }
             }
             else
             {
-                InventoryData itemToAdd = new InventoryData();
-                itemToAdd.ID = loot.ID;
-                itemToAdd.Quantity = loot.Amount;
-
-                context.Player.Inventory!.Add(itemToAdd);
-                GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+                CreateNewInventoryEntry(context, loot);
             }
+        }
+
+        private static void CreateNewInventoryEntry(GameContext context, LootResult loot)
+        {
+            InventoryData itemToAdd = new InventoryData
+            {
+                ID = loot.ID,
+                Quantity = loot.Amount, 
+                Upgrade = 0
+            };
+
+            context.Player.Inventory!.Add(itemToAdd);
+            UnityEngine.Debug.Log($"[INVENTORY] Added new item: {loot.ID}");
+
+            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
         }
 
         /// <summary>
@@ -40,7 +88,7 @@ namespace TextBasedRPG.Managers
 
             for (int i = 0; i < inventory.Count; i++)
             {
-                if (inventory[i].ID == itemId)
+                if (inventory[i] != null && inventory[i].ID == itemId)
                 {
                     inventory[i].Quantity -= amount;
 

@@ -62,25 +62,27 @@ public class ItemPopupCard : MonoBehaviour
             val3.gameObject.SetActive(false);
             arrow3.gameObject.SetActive(false);
 
-            if (w.WeaponATK < context.Player.EquippedWeapon.WeaponATK)
-            {
-                arrow1.sprite = iconDB.downIcon;
-                arrow1.color = Color.red;
-            } else
-            {
-                arrow1.sprite = iconDB.upIcon;
-                arrow1.color = Color.green;
-            }
-            if (w.RequiredLevel < context.Player.EquippedWeapon.RequiredLevel)
-            {
-                arrow2.sprite = iconDB.downIcon;
-                arrow2.color = Color.red;
-            } else
-            {
-                arrow2.sprite = iconDB.upIcon;
-                arrow2.color = Color.green;
-            }
+            if (context.Player.EquippedWeapon!= null) {
 
+                if (w.WeaponATK < context.Player.EquippedWeapon.WeaponATK)
+                {
+                    arrow1.sprite = iconDB.downIcon;
+                    arrow1.color = Color.red;
+                } else
+                {
+                    arrow1.sprite = iconDB.upIcon;
+                    arrow1.color = Color.green;
+                }
+                if (w.RequiredLevel < context.Player.EquippedWeapon.RequiredLevel)
+                {
+                    arrow2.sprite = iconDB.downIcon;
+                    arrow2.color = Color.red;
+                } else
+                {
+                    arrow2.sprite = iconDB.upIcon;
+                    arrow2.color = Color.green;
+                }
+            }
         }
         else if (item is Armor a)
         {
@@ -92,35 +94,40 @@ public class ItemPopupCard : MonoBehaviour
             icon3.sprite = iconDB.plusIcon;
             val3.text = a.ExtraHP.ToString();
 
-            if (a.ArmorDef < context.Player.EquippedArmor.ArmorDef)
+            if (context.Player.EquippedArmor != null)
             {
-                arrow1.sprite = iconDB.downIcon;
-                arrow1.color = Color.red;
-            }
-            else
-            {
-                arrow1.sprite = iconDB.upIcon;
-                arrow1.color = Color.green;
-            }
-            if (a.RequiredLevel < context.Player.EquippedArmor.RequiredLevel)
-            {
-                arrow2.sprite = iconDB.downIcon;
-                arrow2.color = Color.red;
-            }
-            else
-            {
-                arrow2.sprite = iconDB.upIcon;
-                arrow2.color = Color.green;
-            }
-            if (a.ExtraHP < context.Player.EquippedArmor.ExtraHP)
-            {
-                arrow2.sprite = iconDB.downIcon;
-                arrow2.color = Color.red;
-            }
-            else
-            {
-                arrow2.sprite = iconDB.upIcon;
-                arrow2.color = Color.green;
+
+
+                if (a.ArmorDef < context.Player.EquippedArmor.ArmorDef)
+                {
+                    arrow1.sprite = iconDB.downIcon;
+                    arrow1.color = Color.red;
+                }
+                else
+                {
+                    arrow1.sprite = iconDB.upIcon;
+                    arrow1.color = Color.green;
+                }
+                if (a.RequiredLevel < context.Player.EquippedArmor.RequiredLevel)
+                {
+                    arrow2.sprite = iconDB.downIcon;
+                    arrow2.color = Color.red;
+                }
+                else
+                {
+                    arrow2.sprite = iconDB.upIcon;
+                    arrow2.color = Color.green;
+                }
+                if (a.ExtraHP < context.Player.EquippedArmor.ExtraHP)
+                {
+                    arrow2.sprite = iconDB.downIcon;
+                    arrow2.color = Color.red;
+                }
+                else
+                {
+                    arrow2.sprite = iconDB.upIcon;
+                    arrow2.color = Color.green;
+                }
             }
         }
         else if (item is TextBasedRPG.Core.Items.Material m)
