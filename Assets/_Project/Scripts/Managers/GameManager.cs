@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
             { GameState.DetailedStats, new DetailedStatsState() },
             { GameState.Inventory, new InventoryState() },
             { GameState.Blacksmith, new BlacksmithState() },
+            { GameState.TradeCenter, new BlacksmithState() },
             { GameState.Training, new TrainingState() },
             { GameState.Adventure, new AdventureState() },
             { GameState.Map, new MapState() },
