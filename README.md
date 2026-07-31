@@ -48,3 +48,7 @@ This project evolved from a console-based C# RPG into a decoupled, Event-Driven 
 * `UI/` — View layer and display components listening to system events.
 
 ## 📽️ Gameplay GIFs
+
+## ✨ Special thanks
+
+* Special thanks to [@Meenic](https://github.com/Meenic) for design tips and more.
