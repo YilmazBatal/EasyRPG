@@ -82,7 +82,7 @@ public class CombatActions : MonoBehaviour
             p.BonusCritRate = 0;
             p.BonusCritDMG = 0;
             UIExtensions.GhostBarFill(focusBar, focusBarGhost, combatManager.focusAmount);
-            rsm.PlayerQuickStats(context);
+            rsm.quickStatsPanel.PlayerQuickStats(context);
 
             IDamageCalculator damage = new DamageCalculator();
             int calculatedDamage = damage.CalculateDMG(
@@ -320,7 +320,7 @@ public class CombatActions : MonoBehaviour
         float calculatedValue = Mathf.Clamp((float)combatManager.guardAmount / mShield, 0f, 1f);
 
         UIExtensions.GhostBarFill(guardBar, guardBarGhost, calculatedValue);
-        if (rsm != null) rsm.PlayerQuickStats(context);
+        if (rsm != null) rsm.quickStatsPanel.PlayerQuickStats(context);
     }
 
     public void OnFocusChanged()
@@ -329,7 +329,7 @@ public class CombatActions : MonoBehaviour
         float calculatedValue = Mathf.Clamp((float)combatManager.focusAmount / fCap, 0f, 1f);
         Debug.Log($"Focus Amount: {combatManager.focusAmount}, Focus Cap: {combatManager.focusCap}, Calculated Value: {calculatedValue}");
         UIExtensions.GhostBarFill(focusBar, focusBarGhost, calculatedValue);
-        if (rsm != null) rsm.PlayerQuickStats(context);
+        if (rsm != null) rsm.quickStatsPanel.PlayerQuickStats(context);
     }
     #endregion
 }

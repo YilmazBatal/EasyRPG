@@ -233,7 +233,7 @@ namespace TextBasedRPG.Managers
         private void OnPlayerGotHit(bool isCrit, int damage)
         {
             RightSectionManager rsm = UIManager.Instance.rightSection.gameObject.GetComponent<RightSectionManager>();
-            RectTransform playerRect = rsm.playerAvatar.gameObject.GetComponent<RectTransform>();
+            RectTransform playerRect = rsm.playerPanel.playerAvatar.gameObject.GetComponent<RectTransform>();
                 
             if (isCrit)
             {
@@ -246,8 +246,8 @@ namespace TextBasedRPG.Managers
                 UIExtensions.Shake(gameObject.GetComponent<RectTransform>(), shakeIntensity, shakeDuration);
             }
 
-            UIExtensions.Flash(rsm.playerAvatar);
-            UIExtensions.GenerateDamageText(rsm.damageText, isCrit, damage);
+            UIExtensions.Flash(rsm.playerPanel.playerAvatar);
+            UIExtensions.GenerateDamageText(rsm.playerPanel.damageText, isCrit, damage);
         }
         public void OnPlayerLowHP()
         {
