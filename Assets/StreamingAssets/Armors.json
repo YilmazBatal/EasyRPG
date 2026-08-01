@@ -53,5 +53,16 @@
 	  "ArmorDef": 75,
 	  "ExtraHP": 250,
 	  "RequiredLevel": 15
+	},
+	{
+	  "ID": "A0006",
+	  "ItemType": "Armor",
+	  "Name": "Admin Armor",
+	  "Description": "Forged to perfection.",
+	  "Price": 5200,
+	  "Rarity": "Legendary",
+	  "ArmorDef": 100,
+	  "ExtraHP": 300,
+	  "RequiredLevel": 1
 	}
 ]

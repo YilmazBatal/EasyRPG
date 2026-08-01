@@ -35,8 +35,6 @@ public class PlayerPanel : MonoBehaviour
         EventManager.HeroEvents.OnGoldChanged += UpdateGoldUI;
         EventManager.HeroEvents.OnExpChanged += UpdatExpUI;
         EventManager.HeroEvents.OnHPValueChanged += UpdateHPUI;
-        //EventManager.HeroEvents.OnEquipmentChanged += UpdateEquipmentUI;
-        //EventManager.HeroEvents.OnLocationChanged += UpdateRightSection;
     }
 
     private void OnDisable()
@@ -44,8 +42,6 @@ public class PlayerPanel : MonoBehaviour
         EventManager.HeroEvents.OnGoldChanged -= UpdateGoldUI;
         EventManager.HeroEvents.OnExpChanged -= UpdatExpUI;
         EventManager.HeroEvents.OnHPValueChanged -= UpdateHPUI;
-        //EventManager.HeroEvents.OnEquipmentChanged -= UpdateEquipmentUI;
-        //EventManager.HeroEvents.OnLocationChanged -= UpdateRightSection;
     }
     #endregion
 
@@ -70,25 +66,26 @@ public class PlayerPanel : MonoBehaviour
 
         UIExtensions.GhostBarFill(playerEXPFill, playerGhostEXPFill, targetFill);
 
-        LeanTween.scale(playerEXPValue.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
-        LeanTween.scale(playerEXPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.1f, 0.1f).setLoopPingPong(1);
+        LeanTween.scale(playerEXPValue.gameObject, Vector3.one * 1.03f, 0.1f).setLoopPingPong(1);
+        LeanTween.scale(playerEXPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.03f, 0.1f).setLoopPingPong(1);
     }
     public void UpdateHPUI(GameContext context)
     {
+        if (context.Player.CurHP >= context.Player.TotalHP)
+            context.Player.CurHP = context.Player.TotalHP;
+        
         if (context.Player.CurHP <= context.Player.TotalHP * 0.3f)
         {
-            //vignette thing fix here
+            //vignette here later
+            EventManager.CombatEvents.TriggerOnPlayerLowHP();
         }
         float targetFill = (float)context.Player.CurHP / context.Player.TotalHP;
         playerHPValue.text = $"{context.Player.CurHP}/{context.Player.TotalHP}";
 
         UIExtensions.GhostBarFill(playerHPFill, playerGhostHPFill, targetFill);
 
-        LeanTween.scale(playerHPValue.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
-        LeanTween.scale(playerHPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.05f, 0.1f).setLoopPingPong(1);
-
-        EventManager.CombatEvents.TriggerOnPlayerLowHP();
-
+        LeanTween.scale(playerHPValue.gameObject, Vector3.one * 1.03f, 0.1f).setLoopPingPong(1);
+        LeanTween.scale(playerHPFill.transform.parent.transform.parent.gameObject, Vector3.one * 1.03f, 0.1f).setLoopPingPong(1);
     }
     #endregion
 

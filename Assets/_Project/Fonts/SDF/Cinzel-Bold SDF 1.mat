@@ -61,10 +61,10 @@ Material:
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
-    - _GlowInner: 1
-    - _GlowOffset: -0.075
+    - _GlowInner: 0.426
+    - _GlowOffset: 1
     - _GlowOuter: 1
-    - _GlowPower: 0.6
+    - _GlowPower: 0.313
     - _GradientScale: 3
     - _LightAngle: 4.18
     - _MaskSoftnessX: 0
@@ -76,7 +76,7 @@ Material:
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 7.39
     - _ScaleRatioA: 0.6666667
-    - _ScaleRatioB: 0.5416667
+    - _ScaleRatioB: 0.27083334
     - _ScaleRatioC: 0.5416667
     - _ScaleX: 1
     - _ScaleY: 1
@@ -88,8 +88,8 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _TextureHeight: 512
-    - _TextureWidth: 512
+    - _TextureHeight: 4096
+    - _TextureWidth: 4096
     - _UnderlayDilate: 0
     - _UnderlayOffsetX: 0
     - _UnderlayOffsetY: 0

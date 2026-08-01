@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _classSelection;
     [HideInInspector] public GameObject _activePopUp;
 
-    public Dictionary<string, Color> rarityColors;
+    [SerializeField] public Dictionary<string, Color> rarityColors;
 
     [Header("Configuration")]
     [SerializeField] [Range(0.01f,0.5f)] static float typeWriterSpeed = 0.015f;
@@ -236,7 +236,7 @@ public class UIManager : MonoBehaviour
                 yield return new WaitForSeconds(typeWriterSpeed);
             }
 
-            float pitch = Random.Range(0.75f, 0.9f);
+            float pitch = Random.Range(0.75f, 0.8f);
             AudioManager.Instance.PlayUI(AudioManager.Instance.audioDB.typewriter, pitch);
             currentDisplayedText += targetChar;
             textComponent.text = currentDisplayedText;
