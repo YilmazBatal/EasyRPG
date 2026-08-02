@@ -1,4 +1,6 @@
-﻿namespace TextBasedRPG.Core.Items
+﻿using Assets._Project.Scripts.Enums;
+
+namespace TextBasedRPG.Core.Items
 {
     public class Consumable : Item
     {

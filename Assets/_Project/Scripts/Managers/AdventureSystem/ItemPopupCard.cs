@@ -1,4 +1,5 @@
 using Assets._Project.Scripts.Managers.AdventureSystem;
+using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
 using Assets._Project.Scripts.UI;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Core.Locations;
@@ -12,6 +13,9 @@ public class ItemPopupCard : MonoBehaviour
     #region Variables
     [Header("Animations")]
     [SerializeField] Image dim;
+
+    [Header("Rarity Styles")]
+    [SerializeField] RarityDatabase rarityDB;
 
     [Header("Components")]
     [SerializeField] TMP_Text title;
@@ -46,7 +50,7 @@ public class ItemPopupCard : MonoBehaviour
         IconDatabase iconDB = UIManager.Instance.IconDB;
         title.text = item.Name;
         desc.text = item.Description;
-        rarityColor.effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
+        rarityColor.effectColor = rarityDB.GetColor(item.Rarity);
         claim.onClick.RemoveAllListeners();
         claim.onClick.AddListener(() => Claim(ls));
         equip.onClick.RemoveAllListeners();

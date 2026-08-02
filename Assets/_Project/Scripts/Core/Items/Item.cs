@@ -1,3 +1,5 @@
+using Assets._Project.Scripts.Enums;
+
 namespace TextBasedRPG.Core.Items
 {
     public abstract class Item

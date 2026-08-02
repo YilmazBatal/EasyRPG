@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099f0cd8c6d8f5b4cbadbb0a145ff88c, type: 3}
+  m_Name: RarityDatabase
+  m_EditorClassIdentifier: 
+  styles:
+  - rarity: 0
+    color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
+    gradient: {fileID: 11400000, guid: 68e08af706977af4c9c9d13656e5ccf7, type: 2}
+  - rarity: 1
+    color: {r: 0.17120047, g: 0.8773585, b: 0.15312389, a: 1}
+    gradient: {fileID: 11400000, guid: 99584bd16bdab2c4a9ae8ec0d3847eb8, type: 2}
+  - rarity: 2
+    color: {r: 0.3160377, g: 0.7741616, b: 1, a: 1}
+    gradient: {fileID: 11400000, guid: c53b2b0af2ec1ad46a299866e6087c01, type: 2}
+  - rarity: 3
+    color: {r: 0.59607846, g: 0.427451, b: 0.8352942, a: 1}
+    gradient: {fileID: 11400000, guid: da231252723029847898bd7e908450d7, type: 2}
+  - rarity: 4
+    color: {r: 1, g: 0.75294125, b: 0, a: 1}
+    gradient: {fileID: 11400000, guid: 20f847ec1977b96458d7d1f5b7acd83d, type: 2}

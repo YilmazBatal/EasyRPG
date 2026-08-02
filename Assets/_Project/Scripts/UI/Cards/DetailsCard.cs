@@ -1,3 +1,4 @@
+using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
 using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Managers;
@@ -30,6 +31,9 @@ namespace Assets._Project.Scripts.UI.Cards
         [SerializeField] public TMP_Text value5;
         [SerializeField] public TMP_Text gold;
 
+        [Header("Rarity Styles")]
+        [SerializeField] private RarityDatabase rarityDB;
+
         [Header("Buttons")]
         [SerializeField] public Button action;
         [SerializeField] public Button closeBTN;
@@ -60,7 +64,7 @@ namespace Assets._Project.Scripts.UI.Cards
             desc.text = item.Description;
             gold.text = $"{item.Price}G";
             itemIcon.sprite = itemCard.itemIcon.sprite;
-            itemIcon.transform.parent.GetComponent<Outline>().effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
+            itemIcon.transform.parent.GetComponent<Outline>().effectColor = rarityDB.GetColor(item.Rarity);
 
             // Initialize discard state so +/- buttons work immediately
             currentItem = item;

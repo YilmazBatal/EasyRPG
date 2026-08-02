@@ -9,6 +9,7 @@ using TextBasedRPG.Core.Shops;
 using TextBasedRPG.Models;
 using UnityEngine;
 using Material = TextBasedRPG.Core.Items.Material;
+using Assets._Project.Scripts.Enums;
 
 namespace TextBasedRPG.Managers.DataManagement
 {

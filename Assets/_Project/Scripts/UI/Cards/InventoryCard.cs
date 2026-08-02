@@ -7,11 +7,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Material = TextBasedRPG.Core.Items.Material;
+using Assets._Project.Scripts.Enums;
+using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
 
 public class InventoryCard : MonoBehaviour
 {
     [Header("Details Prefab")]
     [SerializeField] private GameObject detailsCardPrefab;
+
+    [Header("Rarity Styles")]
+    [SerializeField] private RarityDatabase rarityDB;
 
     [Header("Components")]
     [SerializeField] public TMP_Text itemName;
@@ -42,7 +47,7 @@ public class InventoryCard : MonoBehaviour
     {
         // Common properties
         itemName.text = item.Name;
-        itemRarity.effectColor = UIManager.Instance.rarityColors[item.Rarity.ToString()];
+        itemRarity.effectColor = rarityDB.GetColor(item.Rarity);
         price.text = $"{item.Price}G";
 
         if (actionBTN != null)
@@ -207,7 +212,7 @@ public class InventoryCard : MonoBehaviour
         {
             _awaitingDiscardConfirm = true;
             discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.confirmIcon;
-            discImg.transform.GetChild(0).GetComponent<Image>().color = UIManager.Instance.rarityColors[Rarity.Uncommon.ToString()];
+            discImg.transform.GetChild(0).GetComponent<Image>().color = rarityDB.GetColor(Rarity.Uncommon);
 
             // start timeout to revert icon after 3 seconds
             if (_discardCoroutine != null) StopCoroutine(_discardCoroutine);

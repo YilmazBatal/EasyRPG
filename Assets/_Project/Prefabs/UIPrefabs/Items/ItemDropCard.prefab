@@ -996,6 +996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dim: {fileID: 8237898592245729871}
+  rarityDB: {fileID: 11400000, guid: 3ec718f0c82ed744d89f1b3a51889699, type: 2}
   title: {fileID: 6778756247552995100}
   desc: {fileID: 4539880948580512542}
   icon: {fileID: 9068655228039354138}

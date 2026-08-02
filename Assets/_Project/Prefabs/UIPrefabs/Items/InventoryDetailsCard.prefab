@@ -1676,6 +1676,7 @@ MonoBehaviour:
   icon5: {fileID: 8582099339801963320}
   value5: {fileID: 8985267893108944928}
   gold: {fileID: 2415020686073776491}
+  rarityDB: {fileID: 11400000, guid: 3ec718f0c82ed744d89f1b3a51889699, type: 2}
   action: {fileID: 6285764815506013538}
   closeBTN: {fileID: 7327640662935907565}
   discardBTN: {fileID: 8459013503887435778}

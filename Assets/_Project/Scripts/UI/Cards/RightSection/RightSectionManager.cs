@@ -1,8 +1,8 @@
+using Assets._Project.Scripts.Enums;
+using Assets._Project.Scripts.UI.Cards.RightSection;
+using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Events;
-using TextBasedRPG.Managers;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets._Project.Scripts.UI.Cards
 {
@@ -15,9 +15,8 @@ namespace Assets._Project.Scripts.UI.Cards
         [Header("Quick Stats")]
         [SerializeField] public QuickStatsPanel quickStatsPanel;
 
-        [Header("Equipments")]
-        [SerializeField] private TMP_Text equippedWeaponName;
-        [SerializeField] private TMP_Text equippedArmorName;
+        [Header("Equipment Cards")]
+        [SerializeField] public EquipmentPanels equipmentPanels;
         #endregion
 
         #region Enable & Disable
@@ -38,9 +37,9 @@ namespace Assets._Project.Scripts.UI.Cards
 
         public void UpdateEquipmentUI(GameContext context)
         {
-            quickStatsPanel.PlayerQuickStats(context);
-            EquipmentCards(context);
             playerPanel.UpdateHPUI(context);
+            quickStatsPanel.PlayerQuickStats(context);
+            equipmentPanels.EquipmentCards(context);
         }
         #endregion
 
@@ -51,32 +50,10 @@ namespace Assets._Project.Scripts.UI.Cards
             {
                 playerPanel.PlayerCard(context);
                 quickStatsPanel.PlayerQuickStats(context);
-                EquipmentCards(context);
+                equipmentPanels.EquipmentCards(context);
             }
         }
         
-        private void EquipmentCards(GameContext context)
-        {
-            if (context.Player.EquippedWeapon != null)
-            {
-                equippedWeaponName.text = context.Player.EquippedWeapon.Name;
-                equippedWeaponName.color = UIManager.Instance.rarityColors[context.Player.EquippedWeapon.Rarity.ToString()];
-            } else
-            {
-                equippedWeaponName.text = "None";
-                equippedWeaponName.color = UIManager.Instance.rarityColors["Common"];
-            }
-            if (context.Player.EquippedArmor != null)
-            {
-                equippedArmorName.text = context.Player.EquippedArmor.Name;
-                equippedArmorName.color = UIManager.Instance.rarityColors[context.Player.EquippedArmor.Rarity.ToString()];
-            }
-            else
-            {
-                equippedArmorName.text = "None";
-                equippedArmorName.color = UIManager.Instance.rarityColors["Common"];
-            }
-        }
         #endregion
     }
 }
