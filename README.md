@@ -48,6 +48,7 @@ This project evolved from a console-based C# RPG into a decoupled, Event-Driven 
 * `UI/` — View layer and display components listening to system events.
 
 ## 📽️ Gameplay GIFs
+<img width="831" height="468" alt="resim" src="https://github.com/user-attachments/assets/847cd2b7-155f-4a3a-bf94-617f15e4156b" />
 
 ## ✨ Special thanks
 
