@@ -767,7 +767,6 @@ GameObject:
   - component: {fileID: 797832674298880026}
   - component: {fileID: 5805312969612204491}
   - component: {fileID: 1001758591467820194}
-  - component: {fileID: 2463289439271667012}
   m_Layer: 5
   m_Name: actionBTN
   m_TagString: Untagged
@@ -914,21 +913,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2463289439271667012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5147274481728426529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1 &6042580178400503927
 GameObject:
   m_ObjectHideFlags: 0

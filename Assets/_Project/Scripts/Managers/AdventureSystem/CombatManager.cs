@@ -125,7 +125,7 @@ namespace TextBasedRPG.Managers
             ca.fleeBtn.GetComponentInChildren<TMP_Text>().text =
                 $"Run Away - {CombatActions.CalculateRunAwayChance(GameManager.Instance.Context, generatedEnemy).ToString()}%";
 
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{generatedEnemy.Name}</color> appears!"));
+            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#3E9BD9>{generatedEnemy.Name}</color> appears!"));
         }
         private void StartCombat()
         {
@@ -329,10 +329,10 @@ namespace TextBasedRPG.Managers
                 }
 
                 didGuardLastTurn = false;
-                string critText = isCrit ? " <color=#0F172A>Critical hit!</color>" : "";
+                string critText = isCrit ? " <color=#C9622E>Critical hit!</color>" : "";
 
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
-                    $"<color=#0F172A>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
+                    $"<color=#B8D93E>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
 
                 EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage);
                 EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
@@ -344,7 +344,7 @@ namespace TextBasedRPG.Managers
             } else
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
-                    $"<color=#0F172A>{generatedEnemy.Name}</color> couldn't land the attack."));
+                    $"<color=#B8D93E>{generatedEnemy.Name}</color> couldn't land the attack."));
             }
             
 
@@ -394,28 +394,34 @@ namespace TextBasedRPG.Managers
         }
         public string GetEnemyStatus(Entity enemy)
         {
-            string red = "#8B0000";
-            string yellow = "#8C7014";
-            string green = "#17761E";
+            string red = "#A6293A";
+            string yellow = "#B8D93E";
+            string green = "#4FBF7A";
 
             float hpPercentage = (float)enemy.CurHP / enemy.TotalHP;
 
-            if (hpPercentage >= 0.60f)
+            string coloredName = $"<color={red}>{enemy.Name}</color>";
+
+            if (hpPercentage <= 1f)
             {
-                string coloredName = $"<color={green}>{enemy.Name}</color>";
+                coloredName = $"<color={green}>{enemy.Name}</color>";
                 return $"{coloredName} looks ready to fight!";
             }
-            if (hpPercentage >= 0.40f) {
-                string coloredName = $"<color={yellow}>{enemy.Name}</color>";
-                return $"{coloredName} is watching you carefully";
-            }
-            if (hpPercentage >= 0.20f)
+            if (hpPercentage <= 0.66f)
             {
-                string coloredName = $"<color={red}>{enemy.Name}</color>";
-                return $"{coloredName} looks tired to fight...";
+                coloredName = $"<color={yellow}>{enemy.Name}</color>";
+                return $"{coloredName} is watching you carefully.";
             }
-            string panicName = $"<color={red}>{enemy.Name}</color>";
-            return $"{panicName} is panicking!";
+            if (hpPercentage <= 0.33f) {
+                coloredName = $"<color={red}>{enemy.Name}</color>";
+                return $"{coloredName} seems tired to fight...";
+            }
+            if (hpPercentage <= 0f)
+            {
+                coloredName = $"<color={red}>{enemy.Name}</color>";
+                return $"{coloredName} is fainted!";
+            }
+            return $"{coloredName} is fainted!";
         }
         
         #endregion
