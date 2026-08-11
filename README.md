@@ -50,6 +50,8 @@ This project evolved from a console-based C# RPG into a decoupled, Event-Driven 
 
 ## 📽️ Gameplay GIFs
 <img width="831" height="468" alt="ss" src="https://github.com/user-attachments/assets/0a7de1a2-0b81-4830-a764-cb1a100844b0" />
-## ✨ Special thanks
 
+---
+
+## ✨ Special thanks
 * Special thanks to [@Meenic](https://github.com/Meenic) for design tips and more.
