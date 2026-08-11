@@ -15,6 +15,7 @@ EasyRPG is a dynamic, UI-driven Tactical RPG that blends deep strategic manageme
 
 * ⚖️ Dynamic Markets: Buy & Sell various items to profit.
 
+
 * 🎒 Optimized Inventory Management: Clean, responsive, and high-performance inventory architecture built for seamless item sorting and equipping.
 
 * 🗺️ Unlocking World Progression: Discover and unlock diverse new regions as your power grows.
@@ -48,8 +49,7 @@ This project evolved from a console-based C# RPG into a decoupled, Event-Driven 
 * `UI/` — View layer and display components listening to system events.
 
 ## 📽️ Gameplay GIFs
-<img width="831" height="468" alt="resim" src="https://github.com/user-attachments/assets/847cd2b7-155f-4a3a-bf94-617f15e4156b" />
-
+<img width="831" height="468" alt="ss" src="https://github.com/user-attachments/assets/0a7de1a2-0b81-4830-a764-cb1a100844b0" />
 ## ✨ Special thanks
 
 * Special thanks to [@Meenic](https://github.com/Meenic) for design tips and more.
