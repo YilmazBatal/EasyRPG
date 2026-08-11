@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 329.5, y: -38.6}
+  m_AnchoredPosition: {x: 329.5, y: -38.601562}
   m_SizeDelta: {x: 586.95, y: 38.574}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8962060989156417943
@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeTime: 0.1
-  cardScale: 1.05
+  cardScale: 1.02
 --- !u!1 &4007089630252913908
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,10 +321,10 @@ RectTransform:
   - {fileID: 10975495780556959}
   m_Father: {fileID: 1989462291533334390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 275.3, y: 28.851}
-  m_SizeDelta: {x: 117.836, y: 27.298}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -199.61426, y: -41.148438}
+  m_SizeDelta: {x: 117.836, y: 27.298004}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4413541554632734720
 CanvasRenderer:
@@ -411,10 +411,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1989462291533334390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -51.038, y: -22.526}
-  m_SizeDelta: {x: 770.51, y: 64.72}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 406.97827, y: -86.33203}
+  m_SizeDelta: {x: 741.91, y: 52.334}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7646771287050941102
 CanvasRenderer:
@@ -553,9 +553,9 @@ RectTransform:
   - {fileID: 6237269071334828720}
   m_Father: {fileID: 1989462291533334390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -82.9, y: -0.000022888}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -82.899994, y: -70.00002}
   m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1099150438833001689

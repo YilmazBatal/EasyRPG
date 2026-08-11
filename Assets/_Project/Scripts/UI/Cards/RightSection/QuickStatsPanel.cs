@@ -1,20 +1,27 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class QuickStatsPanel : MonoBehaviour
 {
     [Header("Quick Stats")]
-    [SerializeField] public TMP_Text attackVal;
-    [SerializeField] public TMP_Text defenseVal;
-    [SerializeField] public TMP_Text speedVal;
-    [SerializeField] public TMP_Text critRateVal;
-    [SerializeField] public TMP_Text critDmgVal;
+    [SerializeField] private TMP_Text attackVal;
+    [SerializeField] private TMP_Text defenseVal;
+    [SerializeField] private TMP_Text speedVal;
+    [SerializeField] private TMP_Text critRateVal;
+    [SerializeField] private TMP_Text critDmgVal;
+
+    [SerializeField] private Color bonusColor = new Color(0.5607843f, 0.8078431f, 0f);
+    private string PrintBonusStat(float bonus)
+    {
+        return $"<color=#{bonusColor.ToHexString()}>{bonus}</color>";
+    }
     public void PlayerQuickStats(GameContext context)
     {
-        attackVal.text = $"{context.Player.BonuslessATK} + <color=#8FCE00>{context.Player.BonusATK}</color>";
-        defenseVal.text = $"{context.Player.BonuslessDEF} + <color=#8FCE00>{context.Player.BonusDEF}</color>";
-        speedVal.text = $"{context.Player.BonuslessSPD} + <color=#8FCE00>{context.Player.BonusSPD}</color>";
-        critRateVal.text = $"{context.Player.BonuslessCritRate} + <color=#8FCE00>{context.Player.BonusCritRate}</color>%";
-        critDmgVal.text = $"{context.Player.BonuslessCritDamage} + <color=#8FCE00>{context.Player.BonusCritDMG}</color>%";
+        attackVal.text = $"{context.Player.BonuslessATK}{(context.Player.BonusATK != 0 ? $" + {PrintBonusStat(context.Player.BonusATK)}" : "")}";
+        defenseVal.text = $"{context.Player.BonuslessDEF}{(context.Player.BonusDEF != 0 ? $" + {PrintBonusStat(context.Player.BonusDEF)}" : "")}";
+        speedVal.text = $"{context.Player.BonuslessSPD}{(context.Player.BonusSPD != 0 ? $" + {PrintBonusStat(context.Player.BonusSPD)}" : "")}";
+        critRateVal.text = $"{context.Player.BonuslessCritRate}{(context.Player.BonusCritRate != 0 ? $" + {PrintBonusStat(context.Player.BonusCritRate)}" : "")}%";
+        critDmgVal.text = $"{context.Player.BonuslessCritDamage}{(context.Player.BonusCritDMG != 0 ? $" + {PrintBonusStat(context.Player.BonusCritDMG)}" : "")}%";
     }
 }

@@ -156,7 +156,7 @@ public class InventoryCard : MonoBehaviour
             if (detailsBTN != null)
             {
                 detailsBTNText.text = "Details";
-                Destroy(detailsBTNIcon);
+                //Destroy(detailsBTNIcon);
                 RectTransform dRt = detailsBTN.GetComponent<RectTransform>();
                 if (dRt != null)
                 {
@@ -248,7 +248,7 @@ public class InventoryCard : MonoBehaviour
         _awaitingDiscardConfirm = false;
         _discardCoroutine = null;
         discImg.transform.GetChild(0).GetComponent<Image>().sprite = iconDB.trashIcon;
-        discImg.transform.GetChild(0).GetComponent<Image>().color = new Color(209f/255f, 52f/255f, 52f/255f);
+        discImg.transform.GetChild(0).GetComponent<Image>().color = Color.red;
     }
 
 
