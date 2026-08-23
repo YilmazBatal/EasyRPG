@@ -894,6 +894,7 @@ GameObject:
   - component: {fileID: 7434992634268770800}
   - component: {fileID: 2393354223495508175}
   - component: {fileID: 5559764818331802385}
+  - component: {fileID: 8821400308730172394}
   m_Layer: 5
   m_Name: MarketItem
   m_TagString: Untagged
@@ -986,6 +987,24 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8821400308730172394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2599632930608265114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd1173633af620444aeb3e72a7af8a9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemNameText: {fileID: 4253732574249324808}
+  itemTypeText: {fileID: 0}
+  itemRarityText: {fileID: 5112608012846177385}
+  itemPriceText: {fileID: 5703829122727934839}
+  reqLevelText: {fileID: 7102509868138963448}
+  rarityColorBar: {fileID: 0}
 --- !u!1 &2663905302666436155
 GameObject:
   m_ObjectHideFlags: 0

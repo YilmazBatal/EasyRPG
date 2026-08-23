@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace TextBasedRPG.Models
 {
@@ -6,6 +6,7 @@ namespace TextBasedRPG.Models
     {
         public string ID { get; set; }
         public string ShopName { get; set; }
+        public string LocationID { get; set; }
         public List<string> Items { get; set; }
     }
 }

@@ -305,6 +305,7 @@ namespace TextBasedRPG.Managers.DataManagement
                     Shop mappedShop = new Shop(
                          shop.ID,
                          shop.ShopName,
+                         shop.LocationID,
                          shop.Items
                     );
                     context.Shops?.Add(mappedShop);

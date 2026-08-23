@@ -21,6 +21,7 @@ public class InventoryCard : MonoBehaviour
     [Header("Components")]
     [SerializeField] public TMP_Text itemName;
     [SerializeField] public Outline itemRarity;
+    [SerializeField] public TMP_Text rarityText;
     [SerializeField] public Image itemIcon;
     [SerializeField] public Image subStatIcon1;
     [SerializeField] public TMP_Text subStat1;
@@ -47,6 +48,8 @@ public class InventoryCard : MonoBehaviour
     {
         // Common properties
         itemName.text = item.Name;
+        rarityText.text = item.Rarity.ToString();
+        rarityText.color = rarityDB.GetColor(item.Rarity);
         itemRarity.effectColor = rarityDB.GetColor(item.Rarity);
         price.text = $"{item.Price}G";
 
