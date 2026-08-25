@@ -1,79 +1,136 @@
-using TMPro;
+using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
 using TextBasedRPG.Core.Items;
-using TextBasedRPG.Core.Shops;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets._Project.Scripts.Enums;
+using static UnityEditor.Progress;
+using Material = TextBasedRPG.Core.Items.Material;
+using Item = TextBasedRPG.Core.Items.Item;
 
 namespace TextBasedRPG.Managers.TradeCenterSystem
 {
-    /// <summary>
-    /// MarketItem prefab'ına bağlanan bileşen.
-    /// TradeCenterManager tarafından SpawnItemCards çağrılırken Setup ile doldurulur.
-    /// </summary>
+    [System.Serializable]
+    public struct StatRow
+    {
+        public GameObject root;       // Stat yoksa sat�r� komple gizlemek i�in
+        public Image icon;
+        public TMP_Text labelText;
+        public TMP_Text valueText;
+
+        public void SetStat(Sprite statIcon, string label, string value)
+        {
+            root.SetActive(true);
+            icon.sprite = statIcon;
+            labelText.text = label;
+            valueText.text = value;
+        }
+
+        public void Hide() => root.SetActive(false);
+    }
     public class MarketItemCard : MonoBehaviour
     {
         [Header("Text References")]
+        [SerializeField] private Image itemIcon;
         [SerializeField] private TextMeshProUGUI itemNameText;
-        [SerializeField] private TextMeshProUGUI itemTypeText;
+        [SerializeField] private Outline itemFrameColor;
         [SerializeField] private TextMeshProUGUI itemRarityText;
         [SerializeField] private TextMeshProUGUI itemPriceText;
-        [SerializeField] private TextMeshProUGUI reqLevelText;
 
-        [Header("Optional")]
-        [SerializeField] private Image rarityColorBar;  // Rarity rengini gösteren arka plan/bar (opsiyonel)
+        [Header("Stats Rows (Size: 3)")]
+        [SerializeField] private StatRow[] statRows;
 
-        // Satın alma veya satma butonuna tıklandığında Manager'ı haberdar etmek için
+        [Header("Button References")]
+        [SerializeField] private Button actionButton;
+        [SerializeField] private Button detailsButton;
+
+        [Header("Rarity Styles")]
+        [SerializeField] private RarityDatabase rarityDB;
+
         private Item _item;
         private TradeMode _mode;
         private TradeCenterManager _manager;
+        private IconDatabase iconDB;
 
-        /// <summary>
-        /// Her card spawn edildiğinde bu metod çağrılır.
-        /// </summary>
-        /// <param name="item">Gösterilecek eşya</param>
-        /// <param name="mode">Buy mu Sell mı</param>
-        /// <param name="manager">İşlem callback'i için manager referansı</param>
         public void Setup(Item item, TradeMode mode, TradeCenterManager manager)
         {
+            iconDB = UIManager.Instance.IconDB;
+
             _item = item;
             _mode = mode;
             _manager = manager;
 
-            // İsim
-            if (itemNameText != null)
-                itemNameText.text = item.Name ?? "Unknown";
+            itemNameText.enableVertexGradient = true;
+            itemNameText.colorGradientPreset = rarityDB.GetGradient(item.Rarity);
+            itemNameText.text = item.Name ?? "Unknown";
 
-            // Tip (Weapon / Armor / Consumable vb.)
-            if (itemTypeText != null)
-                itemTypeText.text = item.ItemType.HasValue ? item.ItemType.Value.ToString() : "-";
+            itemFrameColor.effectColor = rarityDB.GetColor(item.Rarity);
 
-            // Rarity
-            if (itemRarityText != null)
-                itemRarityText.text = item.Rarity.ToString();
+            itemRarityText.text = item.Rarity.ToString();
+            itemRarityText.color = rarityDB.GetColor(item.Rarity);
 
-            // Fiyat: Buy → normal fiyat, Sell → %50
             if (itemPriceText != null)
             {
                 int displayPrice = mode == TradeMode.Sell
                     ? Mathf.FloorToInt(item.Price * 0.5f)
                     : item.Price;
-                itemPriceText.text = $"{displayPrice} G";
+                itemPriceText.text = $"{displayPrice}G";
             }
 
-            // Required Level — sadece Weapon ve Armor'da var
-            if (reqLevelText != null)
+            if (actionButton != null)
             {
-                int reqLevel = GetRequiredLevel(item);
-                reqLevelText.text = reqLevel > 0 ? $"Lv. {reqLevel}" : "-";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(OnActionButtonClicked);
             }
 
-            // Rarity rengi (opsiyonel)
-            if (rarityColorBar != null)
-                rarityColorBar.color = GetRarityColor(item.Rarity);
-        }
+            if (detailsButton != null)
+            {
+                detailsButton.onClick.RemoveAllListeners();
+                detailsButton.onClick.AddListener(OnDetailsButtonClicked);
+            }
 
-        // Inspector'daki "Buy / Sell" butonuna bağlanacak
+            if (_item is Weapon w)
+            {
+                itemIcon.sprite = iconDB.GetWeaponIcon(w.WeaponType);
+
+                statRows[0].SetStat(iconDB.GetWeaponIcon(w.WeaponType), "ATK", $"{w.WeaponATK}");
+                statRows[1].SetStat(iconDB.levelIcon, "Level", $"{w.RequiredLevel}");
+                statRows[2].Hide();
+            }
+            else if (_item is Armor a)
+            {
+                itemIcon.sprite = iconDB.armorIcon;
+
+                statRows[0].SetStat(iconDB.armorIcon, "DEF", $"{a.ArmorDef}");
+                statRows[1].SetStat(iconDB.hpIcon, "Extra HP", $"{a.ExtraHP}");
+                statRows[2].SetStat(iconDB.levelIcon, "Level", $"{a.RequiredLevel}");
+            }
+            else if (_item is Consumable c)
+            {
+                string combatItemText = c.CombatItem ? "Yes" : "No";
+                itemIcon.sprite = iconDB.potIcon;
+
+                statRows[0].SetStat(iconDB.meatIcon, "Effect:", $"{c.Effect}");
+                statRows[1].SetStat(iconDB.plusIcon, "Value", $"{c.Value}");
+                statRows[2].SetStat(iconDB.hammerIcon, "Combat Item", $"{combatItemText}");
+            }
+            else if (_item is Material m)
+            {
+                itemIcon.sprite = iconDB.boneIcon;
+
+                if (_mode == TradeMode.Sell)
+                {
+                    statRows[0].SetStat(iconDB.quantityIcon, "Quantity:", $"{m.Quantity}");
+                    statRows[1].Hide();
+                    statRows[2].Hide();
+                }
+                else
+                {
+                    statRows[0].Hide();
+                    statRows[1].Hide();
+                    statRows[2].Hide();
+                }
+            }
+        }
         public void OnActionButtonClicked()
         {
             if (_manager == null || _item == null) return;
@@ -84,26 +141,13 @@ namespace TextBasedRPG.Managers.TradeCenterSystem
                 _manager.OnSellItem(_item);
         }
 
-        // ─── Yardımcı Metodlar ───────────────────────────────────────────
-
-        private static int GetRequiredLevel(Item item)
+        public void OnDetailsButtonClicked()
         {
-            if (item is Weapon w) return w.RequiredLevel;
-            if (item is Armor a) return a.RequiredLevel;
-            return 0;
-        }
+            if (_manager == null || _item == null) return;
 
-        private static Color GetRarityColor(Rarity rarity)
-        {
-            return rarity switch
-            {
-                Rarity.Common    => new Color(0.75f, 0.75f, 0.75f), // gri
-                Rarity.Uncommon  => new Color(0.30f, 0.80f, 0.30f), // yeşil
-                Rarity.Rare      => new Color(0.20f, 0.50f, 1.00f), // mavi
-                Rarity.Epic      => new Color(0.65f, 0.20f, 1.00f), // mor
-                Rarity.Legendary => new Color(1.00f, 0.65f, 0.00f), // altın
-                _                => Color.white
-            };
+            Toaster.Instance.ShowToast($"Details panel not implemented yet.", UIManager.Instance.IconDB.lockedIcon);
+
         }
     }
 }
+

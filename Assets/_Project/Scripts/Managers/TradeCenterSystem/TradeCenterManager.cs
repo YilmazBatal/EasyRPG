@@ -2,66 +2,40 @@ using System.Collections.Generic;
 using System.Linq;
 using TextBasedRPG.Core.Items;
 using TextBasedRPG.Core.Shops;
+using TextBasedRPG.Events;
+using TextBasedRPG.Managers;
 using TextBasedRPG.Managers.TradeCenterSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Trade Center panelini yöneten ana Manager.
-///
-/// UI Yapısı:
-///   - TabGroup > BuyGroup / SellGroup  → sadece TAB BUTONLARI (görsel işaretleyici), içerik konteyneri değil!
-///   - TabContent > ScrollView > Viewport > Content  → TEK bir içerik alanı, hem Buy hem Sell buraya yüklenir
-///   - CategoryBG > Category (0/1/2)    → kategori butonları
-///
-/// Sorumluluklar:
-///   - Mod geçişi (Buy/Sell) — tek Content temizlenip yeniden doldurulur
-///   - Kategori seçimi (Weapon/Armor/Consumable/Material)
-///   - Bölgeye göre Shop eşyalarını yükleme (Buy)
-///   - Oyuncu envanterini listeleme (Sell, %50 fiyat)
-///   - Satın alma ve satma işlemleri
-/// </summary>
 public class TradeCenterManager : MonoBehaviour
 {
-    // ─── Inspector Referansları ───────────────────────────────────────────
-
-    [Header("Tab Visual Objects (Görsel işaretleyici - SetActive toggle için değil!)")]
-    [Tooltip("TabGroup > BuyGroup — sadece Buy sekmesinin aktif görselini yönetmek için")]
-    [SerializeField] private GameObject buyTabVisual;
-    [Tooltip("TabGroup > SellGroup — sadece Sell sekmesinin aktif görselini yönetmek için")]
-    [SerializeField] private GameObject sellTabVisual;
-
+    #region Inspector References
     [Header("Tab Buttons (Buy / Sell)")]
     [SerializeField] private Button buyTabButton;
     [SerializeField] private Button sellTabButton;
+    [SerializeField] private TextMeshProUGUI modeText;
+    [Range(0f, 1f)] [SerializeField] private float inactiveTabAlpha = 0.35f;
 
-    [Header("Category Buttons")]
-    [SerializeField] private Button weaponCategoryBtn;
-    [SerializeField] private Button armorCategoryBtn;
-    [SerializeField] private Button consumableCategoryBtn;
-    [SerializeField] private Button materialCategoryBtn;
+    [Header("Category Objects")]
+    [Tooltip("Category objects mapped in order: Weapon, Armor, Consumable, Material")]
+    [SerializeField] private GameObject[] categoryObjects;
 
-    [Header("Scroll View — TEK içerik alanı")]
-    [Tooltip("ScrollView (1) > Viewport > Content objesini sürükle")]
+    [Header("Content Container")]
     [SerializeField] private Transform contentParent;
 
-    [Header("Prefab — Project klasöründeki gerçek prefab olmalı, sahnedeki değil!")]
-    [Tooltip("Assets > Prefabs klasöründeki MarketItem prefabını buraya sürükle")]
+    [Header("Prefab")]
     [SerializeField] private GameObject marketItemPrefab;
 
-    [Header("Shop Info (Opsiyonel)")]
+    [Header("Shop Info")]
     [SerializeField] private TextMeshProUGUI shopNameText;
-    [SerializeField] private TextMeshProUGUI playerGoldText;
-
-    // ─── Durum Değişkenleri ───────────────────────────────────────────────
+    #endregion
 
     private TradeMode _currentMode = TradeMode.Buy;
     private ItemType _currentCategory = ItemType.Weapon;
     private GameContext _context;
-    private Shop _currentShop; // Aktif bölgenin dükkânı
-
-    // ─── Unity Lifecycle ──────────────────────────────────────────────────
+    private Shop _currentShop;
 
     private void Start()
     {
@@ -69,84 +43,80 @@ public class TradeCenterManager : MonoBehaviour
 
         if (_context == null)
         {
-            Debug.LogError("[TradeCenterManager] GameManager.Instance.Context null! StaticData yüklendi mi?");
+            Debug.LogError("[TradeCenterManager] GameManager.Instance.Context is null!");
             return;
         }
 
-        // Dükkânı bölgeye göre bul
         LoadShopForCurrentLocation();
 
-        // Tab butonlarını bağla
         buyTabButton?.onClick.AddListener(() => SwitchMode(TradeMode.Buy));
         sellTabButton?.onClick.AddListener(() => SwitchMode(TradeMode.Sell));
 
-        // Kategori butonlarını bağla
-        weaponCategoryBtn?.onClick.AddListener(() => SwitchCategory(ItemType.Weapon));
-        armorCategoryBtn?.onClick.AddListener(() => SwitchCategory(ItemType.Armor));
-        consumableCategoryBtn?.onClick.AddListener(() => SwitchCategory(ItemType.Consumable));
-        materialCategoryBtn?.onClick.AddListener(() => SwitchCategory(ItemType.Material));
+        if (categoryObjects != null)
+        {
+            if (categoryObjects.Length > 0 && categoryObjects[0] != null)
+                categoryObjects[0].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Weapon));
+            if (categoryObjects.Length > 1 && categoryObjects[1] != null)
+                categoryObjects[1].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Armor));
+            if (categoryObjects.Length > 2 && categoryObjects[2] != null)
+                categoryObjects[2].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Consumable));
+            if (categoryObjects.Length > 3 && categoryObjects[3] != null)
+                categoryObjects[3].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Material));
+        }
 
-        // Başlangıç: Buy modu, Weapon kategorisi
+        UpdateCategoryVisuals();
         SwitchMode(TradeMode.Buy);
     }
 
-    // ─── Panel / Kategori Geçiş ───────────────────────────────────────────
-
-    /// <summary>
-    /// Buy veya Sell moduna geçiş yapar.
-    /// NOT: BuyGroup/SellGroup içerik konteyneri DEĞİL — sadece görsel tab işaretleyicileri.
-    /// İçerik her zaman aynı Content'e yüklenir, sadece veri kaynağı değişir.
-    /// </summary>
     public void SwitchMode(TradeMode mode)
     {
         _currentMode = mode;
 
-        // Görsel tab aktif/pasif işaretleme — bunlar İÇERİK konteyneri değil!
-        // Kendi UI yapına göre burada renk/scale animasyonu da yapabilirsin.
-        // Eğer buyTabVisual/sellTabVisual yoksa bu satırlar null-safe çalışır.
-        if (buyTabVisual != null)   buyTabVisual.SetActive(mode == TradeMode.Buy);
-        if (sellTabVisual != null)  sellTabVisual.SetActive(mode == TradeMode.Sell);
+        if (buyTabButton != null)
+            SetImageAlpha(buyTabButton.GetComponent<Image>(), mode == TradeMode.Buy ? 1f : inactiveTabAlpha);
 
-        RefreshGoldUI();
-        RefreshItems(); // Tek Content'i temizle ve yeniden doldur
-    }
+        if (sellTabButton != null)
+            SetImageAlpha(sellTabButton.GetComponent<Image>(), mode == TradeMode.Sell ? 1f : inactiveTabAlpha);
 
-    /// <summary>Sol kategorilerden birini seçer ve içeriği yeniler.</summary>
-    public void SwitchCategory(ItemType category)
-    {
-        _currentCategory = category;
+        modeText.text = mode == TradeMode.Buy ? "BUYING" : "SELLING";
+        
+        if (mode == TradeMode.Buy)
+            categoryObjects[3].SetActive(false);
+        else
+            categoryObjects[3].SetActive(true);
+
         RefreshItems();
     }
 
-    // ─── Veri Yükleme ────────────────────────────────────────────────────
+    public void SwitchCategory(ItemType category)
+    {
+        _currentCategory = category;
+        UpdateCategoryVisuals();
+        RefreshItems();
+    }
 
-    /// <summary>Oyuncunun aktif bölgesine göre Shop'u bulur.</summary>
     private void LoadShopForCurrentLocation()
     {
         if (_context.Shops == null || _context.Player == null)
         {
-            Debug.LogWarning("[TradeCenterManager] Shops listesi veya Player null!");
+            Debug.LogWarning("[TradeCenterManager] Shops or Player context is null.");
             return;
         }
 
         string activeLocationID = _context.Player.ActiveLocation ?? "L001";
-        Debug.Log($"[TradeCenterManager] Aktif bölge: {activeLocationID}");
-
         _currentShop = _context.Shops.FirstOrDefault(s => s.LocationID == activeLocationID);
 
         if (_currentShop == null)
         {
-            Debug.LogWarning($"[TradeCenterManager] '{activeLocationID}' için dükkan bulunamadı. Shops.json'da bu LocationID var mı?");
+            Debug.LogWarning($"[TradeCenterManager] Shop not found for location: {activeLocationID}");
         }
         else
         {
-            Debug.Log($"[TradeCenterManager] Dükkan yüklendi: {_currentShop.ShopName} | Item sayısı: {_currentShop.Items?.Count ?? 0}");
             if (shopNameText != null)
                 shopNameText.text = _currentShop.ShopName;
         }
     }
 
-    /// <summary>Mevcut mod ve kategoriye göre tek Content'i yeniler.</summary>
     private void RefreshItems()
     {
         ClearContent();
@@ -155,80 +125,51 @@ public class TradeCenterManager : MonoBehaviour
             ? GetBuyItems()
             : GetSellItems();
 
-        Debug.Log($"[TradeCenterManager] {_currentMode} | {_currentCategory} → {items.Count} eşya listeleniyor.");
         SpawnItemCards(items);
     }
 
-    /// <summary>Buy: Bölgenin dükkânındaki eşyaları kategoriye göre filtreler.</summary>
     private List<Item> GetBuyItems()
     {
-        if (_currentShop == null)
-        {
-            Debug.LogWarning("[TradeCenterManager] _currentShop null — Buy listesi boş.");
+        if (_currentShop == null || _context.MasterItemBook == null)
             return new List<Item>();
-        }
 
-        if (_context.MasterItemBook == null || _context.MasterItemBook.Count == 0)
-        {
-            Debug.LogWarning("[TradeCenterManager] MasterItemBook boş — StaticData.LoadStaticDatas çağrıldı mı?");
-            return new List<Item>();
-        }
-
-        var result = _currentShop.Items
+        return _currentShop.Items
             .Where(id => !string.IsNullOrEmpty(id) && _context.MasterItemBook.ContainsKey(id))
             .Select(id => _context.MasterItemBook[id])
             .Where(item => item.ItemType.HasValue && item.ItemType.Value == _currentCategory)
             .ToList();
-
-        return result;
     }
 
-    /// <summary>Sell: Oyuncunun envanterindeki eşyaları kategoriye göre filtreler.</summary>
     private List<Item> GetSellItems()
     {
-        if (_context.Player?.Inventory == null)
-        {
-            Debug.LogWarning("[TradeCenterManager] Player.Inventory null.");
+        if (_context.Player?.Inventory == null || _context.MasterItemBook == null)
             return new List<Item>();
+
+        var items = new List<Item>();
+
+        foreach (var inv in _context.Player.Inventory)
+        {
+            if (inv == null || string.IsNullOrEmpty(inv.ID)) continue;
+
+            if (_context.MasterItemBook.TryGetValue(inv.ID, out var masterItem))
+            {
+                if (masterItem.ItemType.HasValue && masterItem.ItemType.Value == _currentCategory)
+                {
+                    Item clone = masterItem.Clone();
+                    clone.Quantity = inv.Quantity;
+                    if (clone is Weapon w) w.Upgrade = inv.Upgrade;
+                    if (clone is Armor a) a.Upgrade = inv.Upgrade;
+                    items.Add(clone);
+                }
+            }
         }
 
-        if (_context.MasterItemBook == null || _context.MasterItemBook.Count == 0)
-        {
-            Debug.LogWarning("[TradeCenterManager] MasterItemBook boş.");
-            return new List<Item>();
-        }
-
-        var result = _context.Player.Inventory
-            .Where(inv => !string.IsNullOrEmpty(inv.ID) && _context.MasterItemBook.ContainsKey(inv.ID))
-            .Select(inv => _context.MasterItemBook[inv.ID])
-            .Where(item => item.ItemType.HasValue && item.ItemType.Value == _currentCategory)
-            .ToList();
-
-        return result;
+        return items;
     }
 
-    // ─── UI Kartları ──────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Eşya listesini TEK Content'e spawn eder.
-    /// marketItemPrefab: Assets > Prefabs klasöründeki prefab olmalı (sahnedeki değil!).
-    /// Sahnedeki MarketItem'lar tasarım örneği olarak duruyorsa play modunda silinmelerini
-    /// önlemek için onları Content'in altından çıkar veya ayrı bir "template" objesine taşı.
-    /// </summary>
     private void SpawnItemCards(List<Item> items)
     {
-        if (marketItemPrefab == null)
-        {
-            Debug.LogError("[TradeCenterManager] marketItemPrefab atanmamış! " +
-                           "Project klasöründeki prefabı Inspector'a sürükle, sahnedeki objeyi değil.");
-            return;
-        }
-
-        if (contentParent == null)
-        {
-            Debug.LogError("[TradeCenterManager] contentParent atanmamış! ScrollView > Viewport > Content'i sürükle.");
-            return;
-        }
+        if (marketItemPrefab == null || contentParent == null) return;
 
         foreach (Item item in items)
         {
@@ -237,95 +178,89 @@ public class TradeCenterManager : MonoBehaviour
 
             if (card != null)
                 card.Setup(item, _currentMode, this);
-            else
-                Debug.LogWarning("[TradeCenterManager] MarketItem prefabında MarketItemCard bileşeni yok!");
         }
     }
 
-    /// <summary>
-    /// Content altındaki tüm dinamik kartları siler.
-    /// ÖNEMLİ: marketItemPrefab sahnedeki Content altında bir objeye işaret ediyorsa
-    /// o da silinir ve bir sonraki SpawnItemCards çöker. Prefab mutlaka Project'ten seçilmeli.
-    /// </summary>
     private void ClearContent()
     {
         if (contentParent == null) return;
 
-        // Immediate destroy yerine DestroyImmediate sorun çıkarmaz,
-        // ama normal Destroy yeterli — çerçeve sonunda temizlenir.
         for (int i = contentParent.childCount - 1; i >= 0; i--)
         {
             Destroy(contentParent.GetChild(i).gameObject);
         }
     }
 
-    // ─── İşlem Metodları (MarketItemCard çağırır) ─────────────────────────
-
-    /// <summary>Bir eşya satın alındığında MarketItemCard.OnActionButtonClicked tarafından çağrılır.</summary>
     public void OnBuyItem(Item item)
     {
-        if (_context?.Player == null) return;
+        if (_context?.Player == null || item == null) return;
 
         if (_context.Player.Gold < item.Price)
         {
-            Debug.Log($"[TradeCenterManager] Yeterli altın yok! Gereken: {item.Price} G, Mevcut: {_context.Player.Gold} G");
-            // TODO: UI feedback — yetersiz altın popup/mesajı
+            Toaster.Instance.ShowToast($"Not enough gold! ({item.Price}G)", UIManager.Instance.IconDB.lockedIcon);
             return;
         }
 
         _context.Player.Gold -= item.Price;
+        EventManager.HeroEvents.TriggerGoldChanged(_context);
 
-        var existing = _context.Player.Inventory.FirstOrDefault(x => x.ID == item.ID);
-        if (existing != null)
-        {
-            existing.Quantity++;
-        }
-        else
-        {
-            _context.Player.Inventory.Add(new TextBasedRPG.Models.InventoryData
-            {
-                InstanceID = System.Guid.NewGuid().ToString(),
-                ID         = item.ID,
-                Quantity   = 1,
-                Upgrade    = 0
-            });
-        }
+        InventoryManager.AddToInventory(item.ID, 1);
 
-        Debug.Log($"[TradeCenterManager] Satın alındı: {item.Name} — {item.Price} G");
-        RefreshGoldUI();
+        Toaster.Instance.ShowToast($"{item.Name} purchased for {item.Price}G.", UIManager.Instance.IconDB.confirmIcon);
+
+        if (_currentMode == TradeMode.Sell)
+            RefreshItems();
     }
 
-    /// <summary>Bir eşya satıldığında MarketItemCard.OnActionButtonClicked tarafından çağrılır. Fiyat %50.</summary>
     public void OnSellItem(Item item)
     {
-        if (_context?.Player == null) return;
+        if (_context?.Player == null || item == null) return;
 
-        var inventoryEntry = _context.Player.Inventory.FirstOrDefault(x => x.ID == item.ID);
+        int sellPrice = Mathf.FloorToInt(item.Price * 0.5f);
 
-        if (inventoryEntry == null)
+        bool removed = InventoryManager.RemoveFromInventory(item.ID, 1);
+        if (!removed)
         {
-            Debug.LogWarning($"[TradeCenterManager] Satılacak eşya envanterde bulunamadı: {item.ID}");
+            Toaster.Instance.ShowToast($"Item not found in inventory: {item.ID}", UIManager.Instance.IconDB.lockedIcon);
             return;
         }
 
-        int sellPrice = Mathf.FloorToInt(item.Price * 0.5f);
         _context.Player.Gold += sellPrice;
+        EventManager.HeroEvents.TriggerGoldChanged(_context);
 
-        if (inventoryEntry.Quantity > 1)
-            inventoryEntry.Quantity--;
-        else
-            _context.Player.Inventory.Remove(inventoryEntry);
-
-        Debug.Log($"[TradeCenterManager] Satıldı: {item.Name} — {sellPrice} G (%50)");
-        RefreshGoldUI();
+        Toaster.Instance.ShowToast($"{item.Name} sold for {sellPrice}G.", UIManager.Instance.IconDB.confirmIcon);
         RefreshItems();
     }
 
-    // ─── UI Yardımcıları ──────────────────────────────────────────────────
-
-    private void RefreshGoldUI()
+    private void UpdateCategoryVisuals()
     {
-        if (playerGoldText != null && _context?.Player != null)
-            playerGoldText.text = $"{_context.Player.Gold} G";
+        if (categoryObjects == null) return;
+
+        ItemType[] categoryTypes = { ItemType.Weapon, ItemType.Armor, ItemType.Consumable, ItemType.Material };
+
+        for (int i = 0; i < categoryObjects.Length && i < categoryTypes.Length; i++)
+        {
+            GameObject catObj = categoryObjects[i];
+            if (catObj == null) continue;
+
+            bool isActive = categoryTypes[i] == _currentCategory;
+
+            Image rootImage = catObj.GetComponent<Image>();
+            if (rootImage != null)
+                rootImage.enabled = isActive;
+
+            Transform childImage = catObj.transform.Find("Image");
+            if (childImage != null)
+                childImage.gameObject.SetActive(isActive);
+        }
+    }
+
+    private static void SetImageAlpha(Image img, float alpha)
+    {
+        if (img == null) return;
+        Color c = img.color;
+        c.a = alpha;
+        img.color = c;
     }
 }
+

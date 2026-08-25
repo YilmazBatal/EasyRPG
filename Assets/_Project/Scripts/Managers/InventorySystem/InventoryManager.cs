@@ -1,103 +1,111 @@
 using Assets._Project.Scripts.Managers.AdventureSystem;
+using System;
 using System.Linq;
 using TextBasedRPG.Events;
 using TextBasedRPG.Models;
+using UnityEngine;
 
 namespace TextBasedRPG.Managers
 {
-    internal class InventoryManager
+    public static class InventoryManager
     {
+        public static void AddToInventory(string itemId, int amount = 1)
+        {
+            AddToInventory(new LootResult { ID = itemId, Amount = amount });
+        }
+
         public static void AddToInventory(LootResult loot)
         {
             if (loot == null || string.IsNullOrEmpty(loot.ID)) return;
 
-            if (GameManager.Instance == null)
+            if (GameManager.Instance == null || GameManager.Instance.Context?.Player == null)
             {
-                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance is null! (Are you calling this after the game stopped or before Awake?)");
+                Debug.LogError("[INVENTORY] Cannot add item: GameManager or Player context is null.");
                 return;
             }
 
             GameContext context = GameManager.Instance.Context;
-            if (context == null)
-            {
-                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance.Context is null!");
-                return;
-            }
-
-            if (context.Player == null)
-            {
-                UnityEngine.Debug.LogError("[INVENTORY] GameManager.Instance.Context.Player is null! (Are you trying to add an item before selecting a hero?)");
-                return;
-            }
-
-            if (context.Player.Inventory == null)
-            {
-                context.Player.Inventory = new System.Collections.Generic.List<InventoryData>();
-            }
+            context.Player.Inventory ??= new System.Collections.Generic.List<InventoryData>();
 
             char itemTypeID = loot.ID[0];
-
             bool isStackable = (itemTypeID != 'W' && itemTypeID != 'A');
 
             if (isStackable)
             {
-                var existingStack = context.Player.Inventory!.FirstOrDefault(x => x != null && x.ID == loot.ID);
+                var existingStack = context.Player.Inventory.FirstOrDefault(x => x != null && x.ID == loot.ID);
 
                 if (existingStack != null)
                 {
                     existingStack.Quantity += loot.Amount;
-                    UnityEngine.Debug.Log($"[INVENTORY] Updated stack for: {loot.ID}, new qty: {existingStack.Quantity}");
-                }
-                else
-                {
-                    CreateNewInventoryEntry(context, loot);
+                    Debug.Log($"[INVENTORY] Updated stack for {loot.ID}, new qty: {existingStack.Quantity}");
+
+                    EventManager.HeroEvents.TriggerEquipmentChanged(context);
+                    GameManager.Instance.SaveService?.SaveGame(context);
+                    return;
                 }
             }
-            else
+
+            int countToCreate = isStackable ? 1 : Mathf.Max(1, loot.Amount);
+            int singleAmount = isStackable ? loot.Amount : 1;
+
+            for (int i = 0; i < countToCreate; i++)
             {
-                CreateNewInventoryEntry(context, loot);
+                CreateNewInventoryEntry(context, loot.ID, singleAmount);
             }
         }
 
-        private static void CreateNewInventoryEntry(GameContext context, LootResult loot)
+        private static void CreateNewInventoryEntry(GameContext context, string itemId, int amount)
         {
             InventoryData itemToAdd = new InventoryData
             {
-                ID = loot.ID,
-                Quantity = loot.Amount, 
+                InstanceID = Guid.NewGuid().ToString(),
+                ID = itemId,
+                Quantity = amount,
                 Upgrade = 0
             };
 
             context.Player.Inventory!.Add(itemToAdd);
-            UnityEngine.Debug.Log($"[INVENTORY] Added new item: {loot.ID}");
+            Debug.Log($"[INVENTORY] Added new item entry: {itemId} (x{amount})");
 
-            GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+            EventManager.HeroEvents.TriggerEquipmentChanged(context);
+            GameManager.Instance.SaveService?.SaveGame(context);
         }
 
-        /// <summary>
-        /// Removes a given amount of an item from the player's inventory.
-        /// If the remaining quantity drops to zero or below, the entry is removed entirely.
-        /// Fires the EquipmentChanged event to refresh the UI afterwards.
-        /// </summary>
-        /// <returns>True if the item was found and discarded, false otherwise.</returns>
-        public static bool RemoveFromInventory(string itemId, int amount)
+        public static bool RemoveFromInventory(string itemId, int amount = 1)
         {
+            if (GameManager.Instance == null || GameManager.Instance.Context?.Player?.Inventory == null) return false;
+
             GameContext context = GameManager.Instance.Context;
             var inventory = context.Player.Inventory;
-            if (inventory == null) return false;
 
-            for (int i = 0; i < inventory.Count; i++)
+            char itemTypeID = string.IsNullOrEmpty(itemId) ? ' ' : itemId[0];
+            bool isStackable = (itemTypeID != 'W' && itemTypeID != 'A');
+
+            if (isStackable)
             {
-                if (inventory[i] != null && inventory[i].ID == itemId)
+                for (int i = 0; i < inventory.Count; i++)
                 {
-                    inventory[i].Quantity -= amount;
+                    if (inventory[i] != null && inventory[i].ID == itemId)
+                    {
+                        inventory[i].Quantity -= amount;
 
-                    if (inventory[i].Quantity <= 0)
-                        inventory.RemoveAt(i);
+                        if (inventory[i].Quantity <= 0)
+                            inventory.RemoveAt(i);
 
+                        EventManager.HeroEvents.TriggerEquipmentChanged(context);
+                        GameManager.Instance.SaveService?.SaveGame(context);
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                var entry = inventory.FirstOrDefault(x => x != null && x.ID == itemId);
+                if (entry != null)
+                {
+                    inventory.Remove(entry);
                     EventManager.HeroEvents.TriggerEquipmentChanged(context);
-                    GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
-
+                    GameManager.Instance.SaveService?.SaveGame(context);
                     return true;
                 }
             }
@@ -106,3 +114,4 @@ namespace TextBasedRPG.Managers
         }
     }
 }
+
