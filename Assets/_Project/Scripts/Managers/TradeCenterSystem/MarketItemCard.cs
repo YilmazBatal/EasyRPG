@@ -92,17 +92,35 @@ namespace TextBasedRPG.Managers.TradeCenterSystem
             {
                 itemIcon.sprite = iconDB.GetWeaponIcon(w.WeaponType);
 
-                statRows[0].SetStat(iconDB.GetWeaponIcon(w.WeaponType), "ATK", $"{w.WeaponATK}");
-                statRows[1].SetStat(iconDB.levelIcon, "Level", $"{w.RequiredLevel}");
-                statRows[2].Hide();
+                if (_mode == TradeMode.Sell)
+                {
+                    statRows[0].SetStat(iconDB.GetWeaponIcon(w.WeaponType), "ATK", $"{w.WeaponATK}");
+                    statRows[1].SetStat(iconDB.levelIcon, "Level", $"{w.RequiredLevel}");
+                    statRows[2].SetStat(iconDB.upgradeIcon, "Upgrade", $"+{w.Upgrade}");
+                } else
+                {
+                    statRows[0].SetStat(iconDB.GetWeaponIcon(w.WeaponType), "ATK", $"{w.WeaponATK}");
+                    statRows[1].SetStat(iconDB.levelIcon, "Level", $"{w.RequiredLevel}");
+                    statRows[2].Hide();
+                }
             }
             else if (_item is Armor a)
             {
                 itemIcon.sprite = iconDB.armorIcon;
 
-                statRows[0].SetStat(iconDB.armorIcon, "DEF", $"{a.ArmorDef}");
-                statRows[1].SetStat(iconDB.hpIcon, "Extra HP", $"{a.ExtraHP}");
-                statRows[2].SetStat(iconDB.levelIcon, "Level", $"{a.RequiredLevel}");
+                if (_mode == TradeMode.Sell)
+                {
+                    statRows[0].SetStat(iconDB.armorIcon, "DEF", $"{a.ArmorDef}");
+                    statRows[1].SetStat(iconDB.hpIcon, "Extra HP", $"{a.ExtraHP}");
+                    statRows[2].SetStat(iconDB.upgradeIcon, "Upgrade", $"+{a.Upgrade}");
+                }
+                else
+                {
+                    statRows[0].SetStat(iconDB.armorIcon, "DEF", $"{a.ArmorDef}");
+                    statRows[1].SetStat(iconDB.hpIcon, "Extra HP", $"{a.ExtraHP}");
+                    statRows[2].SetStat(iconDB.levelIcon, "Level", $"{a.RequiredLevel}");
+                }
+                
             }
             else if (_item is Consumable c)
             {
