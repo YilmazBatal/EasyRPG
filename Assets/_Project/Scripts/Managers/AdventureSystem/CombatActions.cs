@@ -104,7 +104,7 @@ public class CombatActions : MonoBehaviour
                 combatManager.generatedEnemy.CurHP -= calculatedDamage;
 
             string typeID = combatManager.generatedEnemy.EntityTypeID;
-            Debug.Log($"[COMBAT] Ses isteği gönderiliyor. ID: '{typeID}'");
+            Debug.Log($"[COMBAT] Audio request sent. ID: '{typeID}'");
 
             if (AudioManager.Instance == null)
             {
@@ -132,7 +132,7 @@ public class CombatActions : MonoBehaviour
 
             StartCoroutine(UIManager.BruteForceTypeWriterRoutine(
                 contentText,
-                $"You dealt <color=#0F172A>{calculatedDamage}</color> to {combatManager.generatedEnemy.Name}! {critText}"));
+                $"You dealt <color=#A6293A>{calculatedDamage}</color> to {combatManager.generatedEnemy.Name}! {critText}"));
 
             yield return new WaitForSeconds(2f);
 

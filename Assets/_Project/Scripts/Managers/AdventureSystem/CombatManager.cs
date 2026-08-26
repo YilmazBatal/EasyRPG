@@ -276,7 +276,7 @@ namespace TextBasedRPG.Managers
             Hero player = GameManager.Instance.Context.Player;
 
             contentText.text = string.Empty;
-            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#0F172A>{generatedEnemy.Name}</color> is preparing to attack..."));
+            StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"<color=#FFFFFF>{generatedEnemy.Name}</color> is preparing to attack..."));
 
             yield return new WaitForSeconds(2.5f);
 
@@ -332,7 +332,7 @@ namespace TextBasedRPG.Managers
                 string critText = isCrit ? " <color=#C9622E>Critical hit!</color>" : "";
 
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
-                    $"<color=#B8D93E>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
+                    $"<color=#FFFFFF>{generatedEnemy.Name}</color> dealt {calculatedDamage} damage! {critText}"));
 
                 EventManager.CombatEvents.TriggerOnPlayerGotHit(isCrit, calculatedDamage);
                 EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
@@ -344,7 +344,7 @@ namespace TextBasedRPG.Managers
             } else
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText,
-                    $"<color=#B8D93E>{generatedEnemy.Name}</color> couldn't land the attack."));
+                    $"<color=#FFFFFF>{generatedEnemy.Name}</color> couldn't land the attack."));
             }
             
 
