@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 1184998745818735573}
   - component: {fileID: 6670251352445078151}
   - component: {fileID: 2760788918588609648}
+  - component: {fileID: 1928964419277544116}
   m_Layer: 5
   m_Name: UpgradeSelection
   m_TagString: Untagged
@@ -604,6 +605,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeTime: 0.2
   cardScale: 1.05
+--- !u!114 &1928964419277544116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3905028270528783127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0071261b5a32e9246856b95a089dd18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipmentIcon: {fileID: 2040002369879988763}
+  equipmentName: {fileID: 2422282937752577593}
+  upgradeLevel: {fileID: 3320197085565840787}
+  equipmentLevel: {fileID: 8340222107938520482}
+  equipmentCard: {fileID: 6917940869229600147}
 --- !u!1 &4610292236854141910
 GameObject:
   m_ObjectHideFlags: 0

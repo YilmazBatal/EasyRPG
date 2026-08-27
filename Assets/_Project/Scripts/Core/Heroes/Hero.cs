@@ -45,8 +45,8 @@ namespace TextBasedRPG.Core.Heroes
         public int BonusSPD { get; internal set; }
         public float BonusCritRate { get; internal set; } // %
         public float BonusCritDMG { get; internal set; } // %
-        public int BonuslessATK => BaseATK + (int)Math.Round((EquippedWeapon?.WeaponATK ?? 5) * (1f + (EquippedWeapon?.Upgrade ?? 0) * 0.05f)) + (int)Math.Round(InvestedSTRPoints * 1.5);
-        public int BonuslessDEF => BaseDEF + (int)Math.Round((EquippedArmor?.ArmorDef ?? 5) * (1f + (EquippedArmor?.Upgrade ?? 0) * 0.05f)) + (int)Math.Round(InvestedVITPoints * 1.5);
+        public int BonuslessATK => BaseATK + (EquippedWeapon != null ? Assets._Project.Scripts.Managers.Blacksmith.UpgradeSystem.CalculateUpgradedStat(EquippedWeapon.WeaponATK, EquippedWeapon.Upgrade) : 5) + (int)Math.Round(InvestedSTRPoints * 1.5);
+        public int BonuslessDEF => BaseDEF + (EquippedArmor != null ? Assets._Project.Scripts.Managers.Blacksmith.UpgradeSystem.CalculateUpgradedStat(EquippedArmor.ArmorDef, EquippedArmor.Upgrade) : 5) + (int)Math.Round(InvestedVITPoints * 1.5);
         public int BonuslessSPD => BaseSPD + (int)Math.Round(InvestedAGIPoints * 1.5);
         public float BonuslessCritRate => 5f + (InvestedDEXPoints * 1.0f / 3.0f);
         public float BonuslessCritDamage => 150f + (InvestedSTRPoints);
@@ -54,7 +54,7 @@ namespace TextBasedRPG.Core.Heroes
         public int TotalATK => BonuslessATK + BonusATK;
         public int TotalDEF => BonuslessDEF + BonusDEF;
         public int TotalSPD => BonuslessSPD + BonusSPD;
-        public int TotalHP => BaseHP + (EquippedArmor?.ExtraHP ?? 0) + (int)Math.Round(InvestedVITPoints * 1.5);
+        public int TotalHP => BaseHP + (EquippedArmor != null ? Assets._Project.Scripts.Managers.Blacksmith.UpgradeSystem.CalculateUpgradedStat(EquippedArmor.ExtraHP, EquippedArmor.Upgrade) : 0) + (int)Math.Round(InvestedVITPoints * 1.5);
         public int CurHP { get; internal set; } = 100;
         public float CritRate => BonuslessCritRate + BonusCritRate; // %
         public float CritDamage => BonuslessCritDamage + BonusCritDMG; // %
