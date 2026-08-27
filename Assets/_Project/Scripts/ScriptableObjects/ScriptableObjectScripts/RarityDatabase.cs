@@ -30,6 +30,11 @@ namespace Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts
             }
         }
 
+        /// <summary>
+        /// Gets basic color for the rarity
+        /// </summary>
+        /// <param name="rarity"></param>
+        /// <returns>Color of the rarity (Color)</returns>
         public Color GetColor(Rarity rarity)
         {
             if (_styleDict.TryGetValue(rarity, out var style))
@@ -37,6 +42,11 @@ namespace Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts
 
             return Color.white; // Fallback
         }
+        /// <summary>
+        /// Gets the TMP_ColorGradient for the titles.
+        /// </summary>
+        /// <param name="rarity"></param>
+        /// <returns></returns>
         public TMP_ColorGradient GetGradient(Rarity rarity)
         {
             if (_styleDict.TryGetValue(rarity, out var style))
