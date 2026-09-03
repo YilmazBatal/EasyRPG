@@ -10,6 +10,8 @@ namespace TextBasedRPG.Events
             public static event Action<bool, int, bool> OnEntityGotHit;
             public static event Action<bool, int> OnPlayerGotHit;
             public static event Action OnPlayerLowHP;
+            public static event Action OnPlayerDied;
+            public static void TriggerOnPlayerDied() => OnPlayerDied?.Invoke();
 
             public static event Action OnFocusChanged;
             public static event Action OnGuardChanged;

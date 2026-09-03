@@ -1,7 +1,4 @@
 using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +32,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
     public class SelectionUpgrade : MonoBehaviour
     {
         // -------- Equipment Info
+        [SerializeField] private Transform panel;
         [SerializeField] private Image equipmentIcon;
         [SerializeField] private TextMeshProUGUI equipmentName;
         [SerializeField] private Outline equipmentOutlineColor;
@@ -115,7 +113,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
             equipmentName.colorGradientPreset = rarityDB.GetGradient(_currentItem.Rarity);
 
             oldUpgradeLevel.text = $"+{currentLevel}";
-            
+
             bool canUpgrade = currentLevel < maxLevel;
 
             if (canUpgrade)
@@ -123,6 +121,8 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
                 _goldCost = UpgradeSystem.CalculateGoldCost(_currentItem.Price, currentLevel, _currentItem.Rarity);
                 _successChance = UpgradeSystem.CalculateSuccessChance(currentLevel);
 
+                Debug.Log($"Can upgrade: {canUpgrade}");
+                newUpgradeLevel.text = $"+{currentLevel + 1}";
                 upgradeGoldCost.text = _goldCost.ToString();
                 successChance.text = $"{_successChance}%";
 
@@ -132,6 +132,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
             }
             else
             {
+                newUpgradeLevel.text = $"(MAX)";
                 upgradeGoldCost.text = "MAX";
                 successChance.text = "-";
 
@@ -171,20 +172,6 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
                     statCount++;
                 }
             }
-
-            if (canUpgrade)
-            {
-                _goldCost = UpgradeSystem.CalculateGoldCost(_currentItem.Price, currentLevel, _currentItem.Rarity);
-                _successChance = UpgradeSystem.CalculateSuccessChance(currentLevel);
-                
-                upgradeGoldCost.text = _goldCost.ToString();
-                successChance.text = $"{_successChance}%";
-            }
-            else
-            {
-                upgradeGoldCost.text = "MAX";
-                successChance.text = "-";
-            }
         }
 
         private void OnUpgradeClicked()
@@ -217,19 +204,35 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
                 if (_currentItem is Weapon weapon)
                 {
                     weapon.Upgrade++;
+                    if (_playerHero.EquippedWeapon != null && _playerHero.EquippedWeapon.ID == weapon.ID && _playerHero.EquippedWeapon.Upgrade == weapon.Upgrade - 1)
+                        _playerHero.EquippedWeapon.Upgrade++;
+                    else
+                    {
+                        var inv = _playerHero.Inventory.Find(x => x.ID == weapon.ID && x.Upgrade == weapon.Upgrade - 1);
+                        if (inv != null) inv.Upgrade++;
+                    }
                 }
                 else if (_currentItem is Armor armor)
                 {
                     armor.Upgrade++;
+                    if (_playerHero.EquippedArmor != null && _playerHero.EquippedArmor.ID == armor.ID && _playerHero.EquippedArmor.Upgrade == armor.Upgrade - 1)
+                        _playerHero.EquippedArmor.Upgrade++;
+                    else
+                    {
+                        var inv = _playerHero.Inventory.Find(x => x.ID == armor.ID && x.Upgrade == armor.Upgrade - 1);
+                        if (inv != null) inv.Upgrade++;
+                    }
                 }
 
+                AudioManager.Instance.PlayUI(AudioManager.Instance.audioDB.GetUISound("blacksmith_success"));
                 GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
                 Toaster.Instance.ShowToast("Upgrade Successful!", iconDB.confirmIcon);
             }
             else
             {
+                AudioManager.Instance.PlayUI(AudioManager.Instance.audioDB.GetUISound("blacksmith_failure"));
                 Toaster.Instance.ShowToast("Upgrade Failed!", iconDB.lockedIcon);
-                UIExtensions.Shake(upgradeBtn.GetComponent<RectTransform>(), 10f, 0.5f);
+                UIExtensions.Shake(panel.GetComponent<RectTransform>(), 10f, 0.5f);
             }
 
             RefreshUI();

@@ -7,6 +7,12 @@ public struct EnemyAudioEntry
     public string EntityTypeID; // "Slime", "Wolf"
     public List<AudioClip> hitSounds;
 }
+[System.Serializable]
+public struct UIAudioEntry
+{
+    public string audioID; // "blacksmith_success", "inventory_open"
+    public AudioClip hitSounds;
+}
 
 [CreateAssetMenu(fileName = "AudioDatabase", menuName = "RPG/Audio Database")]
 public class AudioDatabase : ScriptableObject
@@ -22,6 +28,8 @@ public class AudioDatabase : ScriptableObject
 
     [Header("UI Clips | UI")]
     public AudioClip typewriter;
+    public List<UIAudioEntry> blacksmith;
+
 
     private Dictionary<string, List<AudioClip>> _hitSoundCache;
 
@@ -36,6 +44,14 @@ public class AudioDatabase : ScriptableObject
                 _hitSoundCache.Add(entry.EntityTypeID, entry.hitSounds);
             }
         }
+
+        foreach (var entry in blacksmith)
+        {
+            if (!string.IsNullOrEmpty(entry.audioID) && !_hitSoundCache.ContainsKey(entry.audioID))
+            {
+                _hitSoundCache.Add(entry.audioID, new List<AudioClip> { entry.hitSounds });
+            }
+        }
     }
 
     public AudioClip GetHitSound(string typeID)
@@ -48,6 +64,24 @@ public class AudioDatabase : ScriptableObject
             return clips[Random.Range(0, clips.Count)];
 
         Debug.LogWarning($"[AudioDB] {typeID} not in the dictionary");
+        return null;
+    }
+
+    public AudioClip GetUISound(string audioID)
+    {
+        if (string.IsNullOrEmpty(audioID)) return null;
+
+        if (_hitSoundCache == null) Initialize();
+
+        if (_hitSoundCache.TryGetValue(audioID, out List<AudioClip> clips))
+        {
+            if (clips != null && clips.Count > 0)
+            {
+                return clips[0]; 
+            }
+        }
+
+        Debug.LogWarning($"[AudioDB] {audioID} bulunamadı veya liste boş.");
         return null;
     }
 }

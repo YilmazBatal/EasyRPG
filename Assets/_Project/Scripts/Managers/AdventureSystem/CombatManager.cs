@@ -1,3 +1,4 @@
+using Assets._Project.Scripts.Managers.Adventure;
 using Assets._Project.Scripts.Managers.AdventureSystem;
 using Assets._Project.Scripts.UI;
 using Assets._Project.Scripts.UI.Cards;
@@ -163,6 +164,7 @@ namespace TextBasedRPG.Managers
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "You have Died! You will be penalized."));
                 StartCoroutine(WaitToPenalize(2f));
+                EventManager.CombatEvents.TriggerOnPlayerDied();
             } else if (result == CombatResult.RunAway)
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "Your journey continues..."));
@@ -192,7 +194,8 @@ namespace TextBasedRPG.Managers
         #region Loot System
         private void GiveLoot(GameContext context, Entity enemy)
         {
-            RewardGoldAndExp(context, enemy);
+            float boost = AdventureManager.Instance != null ? AdventureManager.Instance.CurrentBoost : 1f;
+            RewardGoldAndExp(context, enemy, boost);
             RewardItem(context, enemy);
         }
 
@@ -210,17 +213,17 @@ namespace TextBasedRPG.Managers
             
         }
 
-        private static void RewardGoldAndExp(GameContext context, Entity enemy)
+        private static void RewardGoldAndExp(GameContext context, Entity enemy, float boost = 1f)
         {
             float goldBase = enemy.PowerScore * enemy.GoldMultiplier * MathF.Sqrt(enemy.GeneratedLevel);
             float randomMultiplier = 1 + (UnityEngine.Random.Range(0.0f, 1.0f) * (0.15f));
-            int finalGold = (int)Math.Round(goldBase * randomMultiplier);
+            int finalGold = (int)Math.Round(goldBase * randomMultiplier * boost);
             context.Player.Gold += finalGold;
             EventManager.HeroEvents.TriggerGoldChanged(context);
 
             float levelDiffBonus = (enemy.GeneratedLevel > context.Player.Level) ? 1.2f : (enemy.GeneratedLevel < context.Player.Level ? 0.8f : 1.0f);
             float expBase = (enemy.PowerScore * enemy.GeneratedLevel) / 5.0f;
-            int finalExp = (int)Math.Round(expBase * levelDiffBonus);
+            int finalExp = (int)Math.Round(expBase * levelDiffBonus * boost);
             context.Player.CurExp += finalExp;
             context.Player.TotalExp += finalExp;
             EventManager.HeroEvents.TriggerExpChanged(context);

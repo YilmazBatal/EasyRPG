@@ -35,3 +35,10 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 22752c33469688c49a981f46daa355b3, type: 3}
     - {fileID: 8300000, guid: 9f4d693078c4223448dd80f9ad599897, type: 3}
   typewriter: {fileID: 8300000, guid: d79b09e8d9345fd40ad100029476c11a, type: 3}
+  blacksmith:
+  - audioID: blacksmith_upgrade
+    hitSounds: {fileID: 8300000, guid: f3735adf711a3b145b256a795669ef95, type: 3}
+  - audioID: blacksmith_success
+    hitSounds: {fileID: 8300000, guid: 8aaceb944c643664f9e20474567cbed2, type: 3}
+  - audioID: blacksmith_failure
+    hitSounds: {fileID: 8300000, guid: ccfb98aa260460a41bdfff3a5945bcdf, type: 3}
