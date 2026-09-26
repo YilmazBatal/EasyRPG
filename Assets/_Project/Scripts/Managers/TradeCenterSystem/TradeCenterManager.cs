@@ -209,6 +209,10 @@ public class TradeCenterManager : MonoBehaviour
 
         InventoryManager.AddToInventory(item.ID, 1);
 
+        // ── Quest Event: Ticaret ──────────────────────────────────
+        EventManager.QuestEvents.TriggerQuestProgressed(QuestType.Trade, 1);
+        // ─────────────────────────────────────────────────────────
+
         Toaster.Instance.ShowToast($"{item.Name} purchased for {item.Price}G.", UIManager.Instance.IconDB.confirmIcon);
 
         if (_currentMode == TradeMode.Sell)
@@ -230,6 +234,10 @@ public class TradeCenterManager : MonoBehaviour
 
         _context.Player.Gold += sellPrice;
         EventManager.HeroEvents.TriggerGoldChanged(_context);
+
+        // ── Quest Event: Ticaret ──────────────────────────────────
+        EventManager.QuestEvents.TriggerQuestProgressed(QuestType.Trade, 1);
+        // ─────────────────────────────────────────────────────────
 
         Toaster.Instance.ShowToast($"{item.Name} sold for {sellPrice}G.", UIManager.Instance.IconDB.confirmIcon);
         RefreshItems();

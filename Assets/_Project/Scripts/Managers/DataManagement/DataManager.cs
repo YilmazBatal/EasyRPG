@@ -62,6 +62,10 @@ namespace  TextBasedRPG.Managers.DataManagement
                 if (loadedData != null)
                 {
                     DynamicData.LoadPlayerData(context, loadedData);
+
+                    // Quest ilerlemelerini context'e yükle
+                    if (loadedData.QuestSaves != null)
+                        context.QuestSaves = loadedData.QuestSaves;
                 }
 
                 InitializeEvents(context);
@@ -118,6 +122,11 @@ namespace  TextBasedRPG.Managers.DataManagement
                 }
             }
             data.Player.Inventory = convertedInventory;
+
+            // Quest ilerlemelerini kaydet
+            if (context.QuestSaves != null && context.QuestSaves.Count > 0)
+                data.QuestSaves = context.QuestSaves;
+
             return data;
         }
 
@@ -156,5 +165,7 @@ namespace  TextBasedRPG.Managers.DataManagement
         public List<Material>? Materials { get; set; }
         //[JsonIgnore]
         public List<Consumable>? Consumables { get; set; }
+
+        public List<QuestSaveData>? QuestSaves { get; set; }
     }
 }

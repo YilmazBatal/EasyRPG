@@ -55,6 +55,10 @@ namespace Assets._Project.Scripts.Managers.Adventure
             ManageButtonCooldown();
             ProcessRandomEvent();
             IncreaseBoost();
+
+            // ── Quest Event: Adventure Rush ──────────────────────
+            EventManager.QuestEvents.TriggerQuestProgressed(QuestType.Adventure, 1);
+            // ─────────────────────────────────────────────────────
         }
 
         private void IncreaseBoost()

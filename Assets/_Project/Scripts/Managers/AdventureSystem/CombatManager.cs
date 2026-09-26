@@ -161,6 +161,12 @@ namespace TextBasedRPG.Managers
             {
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "You crushed the enemy."));
                 GiveLoot(GameManager.Instance.Context, generatedEnemy);
+
+                // ── Quest Event ───────────────────────────────────
+                // Entity.isElite: Enemy/Boss oluştururken set edilir
+                QuestType killType = generatedEnemy.isElite ? QuestType.EliteKill : QuestType.MonsterKill;
+                EventManager.QuestEvents.TriggerQuestProgressed(killType, 1);
+                // ─────────────────────────────────────────────────
             }
             else if (result == CombatResult.Defeat)
             {

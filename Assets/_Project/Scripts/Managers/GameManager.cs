@@ -92,6 +92,13 @@ public class GameContext
     public List<Material> Materials { get; set; }
     public List<Consumable> Consumables { get; set; }
     public List<Shop> Shops { get; set; }
+
+    /// <summary>
+    /// Görev ilerlemeleri. DataManager tarafından save/load sırasında doldurulur.
+    /// QuestManager tarafından çalışma zamanında kullanılır.
+    /// </summary>
+    public List<QuestSaveData> QuestSaves { get; set; } = new();
+
     public Dictionary<string, string> ClassWeaponCheck { get; private set; } = new();
     public Dictionary<string, Item> MasterItemBook { get; private set; } = new();
     public void InitializeMasterBook()

@@ -255,6 +255,10 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
                 AudioManager.Instance.PlayUI(AudioManager.Instance.audioDB.GetUISound("blacksmith_success"));
                 GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
                 Toaster.Instance.ShowToast("Upgrade Successful!", iconDB.confirmIcon);
+
+                // ── Quest Event: Eşya Yükseltme ──────────────────
+                EventManager.QuestEvents.TriggerQuestProgressed(QuestType.ItemUpgrade, 1);
+                // ─────────────────────────────────────────────────
             }
             else
             {

@@ -36,5 +36,26 @@ namespace TextBasedRPG.Events
             public static void TriggerEquipmentChanged(GameContext context) => OnEquipmentChanged?.Invoke(context);
             public static void TriggerLocationChanged(GameContext context, bool setDelay) => OnLocationChanged?.Invoke(context, setDelay);
         }
+
+        public static class QuestEvents
+        {
+            /// <summary>
+            /// Herhangi bir oyun sistemi (savaş, blacksmith, ticaret vb.) bu eventi tetikler.
+            /// QuestManager dinler ve ilgili görevin progress'ini günceller.
+            /// </summary>
+            public static event System.Action<QuestType, int> OnQuestProgressed;
+
+            /// <summary>
+            /// QuestManager, progress veya claim sonrasında bu eventi tetikler.
+            /// QuestCardUI'lar bunu dinleyerek kendilerini yeniler.
+            /// </summary>
+            public static event System.Action OnQuestUIRefresh;
+
+            public static void TriggerQuestProgressed(QuestType type, int amount) =>
+                OnQuestProgressed?.Invoke(type, amount);
+
+            public static void TriggerQuestUIRefresh() =>
+                OnQuestUIRefresh?.Invoke();
+        }
     }
 }

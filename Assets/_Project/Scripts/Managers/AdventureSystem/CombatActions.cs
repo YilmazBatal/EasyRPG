@@ -96,6 +96,10 @@ public class CombatActions : MonoBehaviour
 
             p.UpdateHeaviestDamage(calculatedDamage);
 
+            // ── Quest Event: Hasar Rekoru ─────────────────────────
+            EventManager.QuestEvents.TriggerQuestProgressed(QuestType.DamageRecord, calculatedDamage);
+            // ─────────────────────────────────────────────────────
+
             if (calculatedDamage >= combatManager.generatedEnemy.CurHP)
             {
                 //calculatedDamage = combatManager.generatedEnemy.CurHP;

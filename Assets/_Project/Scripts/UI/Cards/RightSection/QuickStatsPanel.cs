@@ -21,7 +21,7 @@ public class QuickStatsPanel : MonoBehaviour
         attackVal.text = $"{context.Player.BonuslessATK}{(context.Player.BonusATK != 0 ? $" + {PrintBonusStat(context.Player.BonusATK)}" : "")}";
         defenseVal.text = $"{context.Player.BonuslessDEF}{(context.Player.BonusDEF != 0 ? $" + {PrintBonusStat(context.Player.BonusDEF)}" : "")}";
         speedVal.text = $"{context.Player.BonuslessSPD}{(context.Player.BonusSPD != 0 ? $" + {PrintBonusStat(context.Player.BonusSPD)}" : "")}";
-        critRateVal.text = $"{context.Player.BonuslessCritRate}{(context.Player.BonusCritRate != 0 ? $" + {PrintBonusStat(context.Player.BonusCritRate)}" : "")}%";
-        critDmgVal.text = $"{context.Player.BonuslessCritDamage}{(context.Player.BonusCritDMG != 0 ? $" + {PrintBonusStat(context.Player.BonusCritDMG)}" : "")}%";
+        critRateVal.text = $"{context.Player.BonuslessCritRate:0.#}{(context.Player.BonusCritRate != 0 ? $" + {PrintBonusStat(context.Player.BonusCritRate):0.#}" : "")}%";
+        critDmgVal.text = $"{context.Player.BonuslessCritDamage:0.#}{(context.Player.BonusCritDMG != 0 ? $" + {PrintBonusStat(context.Player.BonusCritDMG):0.#}" : "")}%";
     }
 }
