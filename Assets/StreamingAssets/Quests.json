@@ -12,8 +12,8 @@
 	{
 	  "ID": "Q0002",
 	  "IsRepeatable": true,
-	  "Name": "Crafter",
-	  "Description": "Craft an item.",
+	  "Name": "Upgrade Time",
+	  "Description": "Upgrade an item successfully.",
 	  "Objective": 1,
 	  "RewardGold": 5,
 	  "RewardExp" : 0.203,

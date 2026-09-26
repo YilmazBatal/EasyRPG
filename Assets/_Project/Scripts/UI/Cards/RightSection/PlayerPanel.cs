@@ -48,7 +48,7 @@ public class PlayerPanel : MonoBehaviour
     #region Event Handlers
     public void UpdateGoldUI(GameContext context)
     {
-        playerGold.text = $"{context.Player.Gold}";
+        playerGold.text = $"{UIExtensions.ToAbbreviatedString(context.Player.Gold)}";
 
         LeanTween.scale(playerGold.gameObject, Vector3.one * 1.2f, 0.1f).setLoopPingPong(1);
     }

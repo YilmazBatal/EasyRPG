@@ -1,6 +1,4 @@
-using Assets._Project.Scripts.Enums;
 using Assets._Project.Scripts.UI.Cards.RightSection;
-using TextBasedRPG.Core.Heroes;
 using TextBasedRPG.Events;
 using UnityEngine;
 
@@ -24,12 +22,14 @@ namespace Assets._Project.Scripts.UI.Cards
         {
             EventManager.HeroEvents.OnEquipmentChanged += UpdateEquipmentUI;
             EventManager.HeroEvents.OnLocationChanged += UpdateRightSection;
+            EventManager.HeroEvents.OnTrainingDataChanged += UpdateTrainingUI;
         }
 
         private void OnDisable()
         {
             EventManager.HeroEvents.OnEquipmentChanged -= UpdateEquipmentUI;
             EventManager.HeroEvents.OnLocationChanged -= UpdateRightSection;
+            EventManager.HeroEvents.OnTrainingDataChanged -= UpdateTrainingUI;
         }
         #endregion
         
@@ -40,6 +40,14 @@ namespace Assets._Project.Scripts.UI.Cards
             playerPanel.UpdateHPUI(context);
             quickStatsPanel.PlayerQuickStats(context);
             equipmentPanels.EquipmentCards(context);
+        }
+        public void UpdateTrainingUI(GameContext context)
+        {
+            if (context.Player != null)
+            {
+                playerPanel.UpdateHPUI(context);
+                quickStatsPanel.PlayerQuickStats(context);
+            }
         }
         #endregion
 

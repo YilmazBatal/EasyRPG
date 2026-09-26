@@ -24,11 +24,13 @@ namespace TextBasedRPG.Events
         public static class HeroEvents
         {
             public static event Action<GameContext> OnGoldChanged;
+            public static event Action<GameContext> OnTrainingDataChanged;
             public static event Action<GameContext> OnExpChanged;
             public static event Action<GameContext> OnHPValueChanged;
             public static event Action<GameContext> OnEquipmentChanged;
             public static event Action<GameContext, bool> OnLocationChanged;
             public static void TriggerGoldChanged(GameContext context) => OnGoldChanged?.Invoke(context);
+            public static void TriggerTrainingDataChanged(GameContext context) => OnTrainingDataChanged?.Invoke(context);
             public static void TriggerExpChanged(GameContext context) => OnExpChanged?.Invoke(context);
             public static void TriggerHPValueChanged(GameContext context) => OnHPValueChanged?.Invoke(context);
             public static void TriggerEquipmentChanged(GameContext context) => OnEquipmentChanged?.Invoke(context);

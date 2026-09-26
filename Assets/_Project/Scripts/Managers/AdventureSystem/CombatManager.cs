@@ -31,6 +31,9 @@ namespace TextBasedRPG.Managers
         [SerializeField] Image healthSprite;
         [SerializeField] public TMP_Text damageText;
 
+        [Header("Links")]
+        [SerializeField] private GameObject[] Links;
+
         [Header("Other")]
         //[SerializeField] Image wobbleImage;
         [SerializeField] Image vignette;
@@ -100,9 +103,9 @@ namespace TextBasedRPG.Managers
         #region Initialize & Start Combat & End Combat
         private void InitializeArena()
         {
-            if (GameManager.Instance == null) { Debug.LogError("GameManager.Instance bulunamadı!"); return; }
-            if (GameManager.Instance.Context == null) { Debug.LogError("Context henüz oluşturulmamış (null)!"); return; }
-            if (GameManager.Instance.Context.Entities == null) { Debug.LogError("Entities listesi null!"); return; }
+            if (GameManager.Instance == null) { Debug.LogError("GameManager.Instance couldn't find!"); return; }
+            if (GameManager.Instance.Context == null) { Debug.LogError("Context (null)!"); return; }
+            if (GameManager.Instance.Context.Entities == null) { Debug.LogError("Entities list is null!"); return; }
 
             generatedEnemy = null;
             generatedEnemy = EnemyGenerator.GenerateEnemy(GameManager.Instance.Context);
@@ -133,7 +136,7 @@ namespace TextBasedRPG.Managers
             isCombatActive = true;
             //StartWobble();
             isPlayerTurn = GameManager.Instance.Context.Player.TotalSPD >= generatedEnemy.CurrentSPD;
-
+            DisableNavbar(true);
 
             if (!isPlayerTurn)
             {
@@ -146,7 +149,6 @@ namespace TextBasedRPG.Managers
                 ca.fleeBtn.GetComponentInChildren<TMP_Text>().text = $"Run Away - {CombatActions.CalculateRunAwayChance(GameManager.Instance.Context, generatedEnemy).ToString()}%";
                 contentText.text += "";
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, $"Your turn! What will you do?"));
-
             }
         }
         
@@ -170,15 +172,19 @@ namespace TextBasedRPG.Managers
                 StartCoroutine(UIManager.BruteForceTypeWriterRoutine(contentText, "Your journey continues..."));
                 
             }
+            DisableNavbar(false);
             GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
             StartCoroutine(ClosePopup());
 
             
         }
 
-        private void DisableNavbar()
+        private void DisableNavbar(bool disable)
         {
-
+            foreach (var link in Links)
+            {
+                link.GetComponentInChildren<Button>().interactable = !disable;
+            }
         }
         private IEnumerator ClosePopup()
         {

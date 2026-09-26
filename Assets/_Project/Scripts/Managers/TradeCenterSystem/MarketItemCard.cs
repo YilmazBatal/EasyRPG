@@ -3,7 +3,6 @@ using TextBasedRPG.Core.Items;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using Material = TextBasedRPG.Core.Items.Material;
 using Item = TextBasedRPG.Core.Items.Item;
 

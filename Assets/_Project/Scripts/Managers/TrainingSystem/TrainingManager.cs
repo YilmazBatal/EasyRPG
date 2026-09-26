@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 public class TrainingManager : MonoBehaviour
 {
-    #region Variables
+    #region UI References
     [SerializeField] TMP_Text totalAllocated;
     [SerializeField] TMP_Text unusedPoints;
+    #endregion
 
+    #region Allocation Buttons & Values & Input Fields
     [Header("Allocation Buttons & Values & Input Fields")]
     [SerializeField] Button STR;
     [SerializeField] Button DEX;
@@ -45,12 +47,14 @@ public class TrainingManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(points.text) || !int.TryParse(points.text, out int pointsToInvest))
         {
-            Toaster.Instance.ShowToast("Put an actual number please.", UIManager.Instance.IconDB.questionMarkIcon);
+            Toaster.Instance.ShowToast("Please enter a valid number.", UIManager.Instance.IconDB.questionMarkIcon);
             return;
         }
 
         if (pointsToInvest > 0 && p.UnusedStatPoints >= pointsToInvest)
         {
+            int oldTotalHP = p.TotalHP;
+            
             switch (stat)
             {
                 case StatType.STR: p.InvestedSTRPoints += pointsToInvest; break;
@@ -59,8 +63,17 @@ public class TrainingManager : MonoBehaviour
                 case StatType.AGI: p.InvestedAGIPoints += pointsToInvest; break;
             }
             p.UnusedStatPoints -= pointsToInvest;
+            
+            int hpDifference = p.TotalHP - oldTotalHP;
+            if (hpDifference > 0)
+            {
+                p.CurHP += hpDifference;
+            }
+            
             UpdateUI();
-            Toaster.Instance.ShowToast($"{pointsToInvest} points invested in {stat}. You can feel that you are getting stronger.", UIManager.Instance.IconDB.confirmIcon);
+
+            Toaster.Instance.ShowToast($"{pointsToInvest} points invested in {stat}.", UIManager.Instance.IconDB.confirmIcon);
+            TextBasedRPG.Events.EventManager.HeroEvents.TriggerTrainingDataChanged(GameManager.Instance.Context);
             GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
         }
         

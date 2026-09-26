@@ -51,7 +51,7 @@
         { "ID": "M0002", "Weight": 1, "MaxAmount": 2 },
 	{ "ID": "C0002", "Weight": 1, "MaxAmount": 1 },
         { "ID": "W0001", "Weight": 300, "MaxAmount": 1 },
-	{ "ID": "A0004", "Weight": 30, "MaxAmount": 1 },
+	{ "ID": "A0004", "Weight": 30, "MaxAmount": 1 }
     ]
   },
   {
@@ -133,6 +133,7 @@
   {
     "ID": "L004",
     "Name": "Sunken Mire",
+    "Description": "Lorem ipsum dolor sit amet.",
     "Tag": "Swamp",
     "AdventureTexts": [
       "A frog stared at you for three minutes. It eventually sighed and hopped away. You feel judged.",
@@ -150,6 +151,7 @@
   {
     "ID": "L005",
     "Name": "Gilded Sands",
+    "Description": "Lorem ipsum dolor sit amet.",
     "Tag": "Desert",
     "AdventureTexts": [
       "You saw a giant lake with cold water! You ran to it, but it was just a very shiny rock. Cruel desert.",

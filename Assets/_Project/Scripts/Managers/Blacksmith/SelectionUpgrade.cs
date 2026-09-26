@@ -58,7 +58,9 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
         {
             iconDB = UIManager.Instance.IconDB;
             _playerHero = GameManager.Instance.Context.Player;
-            
+            SetNullValues();
+
+
             if (upgradeBtn != null)
             {
                 upgradeBtn.onClick.AddListener(OnUpgradeClicked);
@@ -80,11 +82,37 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
             RefreshUI();
         }
 
+        private void SetNullValues()
+        {
+            equipmentIcon.sprite = iconDB.questionMarkIcon;
+            equipmentName.text = "No Item Selected";
+            equipmentName.color = Color.white;
+            equipmentOutlineColor.effectColor = Color.white;
+            equipmentRarityText.text = $"Common";
+            equipmentRarityText.color = Color.white;
+
+            equipmentName.enableVertexGradient = true;
+            equipmentName.colorGradientPreset = rarityDB.GetGradient(Enums.Rarity.Common);
+            oldUpgradeLevel.text = $"-";
+
+            upgradeBtn.enabled = false;
+
+
+            newUpgradeLevel.text = $"(-)";
+            upgradeGoldCost.text = "-";
+            successChance.text = "-";
+
+            successChance.color = Color.white;
+
+
+            foreach (var row in statRows) row.Hide();
+        }
+
         private void RefreshUI()
         {
             if (this == null) return;
             if (_currentItem == null) return;
-            
+
             int currentLevel = (_currentItem is Weapon w) ? w.Upgrade : ((_currentItem is Armor a) ? a.Upgrade : 0);
             int maxLevel = UpgradeSystem.GetMaxUpgradeLevel(_currentItem.Rarity);
 
@@ -123,7 +151,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
 
                 Debug.Log($"Can upgrade: {canUpgrade}");
                 newUpgradeLevel.text = $"+{currentLevel + 1}";
-                upgradeGoldCost.text = _goldCost.ToString();
+                upgradeGoldCost.text = UIExtensions.ToAbbreviatedString(_goldCost);
                 successChance.text = $"{_successChance}%";
 
                 float chanceFactor = _successChance / 100f;

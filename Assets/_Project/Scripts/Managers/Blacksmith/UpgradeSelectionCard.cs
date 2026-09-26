@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TextBasedRPG.Core.Items;
 using Assets._Project.Scripts.Managers.Blacksmith;
-using Assets._Project.Scripts.ScriptableObjects.ScriptableObjectScripts;
 
 public class UpgradeSelectionCard : MonoBehaviour
 {

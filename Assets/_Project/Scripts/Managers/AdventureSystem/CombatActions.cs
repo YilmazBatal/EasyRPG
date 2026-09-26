@@ -37,6 +37,8 @@ public class CombatActions : MonoBehaviour
         "You're staring at the enemy so intensely that it's starting to feel awkward for both of you."
     };
 
+    string criticalHitColor = "D6453F";
+
     GameContext context;
     RightSectionManager rsm;
     #endregion
@@ -115,7 +117,7 @@ public class CombatActions : MonoBehaviour
                 AudioManager.Instance.PlayHitSound(typeID);
             }
 
-            string critText = isCrit ? "<color=#0F172A>Critical hit!</color>" : "";
+            string critText = isCrit ? $"<color=#{criticalHitColor}>Critical hit!</color>" : "";
             bool wasFocused = false;
             if (combatManager.focusAmount > 0)
                 wasFocused = true;
@@ -132,7 +134,7 @@ public class CombatActions : MonoBehaviour
 
             StartCoroutine(UIManager.BruteForceTypeWriterRoutine(
                 contentText,
-                $"You dealt <color=#A6293A>{calculatedDamage}</color> to {combatManager.generatedEnemy.Name}! {critText}"));
+                $"You dealt <color=#{criticalHitColor}>{calculatedDamage}</color> to {combatManager.generatedEnemy.Name}! {critText}"));
 
             yield return new WaitForSeconds(2f);
 
@@ -327,7 +329,6 @@ public class CombatActions : MonoBehaviour
     {
         float fCap = combatManager.focusCap > 0 ? combatManager.focusCap : 1f;
         float calculatedValue = Mathf.Clamp((float)combatManager.focusAmount / fCap, 0f, 1f);
-        Debug.Log($"Focus Amount: {combatManager.focusAmount}, Focus Cap: {combatManager.focusCap}, Calculated Value: {calculatedValue}");
         UIExtensions.GhostBarFill(focusBar, focusBarGhost, calculatedValue);
         if (rsm != null) rsm.quickStatsPanel.PlayerQuickStats(context);
     }

@@ -92,5 +92,16 @@ namespace Assets._Project.Scripts.UI
                     .setOnUpdate((float val) => ghostBar.fillAmount = val);
             }
         }
+        public static string ToAbbreviatedString(this int number)
+        {
+            if (number >= 1000000000)
+                return (number / 1000000000D).ToString("0.##") + "b"; // Milyar
+            if (number >= 1000000)
+                return (number / 1000000D).ToString("0.##") + "m"; // Milyon
+            if (number >= 1000)
+                return (number / 1000D).ToString("0.##") + "k"; // Bin
+
+            return number.ToString();
+        }
     }
 }

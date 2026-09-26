@@ -39,18 +39,8 @@ public class TradeCenterManager : MonoBehaviour
 
     private void Start()
     {
-        _context = GameManager.Instance.Context;
-
-        if (_context == null)
-        {
-            Debug.LogError("[TradeCenterManager] GameManager.Instance.Context is null!");
-            return;
-        }
-
-        LoadShopForCurrentLocation();
-
-        buyTabButton?.onClick.AddListener(() => SwitchMode(TradeMode.Buy));
-        sellTabButton?.onClick.AddListener(() => SwitchMode(TradeMode.Sell));
+        if (buyTabButton != null) buyTabButton.onClick.AddListener(() => SwitchMode(TradeMode.Buy));
+        if (sellTabButton != null) sellTabButton.onClick.AddListener(() => SwitchMode(TradeMode.Sell));
 
         if (categoryObjects != null)
         {
@@ -63,7 +53,20 @@ public class TradeCenterManager : MonoBehaviour
             if (categoryObjects.Length > 3 && categoryObjects[3] != null)
                 categoryObjects[3].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Material));
         }
+    }
 
+    private void OnEnable()
+    {
+        _context = GameManager.Instance?.Context;
+
+        if (_context == null)
+        {
+            Debug.LogError("[TradeCenterManager] GameManager.Instance.Context is null!");
+            return;
+        }
+
+        LoadShopForCurrentLocation();
+        
         UpdateCategoryVisuals();
         SwitchMode(TradeMode.Buy);
     }
