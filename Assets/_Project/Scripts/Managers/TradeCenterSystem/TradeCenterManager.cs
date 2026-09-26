@@ -53,6 +53,21 @@ public class TradeCenterManager : MonoBehaviour
             if (categoryObjects.Length > 3 && categoryObjects[3] != null)
                 categoryObjects[3].GetComponent<Button>()?.onClick.AddListener(() => SwitchCategory(ItemType.Material));
         }
+
+        // Eğer GridLayoutGroup 3 sütun olarak ayarlandıysa ve ScrollView genişliği (~786px) dar kalıyorsa,
+        // 3. sütundaki kartların maske dışına taşıp görünmez olmasını engellemek için 2 sütuna ayarlar
+        if (contentParent != null)
+        {
+            var grid = contentParent.GetComponent<GridLayoutGroup>();
+            if (grid != null && grid.constraint == GridLayoutGroup.Constraint.FixedColumnCount && grid.constraintCount == 3)
+            {
+                RectTransform viewRect = contentParent.parent as RectTransform;
+                if (viewRect != null && viewRect.rect.width > 0 && viewRect.rect.width < 1100f)
+                {
+                    grid.constraintCount = 2;
+                }
+            }
+        }
     }
 
     private void OnEnable()
@@ -65,10 +80,26 @@ public class TradeCenterManager : MonoBehaviour
             return;
         }
 
+        EventManager.HeroEvents.OnLocationChanged += HandleLocationChanged;
+
         LoadShopForCurrentLocation();
-        
         UpdateCategoryVisuals();
         SwitchMode(TradeMode.Buy);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.HeroEvents.OnLocationChanged -= HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(GameContext ctx, bool setDelay)
+    {
+        _context = ctx ?? GameManager.Instance?.Context;
+        LoadShopForCurrentLocation();
+        if (gameObject.activeInHierarchy)
+        {
+            RefreshItems();
+        }
     }
 
     public void SwitchMode(TradeMode mode)
@@ -109,14 +140,19 @@ public class TradeCenterManager : MonoBehaviour
         string activeLocationID = _context.Player.ActiveLocation ?? "L001";
         _currentShop = _context.Shops.FirstOrDefault(s => s.LocationID == activeLocationID);
 
+        // Fallback: Eğer bulunulan bölgeye özel shop tanımlanmamışsa ilk dükkanı göster
         if (_currentShop == null)
         {
-            Debug.LogWarning($"[TradeCenterManager] Shop not found for location: {activeLocationID}");
+            Debug.LogWarning($"[TradeCenterManager] Shop not found for location: {activeLocationID}. Falling back to default shop.");
+            _currentShop = _context.Shops.FirstOrDefault();
         }
-        else
+
+        if (_currentShop != null)
         {
             if (shopNameText != null)
                 shopNameText.text = _currentShop.ShopName;
+
+            Debug.Log($"[TradeCenterManager] Loaded shop '{_currentShop.ShopName}' (ID: {_currentShop.ID}) for location '{activeLocationID}'. Total items: {_currentShop.Items.Count}");
         }
     }
 
@@ -190,7 +226,9 @@ public class TradeCenterManager : MonoBehaviour
 
         for (int i = contentParent.childCount - 1; i >= 0; i--)
         {
-            Destroy(contentParent.GetChild(i).gameObject);
+            Transform child = contentParent.GetChild(i);
+            child.gameObject.SetActive(false);
+            Destroy(child.gameObject);
         }
     }
 
