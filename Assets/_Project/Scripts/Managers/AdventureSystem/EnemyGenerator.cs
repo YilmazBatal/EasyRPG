@@ -26,7 +26,7 @@ namespace TextBasedRPG.Managers
             Entity newEnemy = new Enemy(template);
 
             var currentLocation = context.Locations?.FirstOrDefault(x => x.ID == currentLocationId);
-            int levelCap = currentLocation?.LevelCap ?? 1000;
+            int levelCap = currentLocation?.LevelCap ?? 10000;
 
             newEnemy.Initialize(context.Player.Level, levelCap);
 

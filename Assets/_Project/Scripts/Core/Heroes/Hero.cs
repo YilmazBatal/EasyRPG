@@ -16,7 +16,7 @@ namespace TextBasedRPG.Core.Heroes
         public int BaseDEF { get; protected set; }
         public int BaseSPD { get; protected set; }
         public string? ActiveLocation { get; set; }
-        public int? UnlockedUntill { get; set; }
+        public int? UnlockedUntill => 1 + (Level / 15);
         #endregion
         #region Inventory and Equipments
         public List<InventoryData>? Inventory {  get; set; } = new List<InventoryData>();
@@ -27,7 +27,7 @@ namespace TextBasedRPG.Core.Heroes
         public int Level { get; internal set; } = 1;
         public int CurExp { get; internal set; } = 0; 
         public int TotalExp { get; internal set; } = 0;
-        public int ReqExp => (int)(100 * Math.Pow(Level, 1.5));
+        public int ReqExp => (int)(100 * Math.Pow(Level, 1.35));
         #endregion
         #region Stat Points / Training
         public int UnusedStatPoints { get; internal set; } = 0;
@@ -58,7 +58,7 @@ namespace TextBasedRPG.Core.Heroes
         public int CurHP { get; internal set; } = 100;
         public float CritRate => BonuslessCritRate + BonusCritRate; // %
         public float CritDamage => BonuslessCritDamage + BonusCritDMG; // %
-        public float EvasionRate => 5f + InvestedAGIPoints * 0.2f;
+        public float EvasionRate => 5f + InvestedAGIPoints * 0.1f;
         // Other
         public int Deaths { get; internal set; } = 0;
         public int EntitiesSlayed { get; internal set; } = 0;

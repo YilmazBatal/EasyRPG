@@ -34,7 +34,6 @@ namespace Assets._Project.Scripts.UI
             if (selectedHero != null)
             {
                 selectedHero.ActiveLocation = "L001";
-                selectedHero.UnlockedUntill = 1;
                 selectedHero.Gold = 100;
 
                 GameManager.Instance.Context.Player = selectedHero; 

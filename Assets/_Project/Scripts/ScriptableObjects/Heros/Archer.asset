@@ -18,6 +18,6 @@ MonoBehaviour:
     even react
   classIcon: {fileID: 21300000, guid: 00a576042b649fe45a4a17e0749ec243, type: 3}
   hp: 90
-  atk: 15
+  atk: 20
   def: 10
   spd: 25

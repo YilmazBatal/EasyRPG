@@ -79,6 +79,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
         {
             if (this == null) return;
             _currentItem = item;
+            upgradeBtn.interactable = true;
             RefreshUI();
         }
 
@@ -95,7 +96,7 @@ namespace Assets._Project.Scripts.Managers.Blacksmith
             equipmentName.colorGradientPreset = rarityDB.GetGradient(Enums.Rarity.Common);
             oldUpgradeLevel.text = $"-";
 
-            upgradeBtn.enabled = false;
+            upgradeBtn.interactable = false;
 
 
             newUpgradeLevel.text = $"(-)";

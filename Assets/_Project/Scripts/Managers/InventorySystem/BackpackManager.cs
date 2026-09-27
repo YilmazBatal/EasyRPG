@@ -29,7 +29,7 @@ public class BackpackManager : MonoBehaviour
 
         GenerateItemCards();
 
-        inventoryCapacityText.text = $"{context.Player.Inventory.Count}/20"; // hard coded 20 for now
+        inventoryCapacityText.text = $"{context.Player.Inventory.Count}"; // hard coded 20 for now
     }
     private void OnDisable()
     {

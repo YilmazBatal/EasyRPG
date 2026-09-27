@@ -227,15 +227,19 @@ namespace TextBasedRPG.Managers
 
         private static void RewardGoldAndExp(GameContext context, Entity enemy, float boost = 1f)
         {
-            float goldBase = enemy.PowerScore * enemy.GoldMultiplier * MathF.Sqrt(enemy.GeneratedLevel);
-            float randomMultiplier = 1 + (UnityEngine.Random.Range(0.0f, 1.0f) * (0.15f));
-            int finalGold = (int)Math.Round(goldBase * randomMultiplier * boost);
+            float goldBase = enemy.PowerScore * enemy.GoldMultiplier * MathF.Pow(enemy.GeneratedLevel, 1.2f);
+            float randomMultiplier = 1f + (UnityEngine.Random.Range(0.0f, 0.15f)); // %0 ila %15 arası bonus
+
+            float eliteLootBonus = enemy.isElite ? 1.5f : 1.0f;
+
+            int finalGold = (int)Math.Round(goldBase * randomMultiplier * eliteLootBonus * boost);
             context.Player.Gold += finalGold;
             EventManager.HeroEvents.TriggerGoldChanged(context);
 
             float levelDiffBonus = (enemy.GeneratedLevel > context.Player.Level) ? 1.2f : (enemy.GeneratedLevel < context.Player.Level ? 0.8f : 1.0f);
-            float expBase = (enemy.PowerScore * enemy.GeneratedLevel) / 5.0f;
-            int finalExp = (int)Math.Round(expBase * levelDiffBonus * boost);
+            float expBase = (enemy.PowerScore * MathF.Pow(enemy.GeneratedLevel, 1.2f)) / 0.5f;
+
+            int finalExp = (int)Math.Round(expBase * levelDiffBonus * eliteLootBonus * boost);
             context.Player.CurExp += finalExp;
             context.Player.TotalExp += finalExp;
             EventManager.HeroEvents.TriggerExpChanged(context);
@@ -297,7 +301,7 @@ namespace TextBasedRPG.Managers
 
             float isHit = UnityEngine.Random.Range(0, 101);
 
-            if (isHit <= 95)
+            if (isHit >= player.EvasionRate)
             {
                 IDamageCalculator damage = new DamageCalculator();
                 int calculatedDamage = damage.CalculateDMG(

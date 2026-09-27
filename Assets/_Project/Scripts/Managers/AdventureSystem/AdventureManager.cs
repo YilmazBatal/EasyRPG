@@ -132,7 +132,7 @@ namespace Assets._Project.Scripts.Managers.Adventure
         {
             var player = GameManager.Instance.Context.Player;
 
-            float expBase = 10f * MathF.Pow(player.Level, 1.3f);
+            float expBase = 13f * MathF.Pow(player.Level, 1.3f);
             int finalExp = (int)Math.Round(expBase * CurrentBoost);
             player.CurExp += finalExp;
             player.TotalExp += finalExp;

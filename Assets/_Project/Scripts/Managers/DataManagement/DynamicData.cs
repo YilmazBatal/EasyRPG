@@ -40,7 +40,6 @@ namespace TextBasedRPG.Managers.DataManagement
             context.Player.TotalExp = loadedData.Player?.TotalExp ?? 0;
             context.Player.CurHP = loadedData.Player?.CurHP ?? 1;
             context.Player.ActiveLocation = loadedData.Player?.ActiveLocation ?? "L001";
-            context.Player.UnlockedUntill = loadedData.Player?.UnlockedUntill ?? 1;
             context.Player.Deaths = loadedData.Player?.Deaths ?? 0;
             context.Player.EntitiesSlayed = loadedData.Player?.EntitiesSlayed ?? 0;
             context.Player.HeaviestDamage = loadedData.Player?.HeaviestDamage ?? 0;

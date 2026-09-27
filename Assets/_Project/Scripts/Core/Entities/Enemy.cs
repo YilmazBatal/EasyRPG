@@ -27,10 +27,11 @@ namespace TextBasedRPG.Core.Entities
         }
         public override void Initialize(int playerLevel, int regionCap)
         {
-            UnityEngine.Debug.Log($"[ENEMY INIT] Name: {this.Name}, TypeID: '{this.EntityTypeID}'");
+            //UnityEngine.Debug.Log($"[ENEMY INIT] Name: {this.Name}, TypeID: '{this.EntityTypeID}'");
 
             isElite = Random.Range(0, 100) < EliteChance;
             int enemyLevel = Random.Range(playerLevel - LevelInterval, playerLevel + LevelInterval + 1);
+
             if (enemyLevel > regionCap)
                 enemyLevel = regionCap;
             GeneratedLevel = Math.Max(1, enemyLevel);

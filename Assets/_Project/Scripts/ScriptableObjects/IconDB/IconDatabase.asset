@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fistIcon: {fileID: 21300000, guid: 374daa7e041ec6d4d9019c7e8c5ea8d8, type: 3}
   swordIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
-  bowIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
-  staffIcon: {fileID: 21300000, guid: 90f14ae9ca6ced14cb742a7ab629c958, type: 3}
+  bowIcon: {fileID: 21300000, guid: 4042ea288e1e5e8448fbf01fdc82abb7, type: 3}
+  staffIcon: {fileID: 21300000, guid: 50316999a6c394c4ca5d9ae52384d56d, type: 3}
   armorIcon: {fileID: 21300000, guid: 0176b4f8f61b10d428dbb23b30d43de6, type: 3}
   boneIcon: {fileID: 21300000, guid: 4c54dabd98239e44b9a504f6a52844f8, type: 3}
   meatIcon: {fileID: 21300000, guid: 305c328dd1671a14f9c462df1186efa3, type: 3}
