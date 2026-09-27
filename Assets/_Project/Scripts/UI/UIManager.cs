@@ -228,4 +228,14 @@ public class UIManager : MonoBehaviour
             textComponent.text = currentDisplayedText;
         }
     } 
+
+    public void RestPlayer()
+    {
+        GameManager.Instance.Context.Player.FullHeal();
+        EventManager.HeroEvents.TriggerHPValueChanged(GameManager.Instance.Context);
+        GameManager.Instance.SaveService.SaveGame(GameManager.Instance.Context);
+
+        Toaster.Instance.ShowToast($"You took a rest and fully recovered!", UIManager.Instance.IconDB.boneIcon);
+
+    }
 }
