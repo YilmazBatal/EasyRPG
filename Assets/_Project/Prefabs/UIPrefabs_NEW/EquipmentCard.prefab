@@ -36,9 +36,9 @@ RectTransform:
   - {fileID: 1558937899940383017}
   m_Father: {fileID: 2711208040335452170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 102.7, y: -30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7649183215511440446
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 2530461734331215135}
   - component: {fileID: 7380293947038826937}
   m_Layer: 5
-  m_Name: BarIcon
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -363,9 +363,9 @@ RectTransform:
   - {fileID: 990464334943117271}
   m_Father: {fileID: 2711208040335452170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 102.7, y: -30.000004}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4060374051636846601
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 143040734416808289}
   - component: {fileID: 7569503714229131409}
   m_Layer: 5
-  m_Name: BarValue (1)
+  m_Name: RarityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -786,7 +786,7 @@ GameObject:
   - component: {fileID: 6919994431918346870}
   - component: {fileID: 4498077477708222426}
   m_Layer: 5
-  m_Name: BarValue
+  m_Name: EquipmentName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,8 +808,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 213.91585, y: 14.499999}
-  m_SizeDelta: {x: 237.831, y: 29}
+  m_AnchoredPosition: {x: 288.65, y: 14.499999}
+  m_SizeDelta: {x: 387.3, y: 29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6919994431918346870
 CanvasRenderer:
@@ -1133,7 +1133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2711208040335452170
 RectTransform:
   m_ObjectHideFlags: 0
